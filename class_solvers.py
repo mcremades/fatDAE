@@ -133,14 +133,14 @@ class RK(Solver):
         else:
             self.setup_tlm(problem, h)
 
-        print "Solving..."
+        print("Solving...")
 
         start = time.time()
 
         while self.t < self.t_f:
 
-            print 'Time ->', self.t
-            print 'Step ->', self.h
+            print('Time ->', self.t)
+            print('Step ->', self.h)
 
             if self.t + self.h > self.t_f:
                 self.h = self.t_f - self.t
@@ -198,7 +198,7 @@ class RK(Solver):
         else:
             self.cst = self.cst + self.J(self.t, self.x)
 
-        print "Elapsed time: ", time.time() - start
+        print("Elapsed time: ", time.time() - start)
 
     def solve_adp(self, problem, state_machine = None, h=None, adj=False, tlm=False):
         '''Solves a problem with adaptive step size.
@@ -1506,7 +1506,7 @@ class RW(RK):
 
         else:
 
-            print "Possible order reduction, using fourth order finite differences on time..."
+            print("Possible order reduction, using fourth order finite differences on time...")
 
             dfdt = (48.0 * self.f(t + self.h, x) - 36.0 * self.f(t + 2.0 * self.h, x) \
                                                  + 16.0 * self.f(t + 3.0 * self.h, x) - 3.0 * self.f(t + 4.0 * self.h, x) - 25.0 * self.f(t, x)) / (12.0 * self.h)
@@ -1544,7 +1544,7 @@ class RW(RK):
 
         else:
 
-            print "Possible order reduction, using fourth order finite differences on time..."
+            print("Possible order reduction, using fourth order finite differences on time...")
 
             dMdt = (48.0 * self.M(t + self.h, x) - 36.0 * self.M(t + 2.0 * self.h, x) \
                                                  + 16.0 * self.M(t + 3.0 * self.h, x) - 3.0 * self.M(t + 4.0 * self.h, x) - 25.0 * self.M(t, x)) / (12.0 * self.h)
@@ -1624,5 +1624,3 @@ if __name__ == '__main__':
             raise NameError('Choose between 1 or 2 for advancing method...')
 
     solver = build(butcher_json, embedded_1, embedded_2)
-
-    

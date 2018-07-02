@@ -1,6 +1,6 @@
 
 # Basic modules
-from basic_import import *
+from base.basic_import import *
 
 class solver_ls:
 

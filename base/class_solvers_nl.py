@@ -1,9 +1,9 @@
 
 # Basic modules
-from basic_import import *
+from base.basic_import import *
 
 # User defined
-import class_solvers_sp
+import base.class_solvers_sp
 
 class solver_nl:
 
@@ -28,7 +28,7 @@ class solver_nt(solver_nl):
 
         solver_nl.__init__(self, m_ite=m_ite, a_tol=a_tol, r_tol=r_tol)
 
-        self.solver = class_solvers_sp.solver_sp()
+        self.solver = base.class_solvers_sp.solver_sp()
 
         self.simplified = False
 
@@ -64,6 +64,6 @@ class solver_nt(solver_nl):
 
                 error_old = error
 
-        print "Converged - >", self.converged
+        print("Converged - >", self.converged)
 
         return x, j

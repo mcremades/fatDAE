@@ -213,10 +213,10 @@ class Problem(object):
 
             e_list.append(numpy.sqrt(e / len(self.err_exc_list)))
 
-            print 'Step: ', h_list[i], 'Error: ', e_list[i]
+            print('Step: ', h_list[i], 'Error: ', e_list[i])
 
             if i > 0:
-                print "Convergence Rate: ", numpy.log(e_list[-1] / e_list[-2]) / numpy.log(h_list[i] / h_list[i - 1])
+                print("Convergence Rate: ", numpy.log(e_list[-1] / e_list[-2]) / numpy.log(h_list[i] / h_list[i - 1]))
 
             o_1.append(h_list[i] ** 1.0)
             o_2.append(h_list[i] ** 2.0)
