@@ -1,9 +1,9 @@
 
 # Basic modules
-from base.basic_import import *
+from qlip_rk.base.basic_import import *
 
 # User defined
-import base.class_solvers_sp
+import qlip_rk.base.class_solvers_sp
 
 class solver_nl:
 

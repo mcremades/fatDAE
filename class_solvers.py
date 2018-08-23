@@ -2,14 +2,14 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..'); from base.basic_import import *
+import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
 
 # User defined
-from base import class_solvers_nl
-from base import class_solvers_sp
+from qlip_rk.base import class_solvers_nl
+from qlip_rk.base import class_solvers_sp
 
-import class_butcher
-import class_problem
+import qlip_rk.class_butcher
+import qlip_rk.class_problem
 
 def build(butcher_json, embedded_1, embedded_2):
     '''Instances a solver from a Butcher table.

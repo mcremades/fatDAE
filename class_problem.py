@@ -2,11 +2,11 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..'); from base.basic_import import *
+import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
 
 # User defined
-import class_butcher
-import class_solvers
+import qlip_rk.class_butcher
+import qlip_rk.class_solvers
 
 class Problem(object):
     ''' Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.
