@@ -111,6 +111,9 @@ class Problem(object):
         self.t_list = []
         self.x_list = []
 
+        self.delta_x_list = []
+        self.delta_y_list = []
+
         self.err_est_list = []
         self.err_exc_list = []
 
@@ -157,7 +160,7 @@ class Problem(object):
 
         return (numpy.linalg.norm(x - y, ord=numpy.inf)) / (a_tol + r_tol * max(numpy.linalg.norm(x, ord=numpy.inf), numpy.linalg.norm(y, ord=numpy.inf)))
 
-    def store(self, t, x):
+    def store(self, t, x, delta_x=None, delta_y=None):
         ''' Stores a given time and state.
 
         Args:
@@ -168,8 +171,18 @@ class Problem(object):
         self.t_list.append(t)
         self.x_list.append(x)
 
-        if hasattr(self, 'exact'):
-            self.err_exc_list.append(self.error(x, self.exact(t)))
+        if delta_x == None:
+            pass
+        else:
+            self.delta_x_list.append(delta_x)
+
+        if delta_y == None:
+            pass
+        else:
+            self.delta_y_list.append(delta_y)
+
+        if hasattr(self, 'x_exact'):
+            self.err_exc_list.append(self.error(x, self.x_exact(t)))
 
     def clean(self):
         ''' Erases stored times and states.
@@ -177,6 +190,9 @@ class Problem(object):
 
         self.t_list = []
         self.x_list = []
+
+        self.delta_x_list = []
+        self.delta_y_list = []
 
         self.err_est_list = []
         self.err_exc_list = []
@@ -254,11 +270,74 @@ class Problem(object):
         matplotlib.pyplot.grid()
         matplotlib.pyplot.show()
 
+    def get_delta_x(self, i, j):
+
+        delta_x_list = []
+
+        for delta_x in self.delta_x_list:
+            delta_x_list.append(delta_x[i, j])
+
+        return delta_x_list
+
+    def get_delta_y(self, i, j):
+
+        delta_y_list = []
+
+        for delta_y in self.delta_y_list:
+            delta_y_list.append(delta_y[i, j])
+
+        return delta_y_list
+
     def plot(self):
         ''' Plot stored times versus stored states.
         '''
 
-        if len(self.x_list[0]) < 10:
+        nrows = len(self.x_list[0])
+        ncols = len(self.x_list[0])
+
+        print(self.t_list)
+
+        image = []
+
+        for i in range(len(self.x_list[0])):
+
+            for j in range(len(self.x_list[0])):
+
+                image.append(numpy.trapz(self.get_delta_x(i, j), x=self.t_list) / (self.t_list[-1]))
+
+        image = numpy.array(image); image = image.reshape((nrows, ncols))
+
+        row_labels = []
+        col_labels = []
+
+        for i in range(len(self.x_list[0])):
+            row_labels.append('$x_{'+str(i)+'}$')
+            col_labels.append('$x_{'+str(i)+'}$')
+
+        matplotlib.pyplot.matshow(image)
+        matplotlib.pyplot.xticks(range(len(self.x_list[0])), col_labels)
+        matplotlib.pyplot.yticks(range(len(self.x_list[0])), row_labels)
+
+        matplotlib.pyplot.colorbar()
+
+        matplotlib.pyplot.show()
+
+        if len(self.delta_x_list) > 0:
+
+            figure, axes = matplotlib.pyplot.subplots(len(self.x_list[0]), len(self.x_list[0]))
+
+            for i in range(len(self.x_list[0])):
+                for j in range(len(self.x_list[0])):
+
+                    axes[i, j].plot(self.t_list, self.get_delta_x(i, j))
+
+                    axes[i, j].set_title('$\delta_{'+str(i)+str(j)+'}$')
+                    axes[i, j].set_xlabel('$t$')
+                    axes[i, j].grid()
+
+            matplotlib.pyplot.subplots_adjust(wspace=0.4, hspace=0.6)
+
+        if len(self.x_list[0]) < 6:
 
             for i in range(len(self.x_list[0])):
 
@@ -284,8 +363,8 @@ class Problem(object):
                 else:
                     matplotlib.pyplot.plot(self.t_list, x_calc_list, 'b-')
 
-                matplotlib.pyplot.xlabel('Times')
-                matplotlib.pyplot.ylabel('State')
+                matplotlib.pyplot.xlabel('$t$')
+                matplotlib.pyplot.ylabel('$x_'+str(i)+'$')
 
                 matplotlib.pyplot.grid()
         else:
@@ -423,7 +502,7 @@ class Fitting(Control):
         derivatives['dJdx'] = dgdx
         derivatives['dJdu'] = dgdu
 
-        Control_Problem.__init__(self, M, f, x_0, t_0, t_f, J=g, g=g, derivatives=derivatives)
+        Control.__init__(self, M, f, x_0, t_0, t_f, J=g, g=g, derivatives=derivatives)
 
     def plot(self):
 
@@ -498,15 +577,15 @@ if __name__ == '__main__':
 
     def f(t, x):
 
-        b = numpy.array([- lmb * x[0], \
+        b = numpy.array([- lmb * x[0] - lmb * x[1], \
                          - dlt * x[1]])
 
         return b
 
     def dfdx(t, x):
 
-        A = numpy.array([[- lmb, 0.], \
-                         [0., - dlt]])
+        A = numpy.array([[- lmb, -lmb], \
+                         [0., -dlt]])
 
         return scipy.sparse.csc_matrix(A)
 
@@ -518,7 +597,7 @@ if __name__ == '__main__':
         return b
 
     x_0 = numpy.array([1., \
-                       1.])
+                       2.])
 
     t_0 = 0.
     t_f = 1.
@@ -526,17 +605,15 @@ if __name__ == '__main__':
     derivatives = {'dfdx': dfdx, \
                    'dfdt': dfdt}
 
-
     problem = Problem(M(t_0, x_0), f, x_0, t_0, t_f, derivatives)
 
     def x(t):
 
-        b = numpy.array([numpy.exp(-lmb * t), \
-                         numpy.exp(-dlt * t)])
+        b = numpy.array([x_0[0] * numpy.exp(-lmb * t), \
+                         x_0[1] * numpy.exp(-dlt * t)])
 
         return b
 
     problem.exact = x
 
-    problem.solve(solver, h=1.e-1); problem.plot()
-    problem.solve(solver, h=5.e-2); problem.plot()
+    problem.solve(solver, h=5.e-2, tlm=True); problem.plot()

@@ -74,8 +74,8 @@ class RK(Solver):
     Attributes:
         advancing_table (:obj:`runge_kutta.class_butcher.Butcher`): Butcher table defining the advancing method.
         estimator_table (:obj:`runge_kutta.class_butcher.Butcher`): Butcher table defining the estimator method.
-        h_max (:obj:`float`): Maximum step size increasing factor.
-        h_min (:obj:`float`): Maximum step size decreasing factor.
+        f_max (:obj:`float`): Maximum step size increasing factor.
+        f_min (:obj:`float`): Maximum step size decreasing factor.
         a_tol (:obj:`float`): Absolute tolerance.
         r_tol (:obj:`float`): Relative tolerance.
         s_fac (:obj:`float`): Safety factor used to reduce step rejections.
@@ -84,7 +84,7 @@ class RK(Solver):
         name (:obj:`str`): Name of the embedded Runge-Kutta method, including type and order of both methods.
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, h_max=5.0, h_min=0.1):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
         # Butcher table
         self.advancing_table = advancing_table
@@ -98,6 +98,9 @@ class RK(Solver):
         self.s_fac = s_fac
 
         # Bounds for stepsize
+        self.f_max = f_max
+        self.f_min = f_min
+
         self.h_max = h_max
         self.h_min = h_min
 
@@ -128,10 +131,7 @@ class RK(Solver):
         else:
             self.setup_frw(problem, h)
 
-        if self.tlm == True:
-            pass
-        else:
-            self.setup_tlm(problem, h)
+        self.store_frw(problem)
 
         print("Solving...")
 
@@ -140,7 +140,6 @@ class RK(Solver):
         while self.t < self.t_f:
 
             print('Time ->', self.t)
-            print('Step ->', self.h)
 
             if self.t + self.h > self.t_f:
                 self.h = self.t_f - self.t
@@ -184,14 +183,19 @@ class RK(Solver):
             else:
 
                 if self.tlm == False:
+
                     self.updat_frw()
-                    self.store_frw(problem)
-                else:
-                    self.updat_frw()
+
                     self.store_frw(problem)
 
+                else:
+
                     self.tstep_tlm()
+
+                    self.updat_frw()
                     self.updat_tlm()
+
+                    self.store_frw(problem)
 
         if self.J == None:
             pass
@@ -209,7 +213,125 @@ class RK(Solver):
             adj (:obj:`bool`): True if adjoint method will be used, False otherwise.
         '''
 
-        raise NameError('Feature not implemented yet...')
+        self.adj = adj
+        self.tlm = tlm
+
+        if self.adj == True:
+            pass
+        else:
+            self.setup_frw(problem, h)
+
+        self.store_frw(problem)
+
+        self.a_steps = 0
+        self.r_steps = 0
+        self.d_steps = 0
+
+        self.a_list = []
+        self.r_list = []
+        self.d_list = []
+
+        print("Solving...")
+
+        start = time.time()
+
+        while self.t < self.t_f:
+
+            print('Time ->', self.t)
+
+            if self.t + self.h > self.t_f:
+                self.h = self.t_f - self.t
+
+            if self.h < self.h_min:
+
+                print ('Minimum stepsize reached...')
+
+                return
+
+            self.tstep_frw()
+
+            __, x_0 = self.state_frw(0)
+            __, x_k = self.state_frw(self.advancing_table.s - 1)
+
+            if state_machine == None:
+                trigged = False
+            else:
+
+                params = {'problem': problem, \
+                          'x_0': x_0, \
+                          'x_k': x_k, \
+                          'h_k': self.h, \
+                          't_0': self.t}
+
+                x, h, trigged, accept = state_machine.check(params)
+
+            if trigged == True:
+
+                self.h = h[0]
+
+                if accept == True:
+
+                    self.x = x[0]
+                    self.t = self.t + self.h
+
+                    if self.tlm == False:
+                        self.store_frw(problem)
+                    else:
+                        self.store_frw(problem)
+
+                        self.tstep_tlm()
+                        self.updat_tlm()
+
+                    self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
+
+            else:
+
+                if not hasattr(self, 'nlsolver') or (hasattr(self, 'nlsolver') and self.nlsolver.converged):
+
+                    self.check(problem)
+
+                    if self.error_est < 1.0:
+
+                        if self.tlm == False:
+
+                            self.updat_frw()
+
+                            self.store_frw(problem)
+
+                        else:
+
+                            self.tstep_tlm()
+
+                            self.updat_frw()
+                            self.updat_tlm()
+
+                            self.store_frw(problem)
+
+                        self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
+
+                    else:
+
+                        self.r_steps = self.r_steps + 1; self.r_list.append([self.t, self.h])
+
+                    self.adapt()
+
+
+                else:
+
+                    self.h = self.h / self.f_max
+
+                    self.d_steps = self.d_steps + 1; self.d_list.append([self.t, self.h])
+
+        if self.J == None:
+            pass
+        else:
+            self.cst = self.cst + self.J(self.t, self.x)
+
+        print("Elapsed time: ", time.time() - start)
+
+        print('Acept. steps: ', self.a_steps)
+        print('Rejec. steps: ', self.r_steps)
+        print('Divrg. steps: ', self.d_steps)
 
     def solve_adj(self, problem, state_machine= None, h=None, adp=False):
         '''Solves an optimization problem and computes the gradient of a cost function by the adjoint method.
@@ -246,14 +368,6 @@ class RK(Solver):
 
     def setup_adj(self, problem, h=None):
         '''Configures the solver for one adjoint resolution.
-
-        Args:
-            problem (:obj:`runge_kutta.class_problem.Control`)
-        '''
-        pass
-
-    def setup_tlm(self, problem, h=None):
-        '''Configures the solver for one tangent resolution.
 
         Args:
             problem (:obj:`runge_kutta.class_problem.Control`)
@@ -343,7 +457,9 @@ class RK(Solver):
     def updat_tlm(self):
         '''Update the tangent state after one tangent time step.
         '''
-        pass
+
+        for i in range(self.advancing_table.s):
+            self.delta_x = self.delta_x + self.advancing_table.b[i] * self.delta_K[i]
 
     def updat_lmb(self):
         '''Update the adjoint state after one adjoint time step.
@@ -362,9 +478,14 @@ class RK(Solver):
         if self.adj == True:
 
             self.h_list.append(self.h)
-            self.K_list.append(self.K)
 
-        problem.store(self.t, self.x)
+            self.K_list.append(self.K)
+            self.L_list.append(self.L)
+
+        if self.tlm == True:
+            problem.store(self.t, self.x, self.delta_x)
+        else:
+            problem.store(self.t, self.x)
 
     def state_frw(self, i):
         '''Compute :math:`i`-th forward intermediate time and state.
@@ -394,7 +515,7 @@ class RK(Solver):
         '''Adjust the step size after one forward time step.
         '''
 
-        self.h = self.h * min(self.h_max, max(self.h_min, self.s_fac * (1.0 / self.error_est) ** (1.0 / (self.q + 1))))
+        self.h = self.h * min(self.f_max, max(self.f_min, self.s_fac * (1.0 / self.error_est) ** (1.0 / (self.q + 1))))
 
     def check(self, problem):
         '''Check if the local error estimate is under the specified tolerance.
@@ -432,7 +553,18 @@ class RK(Solver):
         '''Computes source derivative with respect to the state by finite differences.
         '''
 
-        raise NameError('Feature not implemented yet...')
+        A = numpy.zeros((len(x), len(x))); f = self.f(t, x)
+
+        for i in range(len(x)):
+
+            y = x[i]
+
+            x[i] += self.nlsolver.r_tol * y
+            A[:, i] = (self.f(t, x) - f) / (self.nlsolver.r_tol * y)
+            x[i] -= self.nlsolver.r_tol * y
+
+        return scipy.sparse.csc_matrix(A)
+
 
     def fd_dMdx(self, t, x, y):
         '''Computes matrix directional derivative with respect to the state by finite differences.
@@ -443,7 +575,7 @@ class RK(Solver):
             \\end{equation}
         '''
 
-        raise NameError('Feature not implemented yet...')
+        return (self.M(t, x + self.nlsolver.r_tol * y) - self.M(t, x)) / self.nlsolver.r_tol
 
 class ERK(RK):
     ''' Explicit Runge-Kutta solver.
@@ -516,6 +648,10 @@ class IRK(RK):
 
         self.t = problem.t_0
         self.x = problem.x_0
+        self.y = problem.x_0
+
+        self.delta_x = scipy.sparse.identity(self.x.size,format='csc')
+        self.delta_y = scipy.sparse.identity(self.x.size,format='csc')
 
         self.M = problem.M
         self.f = problem.f
@@ -532,6 +668,14 @@ class IRK(RK):
 
         self.K = numpy.zeros((self.advancing_table.s, self.x.size))
         self.L = numpy.zeros((self.advancing_table.s, self.x.size))
+
+        self.delta_K = []
+        self.delta_L = []
+
+        for i in range(self.advancing_table.s):
+            self.delta_K.append(scipy.sparse.csc_matrix((self.x.size, self.x.size)))
+            self.delta_L.append(scipy.sparse.csc_matrix((self.x.size, self.x.size)))
+
 
         if hasattr(problem, 'J'):
             self.J = problem.J
@@ -915,6 +1059,30 @@ class DIRK(IRK):
             else:
                 return
 
+    def tstep_tlm(self):
+
+        for i in range(self.advancing_table.s):
+
+            ti, xi = self.state_frw(i)
+
+            if callable(self.M):
+                M = self.M(ti, xi + self.advancing_table.A[i, i] * self.K[i, :])
+            else:
+                M = self.M
+
+            if callable(self.dfdx):
+                dfdx = self.dfdx(ti, xi + self.advancing_table.A[i, i] * self.K[i, :])
+            else:
+                dfdx = self.dfdx
+
+            b_x = self.delta_x
+
+            for j in range(i):
+                b_x = b_x + self.advancing_table.A[i, j] * self.delta_K[j]
+
+            self.delta_K[i] = self.nlsolver.solver.solve(M - self.h * self.advancing_table.A[i,i] * dfdx, \
+                                                         self.h * dfdx * b_x)
+
     def tstep_adj(self):
         '''Performs one adjoint time step.
 
@@ -1179,448 +1347,3 @@ class ESDIRK(DIRK):
                 pass
             else:
                 return
-
-class RW(RK):
-    ''' Rosenbrock-Wanner solver.
-
-    The matrix of coefficients defining the method takes the form:
-
-    .. math::
-        \\begin{equation}
-            \\begin{array}{c|cccc|cccc|c}
-            c_1     & a_{11}  & 0       & \\cdots & 0       & \\gamma_{11} & 0            & \\cdots & 0            & d_1     \\\\
-            \\vdots & a_{21}  & a_{22}  & \\ddots & \\vdots & \\gamma_{21} & \\gamma_{22} & \\ddots & \\vdots      & \\vdots \\\\
-            \\vdots & \\vdots & \\vdots & \\ddots & 0       & \\vdots      & \\vdots      & \\ddots & \\ddots      & \\vdots \\\\
-            c_s     & a_{s1}  & a_{s2}  & \\cdots & a_{ss}  & \\gamma_{s1} & \\gamma_{s2} & \\cdots & \\gamma_{ss} & d_s \\\\
-            \\hline
-                    & b_1     & \\cdots & \\cdots & b_s     &              &              &         &              &
-            \\end{array}
-        \\end{equation}
-    '''
-
-    def __init__(self, advancing_table, estimator_table):
-
-        RK.__init__(self, advancing_table, estimator_table)
-
-        self.spsolver = class_solvers_sp.solver_sp()
-        self.lqsolver = class_solvers_sp.solver_lq()
-
-    def setup_frw(self, problem, h=None):
-        '''Configures the solver for one forward resolution.
-        '''
-
-        problem.clean()
-
-        self.h = h
-
-        self.t = problem.t_0
-        self.x = problem.x_0
-
-        self.M = problem.M
-        self.f = problem.f
-
-        if problem.dMdx == None:
-            self.dMdx = self.fd_dMdx
-        else:
-            self.dMdx = problem.dMdx
-
-        if problem.dfdx == None:
-            self.dfdx = self.fd_dfdx
-        else:
-            self.dfdx = problem.dfdx
-
-        if problem.dfdt == None:
-            self.dfdt = self.fd_dfdt
-        else:
-            self.dfdt = problem.dfdt
-
-        self.K = numpy.zeros((self.advancing_table.s, self.x.size))
-        self.L = numpy.zeros((self.advancing_table.s, self.x.size))
-
-        if hasattr(problem, 'J'):
-            self.J = problem.J
-        else:
-            self.J = None
-
-        if hasattr(problem, 'g'):
-            self.g = problem.g
-        else:
-            self.g = None
-
-        if hasattr(problem, 'J') or hasattr(problem, 'g'):
-            self.cst = 0.
-
-        self.t_0 = problem.t_0
-        self.t_f = problem.t_f
-
-        if h == None:
-            self.h = (self.t_f - self.t_0) / 100.
-        else:
-            self.h = h
-
-        self.h_list = []
-        self.t_list = []
-
-    def setup_adj(self, problem, h=None):
-        '''Configures the solver for one adjoint resolution.
-        '''
-
-        self.setup_frw(problem, h)
-
-        self.X = numpy.zeros((self.advancing_table.s, self.x.size))
-        self.Y = numpy.zeros((self.advancing_table.s, self.x.size))
-
-        if self.J == None:
-            pass
-        else:
-
-            if problem.dJdx == None:
-                self.dJdx = self.fd_dJdx
-            else:
-                self.dJdx = problem.dJdx
-
-            if problem.dJdu == None:
-                self.dJdu = self.fd_dJdu
-            else:
-                self.dJdu = problem.dJdu
-
-        if self.g == None:
-            pass
-        else:
-
-            if problem.dgdx == None:
-                self.dgdx = self.fd_dgdx
-            else:
-                self.dgdx = problem.dgdx
-
-            if problem.dgdu == None:
-                self.dgdu = self.fd_dgdu
-            else:
-                self.dgdu = problem.dgdu
-
-        if problem.dfdu == None:
-            self.dfdu = self.fd_dfdu
-        else:
-            self.dfdu = problem.dfdu
-
-        if problem.dMdu == None:
-            raise NameError('Feature not implemented yet...')
-        else:
-            self.dMdu = problem.dMdu
-
-        if problem.d2fdxdx == None:
-            self.d2fdxdx = self.fd_d2fdxdx
-        else:
-            self.d2fdxdx = problem.d2fdxdx
-
-        if problem.d2fdxdt == None:
-            self.d2fdxdt = self.fd_d2fdxdt
-        else:
-            self.d2fdxdt = problem.d2fdxdt
-
-        if problem.d2fdxdu == None:
-            self.d2fdxdu = self.fd_d2fdxdu
-        else:
-            self.d2fdxdu = problem.d2fdxdu
-
-        if problem.d2fdtdu == None:
-            self.d2fdtdu = self.fd_d2fdtdu
-        else:
-            self.d2fdtdu = problem.d2fdtdu
-
-        self.K_list = []
-        self.L_list = []
-
-        self.advancing_table.build_transposed()
-
-    def updat_lmb(self):
-        '''Update the adjoint state after one adjoint time step.
-        '''
-
-        for i in range(self.advancing_table.s):
-
-            if self.g == None:
-
-                self.lmb = self.lmb + self.h * self.advancing_table.b[i] * (self.dfdx_step[i] + self.d2fdxdx_step[i] + self.h * self.advancing_table.d[i] * self.d2fdxdt(self.t, self.x)).transpose().dot(self.X[i, :])
-
-            else:
-
-                self.lmb = self.lmb + self.h * self.advancing_table.b[i] * (self.dfdx_step[i] + self.d2fdxdx_step[i] + self.h * self.advancing_table.d[i] * self.d2fdxdt(self.t, self.x)).transpose().dot(self.X[i, :]) \
-                                    + self.h * self.advancing_table.b[i] * self.dgdx_step[i]
-
-    def updat_grd(self):
-        '''Update the gradient of the cost function after one adjoint time step.
-        '''
-
-        for i in range(self.advancing_table.s):
-
-            if self.g == None:
-
-                self.grd = self.grd - self.advancing_table.b[i] * (self.dMdu_step[i] - self.h * (self.dfdu_step[i] + self.d2fdxdu_step[i] + self.h * self.advancing_table.d[i] * self.d2fdtdu(self.t, self.x))).transpose().dot(self.X[i, :])
-
-            else:
-
-                self.grd = self.grd - self.advancing_table.b[i] * (self.dMdu_step[i] - self.h * (self.dfdu_step[i] + self.d2fdxdu_step[i] + self.h * self.advancing_table.d[i] * self.d2fdtdu(self.t, self.x))).transpose().dot(self.X[i, :]) \
-                                    + self.h * self.advancing_table.b[i] * self.dgdu_step[i]
-
-    def stage_adj(self):
-        '''Compute matrices and vectors required for one adjoint time step.
-        '''
-
-        self.dfdx_step = []
-        self.dfdu_step = []
-
-        self.dMdu_step = []
-
-        self.d2fdxdx_step = []
-        self.d2fdxdu_step = []
-
-        if self.g == None:
-            pass
-        else:
-            self.dgdx_step = []
-            self.dgdu_step = []
-
-        for i in range(self.advancing_table.s):
-
-            t, x = self.state_frw(i)
-
-            self.dfdx_step.append(self.dfdx(t, x + self.advancing_table.A[i, i] * self.K[i, :]))
-            self.dfdu_step.append(self.dfdu(t, x + self.advancing_table.A[i, i] * self.K[i, :]))
-
-            self.dMdu_step.append(self.dMdu(t, x + self.advancing_table.A[i, i] * self.K[i, :], self.K[i, :]))
-
-            y = self.x - self.x
-
-            for j in range(i):
-                y = y + self.advancing_table.G[i, j] * self.K[j, :]
-
-            self.d2fdxdx_step.append(self.d2fdxdx(self.t, x + self.advancing_table.A[i, i] * self.K[i, :], y + self.advancing_table.G[i, i] * self.K[i, :]))
-            self.d2fdxdu_step.append(self.d2fdxdu(self.t, x + self.advancing_table.A[i, i] * self.K[i, :], y + self.advancing_table.G[i, i] * self.K[i, :]))
-
-            if self.g == None:
-                pass
-            else:
-                self.dgdx_step.append(self.dgdx(t, x + self.advancing_table.A[i, i] * self.K[i, :]))
-                self.dgdu_step.append(self.dgdu(t, x + self.advancing_table.A[i, i] * self.K[i, :]))
-
-    def tstep_frw(self):
-        '''Performs one forward time step.
-
-        The stages are computed by solving the non-linear systems
-
-        .. math::
-            \\begin{equation}
-                \\begin{split}
-                (M-h\\gamma J)\\mathbf{k}_i = & h\\mathbf{f}(t_n + c_ih, \\mathbf{x}_n+\sum_{j=1}^{i-1}a_{ij}\\mathbf{k}_j) + hJ\\sum_{j=1}^{i-1}\\gamma_{ij}\\mathbf{k}_j \\\\
-                                          + & h^2d_i\\frac{\\partial \\mathbf{f}}{\\partial t}(t_n, \\mathbf{x}_n),\\quad i=1,\\dots, s
-                \\end{split}
-            \\end{equation}
-        '''
-
-        if callable(self.dfdx):
-            dfdx = self.dfdx(self.t, self.x)
-        else:
-            dfdx = self.dfdx
-
-        if callable(self.M):
-            raise NameError('Feature not implemented yet...')
-        else:
-            M = self.M
-
-        A = M - self.h * self.advancing_table.G[0, 0] * dfdx
-
-        if callable(self.dfdt):
-            dfdt = self.dfdt(self.t, self.x)
-        else:
-            dfdt = self.dfdt
-
-        for i in range(self.advancing_table.s):
-
-            ti, xi = self.state_frw(i)
-
-            y = self.x - self.x
-
-            for j in range(i):
-                y = y + self.advancing_table.G[i, j] * self.K[j, :]
-
-            b = self.h * self.f(ti, xi + self.advancing_table.A[i, i] * self.K[i, :]) \
-              + self.h * dfdx.dot(y) \
-              + self.h ** 2 * self.advancing_table.d[i] * dfdt
-
-            self.K[i, :] = self.spsolver.solve(A, b)
-
-    def tstep_adj(self):
-        '''Performs one adjoint time step.
-        '''
-
-        if callable(self.M):
-            raise NameError('Feature not implemented yet...')
-        else:
-            A = self.M - self.h * self.advancing_table.G[0, 0] * self.dfdx_step[0]
-
-        for i in range(self.advancing_table.s - 1, - 1, - 1):
-
-            b = self.lmb
-
-            for j in range(i + 1, self.advancing_table.s):
-
-                B_ij = self.advancing_table.A_T[i, j] * self.dfdx_step[j] \
-                     + self.advancing_table.G_T[i, j] * self.dfdx_step[0]
-
-                if self.g == None:
-                    b = b + self.h * B_ij.transpose().dot(self.X[j, :])
-                else:
-                    b = b + self.h * B_ij.transpose().dot(self.X[j, :]) + self.h * self.advancing_table.A_T[i, j] * self.dgdx_step[j]
-
-            self.X[i, :] = self.spsolver.solve(A.transpose(), b)
-
-    def fd_dfdt(self, t, x):
-        '''Computes source derivative with respect to time by finite differences.
-
-        .. math::
-            \\begin{equation}
-                \\frac{\partial\\mathbf{f}}{\partial t}(t, \\mathbf{x}) = \\lim_{h\\rightarrow 0}\\frac{\\mathbf{f}(t + h, \\mathbf{x}) - \\mathbf{f}(t, \\mathbf{x})}{h}
-            \\end{equation}
-
-        Args:
-            t (:obj:`float`): Time.
-            x (:obj:`numpy.ndarray`): State.
-
-        Returns:
-            dfdt (:obj:`numpy.ndarray`): Source derivatives with respect to time.
-        '''
-
-        if self.r < 3:
-            # First order
-            dfdt = (self.f(t + self.h, x) - self.f(t, x)) / self.h
-
-        elif self.r < 4:
-           # Second order
-           dfdt = (4.0 * self.f(t + self.h, x) - self.f(t + 2.0 * self.h, x) - 3.0 * self.f(t, x)) / (2.0 * self.h)
-
-        elif self.r < 6:
-           # Fourth order
-           dfdt = (48.0 * self.f(t + self.h, x) - 36.0 * self.f(t + 2.0 * self.h, x) \
-                                                + 16.0 * self.f(t + 3.0 * self.h, x) - 3.0 * self.f(t + 4.0 * self.h, x) - 25.0 * self.f(t, x)) / (12.0 * self.h)
-
-        else:
-
-            print("Possible order reduction, using fourth order finite differences on time...")
-
-            dfdt = (48.0 * self.f(t + self.h, x) - 36.0 * self.f(t + 2.0 * self.h, x) \
-                                                 + 16.0 * self.f(t + 3.0 * self.h, x) - 3.0 * self.f(t + 4.0 * self.h, x) - 25.0 * self.f(t, x)) / (12.0 * self.h)
-
-        return dfdt
-
-    def fd_dMdt(self, t, x):
-        '''Computes matrix derivative with respect to time by finite differences.
-
-        .. math::
-            \\begin{equation}
-                \\frac{\partial M}{\partial t}(t, \\mathbf{x}) = \\lim_{h\\rightarrow 0}\\frac{M(t + h, \\mathbf{x}) - M(t, \\mathbf{x})}{h}
-            \\end{equation}
-
-        Args:
-            t (:obj:`float`): Time.
-            x (:obj:`numpy.ndarray`): State.
-
-        Returns:
-            dMdt (:obj:`numpy.ndarray`): Matrix derivatives with respect to time.
-        '''
-
-        if self.r < 3:
-            # First order
-            dMdt = (self.M(t + self.h, x) - self.M(t, x)) / self.h
-
-        elif self.r < 4:
-            # Second order
-            dMdt = (4.0 * self.M(t + self.h, x) - self.M(t + 2.0 * self.h, x) - 3.0 * self.M(t, x)) / (2.0 * self.h)
-
-        elif self.r < 6:
-            # Fourth order
-            dMdt = (48.0 * self.M(t + self.h, x) - 36.0 * self.M(t + 2.0 * self.h, x) \
-                                                 + 16.0 * self.M(t + 3.0 * self.h, x) - 3.0 * self.M(t + 4.0 * self.h, x) - 25.0 * self.M(t, x)) / (12.0 * self.h)
-
-        else:
-
-            print("Possible order reduction, using fourth order finite differences on time...")
-
-            dMdt = (48.0 * self.M(t + self.h, x) - 36.0 * self.M(t + 2.0 * self.h, x) \
-                                                 + 16.0 * self.M(t + 3.0 * self.h, x) - 3.0 * self.M(t + 4.0 * self.h, x) - 25.0 * self.M(t, x)) / (12.0 * self.h)
-
-        return dMdt
-
-    def fd_d2fdxdx(self, t, x, y):
-        '''Computes source second order directional derivative with respect to state by finite differences.
-
-        .. math::
-            \\begin{equation}
-                \\frac{\partial^2\\mathbf{f}}{\partial \mathbf{x}^2}(t, \\mathbf{x})\mathbf{y} = \\lim_{\\epsilon\\rightarrow 0}\\frac{\\frac{\\partial \\mathbf{f}}{\\partial \\mathbf{x}}(t, \\mathbf{x} + \\epsilon\\mathbf{y}) - \\frac{\\partial \\mathbf{f}}{\\partial \\mathbf{x}}(t, \\mathbf{x})}{\\epsilon}
-            \\end{equation}
-
-        Args:
-            t (:obj:`float`): Time.
-            x (:obj:`numpy.ndarray`): State.
-            y (:obj:`numpy.ndarray`): Direction.
-
-        Returns:
-            (:obj:`numpy.ndarray`): Source second order derivatives with respect to state.
-        '''
-
-        return (self.dfdx(t, x + self.h * y) - self.dfdx(t, x)) / self.h
-
-    def fd_d2fdxdt(self, t, x):
-        '''Computes source second order derivative with respect to time and state by finite differences.
-
-        .. math::
-            \\begin{equation}
-                \\frac{\partial^2\\mathbf{f}}{\partial \mathbf{x}\partial t}(t, \\mathbf{x}) = \\lim_{h\\rightarrow 0}\\frac{\\frac{\\partial \\mathbf{f}}{\\partial \\mathbf{x}}(t + h, \\mathbf{x}) - \\frac{\\partial \\mathbf{f}}{\\partial \\mathbf{x}}(t, \\mathbf{x})}{h}
-            \\end{equation}
-
-        Args:
-            t (:obj:`float`): Time.
-            x (:obj:`numpy.ndarray`): State.
-
-        Returns:
-            (:obj:`numpy.ndarray`): Source second order derivatives with respect to time and state.
-
-        '''
-
-        return (self.dfdx(t + self.h, x) - self.dfdx(t, x)) / self.h
-
-    def fd_d2fdxdu(self, t, x, y):
-        '''Computes source second order derivative with respect to the state and control by finite differences.
-        '''
-        raise NameError('Feature not implemented yet...')
-
-    def fd_d2fdtdu(self, t, x):
-        '''Computes source second order derivative with respect to the time and control by finite differences.
-        '''
-        raise NameError('Feature not implemented yet...')
-
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('json', help = "Butcher's tables")
-
-    parser.add_argument('-adv', help = "Advancing method, choose 1 or 2.", action = 'store', required = True)
-    parser.add_argument('-est', help = "Estimator method, choose 1 or 2.", action = 'store')
-
-    args = parser.parse_args()
-
-    with open(args.json) as data_file:
-        butcher_json = json.load(data_file)
-
-    if args.adv == '1':
-        embedded_1 = False
-        embedded_2 = True
-    else:
-        if args.adv == '2':
-            embedded_1 = True
-            embedded_2 = False
-        else:
-            raise NameError('Choose between 1 or 2 for advancing method...')
-
-    solver = build(butcher_json, embedded_1, embedded_2)

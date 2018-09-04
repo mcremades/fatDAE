@@ -24,7 +24,7 @@ class solver_fp(solver_nl):
 
 class solver_nt(solver_nl):
 
-    def __init__(self, m_ite=50, a_tol=1e-4, r_tol=1e-6, simplified=False):
+    def __init__(self, m_ite=50, a_tol=1e-8, r_tol=1e-8, simplified=False):
 
         solver_nl.__init__(self, m_ite=m_ite, a_tol=a_tol, r_tol=r_tol)
 
@@ -45,9 +45,9 @@ class solver_nt(solver_nl):
                 else:
                     Delta = self.solver.solve(J, - F(x))
 
-                error = numpy.linalg.norm(Delta) / numpy.linalg.norm(x)
+                error = numpy.linalg.norm(Delta,numpy.inf) / numpy.linalg.norm(x,numpy.inf)
 
-                #print error
+                #print(error)
 
                 if error < self.a_tol:
 
