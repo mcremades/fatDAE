@@ -579,14 +579,14 @@ if __name__ == '__main__':
     def f(t, x):
 
         b = numpy.array([- lmb * x[0] - lmb * x[1], \
-                         - dlt * x[1] - dlt * x[0]])
+                         - dlt * x[1]])
 
         return b
 
     def dfdx(t, x):
 
         A = numpy.array([[- lmb, -lmb], \
-                         [- dlt, -dlt]])
+                         [0., -dlt]])
 
         return scipy.sparse.csc_matrix(A)
 

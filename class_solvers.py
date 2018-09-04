@@ -74,8 +74,8 @@ class RK(Solver):
     Attributes:
         advancing_table (:obj:`runge_kutta.class_butcher.Butcher`): Butcher table defining the advancing method.
         estimator_table (:obj:`runge_kutta.class_butcher.Butcher`): Butcher table defining the estimator method.
-        h_max (:obj:`float`): Maximum step size increasing factor.
-        h_min (:obj:`float`): Maximum step size decreasing factor.
+        f_max (:obj:`float`): Maximum step size increasing factor.
+        f_min (:obj:`float`): Maximum step size decreasing factor.
         a_tol (:obj:`float`): Absolute tolerance.
         r_tol (:obj:`float`): Relative tolerance.
         s_fac (:obj:`float`): Safety factor used to reduce step rejections.
@@ -84,7 +84,7 @@ class RK(Solver):
         name (:obj:`str`): Name of the embedded Runge-Kutta method, including type and order of both methods.
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, h_max=5.0, h_min=0.1):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
         # Butcher table
         self.advancing_table = advancing_table
@@ -98,6 +98,9 @@ class RK(Solver):
         self.s_fac = s_fac
 
         # Bounds for stepsize
+        self.f_max = f_max
+        self.f_min = f_min
+
         self.h_max = h_max
         self.h_min = h_min
 
@@ -239,6 +242,12 @@ class RK(Solver):
             if self.t + self.h > self.t_f:
                 self.h = self.t_f - self.t
 
+            if self.h < self.h_min:
+
+                print ('Minimum stepsize reached...')
+
+                return
+
             self.tstep_frw()
 
             __, x_0 = self.state_frw(0)
@@ -309,7 +318,7 @@ class RK(Solver):
 
                 else:
 
-                    self.h = self.h / self.h_max
+                    self.h = self.h / self.f_max
 
                     self.d_steps = self.d_steps + 1; self.d_list.append([self.t, self.h])
 
@@ -506,7 +515,7 @@ class RK(Solver):
         '''Adjust the step size after one forward time step.
         '''
 
-        self.h = self.h * min(self.h_max, max(self.h_min, self.s_fac * (1.0 / self.error_est) ** (1.0 / (self.q + 1))))
+        self.h = self.h * min(self.f_max, max(self.f_min, self.s_fac * (1.0 / self.error_est) ** (1.0 / (self.q + 1))))
 
     def check(self, problem):
         '''Check if the local error estimate is under the specified tolerance.
