@@ -2,7 +2,7 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..\qlip_rk'); from base.basic_import import *
+import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
 
 class Butcher(object):
     ''' Butcher table defining a Runge-Kutta method.
