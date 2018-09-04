@@ -302,7 +302,7 @@ class Problem(object):
         matplotlib.pyplot.show()
 
 
-class Control_Problem(Problem):
+class Control(Problem):
     '''Optimal control problem governed by a quasi-linearly implicit differential-algebraic system.
 
     .. math::
@@ -394,7 +394,7 @@ class Control_Problem(Problem):
         else:
             self.d2fdtdu = None
 
-class Parameter_Fitting(Control_Problem):
+class Fitting(Control):
 
     def __init__(self, M, f, x_0, t_0, t_f, t_obs, x_obs, h, dhdx, dhdu, derivatives={}):
 
