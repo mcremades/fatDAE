@@ -28,7 +28,7 @@ class solver_nt(solver_nl):
 
         solver_nl.__init__(self, m_ite=m_ite, a_tol=a_tol, r_tol=r_tol)
 
-        self.solver = base.class_solvers_sp.solver_sp()
+        self.solver = qlip_rk.base.class_solvers_sp.solver_sp()
 
         self.simplified = False
 

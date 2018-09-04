@@ -25,15 +25,15 @@ def build(butcher_json, embedded_1, embedded_2):
 
     if butcher_json['type'] == 'RW':
 
-        advancing_table = class_butcher.Generalized(butcher_json, embedded_1)
-        estimator_table = class_butcher.Generalized(butcher_json, embedded_2)
+        advancing_table = qlip_rk.class_butcher.Generalized(butcher_json, embedded_1)
+        estimator_table = qlip_rk.class_butcher.Generalized(butcher_json, embedded_2)
 
         solver = RW(advancing_table, estimator_table)
 
     else:
 
-        advancing_table = class_butcher.Butcher(butcher_json, embedded_1)
-        estimator_table = class_butcher.Butcher(butcher_json, embedded_2)
+        advancing_table = qlip_rk.class_butcher.Butcher(butcher_json, embedded_1)
+        estimator_table = qlip_rk.class_butcher.Butcher(butcher_json, embedded_2)
 
         if butcher_json['type'] == 'DIRK':
             solver = DIRK(advancing_table, estimator_table)
