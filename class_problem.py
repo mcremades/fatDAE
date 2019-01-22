@@ -550,7 +550,7 @@ if __name__ == '__main__':
         else:
             raise NameError('Choose between 1 or 2 for advancing method...')
 
-    solver = class_solvers.build(butcher_json, embedded_1, embedded_2)
+    solver = qlip_rk.class_solvers.build(butcher_json, embedded_1, embedded_2)
 
     '''
         Dahlquist problem
