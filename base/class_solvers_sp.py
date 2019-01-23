@@ -1,6 +1,6 @@
 
 # Basic modules
-from qlip_rk.base.basic_import import *
+from fatDAE.base.basic_import import *
 
 class solver_ls:
 

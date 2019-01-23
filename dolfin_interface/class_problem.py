@@ -2,15 +2,15 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
+import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
 
 # Dolfin package
 from dolfin import *
 
 # User defined
-import qlip_rk.class_problem
+import fatDAE.class_problem
 
-class UFL_Problem(qlip_rk.class_problem.Problem):
+class UFL_Problem(fatDAE.class_problem.Problem):
     ''' Initial value problem.
 
     It takes a variational formulation, for example: Find :math:`u \in L^2((t_0,t_f];H_0^1(\Omega))` such that
@@ -243,7 +243,7 @@ class UFL_Problem(qlip_rk.class_problem.Problem):
                         'dfdt': dfdt
                         }
 
-        qlip_rk.class_problem.Problem.__init__(self, M, f, x_0, t_0, t_f, self.derivatives)
+        fatDAE.class_problem.Problem.__init__(self, M, f, x_0, t_0, t_f, self.derivatives)
 
     def assemble_csr(self, form):
         ''' Assembles a bilinear form.
@@ -404,7 +404,7 @@ class UFL_Problem(qlip_rk.class_problem.Problem):
         self.I_interior = scipy.sparse.spdiags(chi_interior, [0], self.dim, self.dim).tocsr()
         self.I_boundary = scipy.sparse.spdiags(chi_boundary, [0], self.dim, self.dim).tocsr()
 
-class UFL_Control(qlip_rk.class_problem.Control, UFL_Problem):
+class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
     '''Optimal control problem.
 
     Args:
@@ -813,4 +813,4 @@ class UFL_Control(qlip_rk.class_problem.Control, UFL_Problem):
                         'd2fdtdu': d2fdtdu
                         }
 
-        qlip_rk.class_problem.Control.__init__(self, self.M, self.f, x_0, t_0, t_f, J, g, self.derivatives)
+        fatDAE.class_problem.Control.__init__(self, self.M, self.f, x_0, t_0, t_f, J, g, self.derivatives)

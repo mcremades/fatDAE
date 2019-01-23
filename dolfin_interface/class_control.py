@@ -2,7 +2,7 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'../..'); from qlip_rk.base.basic_import import *
+import sys; sys.path.insert(0,'../..'); from fatDAE.base.basic_import import *
 
 # Dolfin package
 from dolfin import *

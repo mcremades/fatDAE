@@ -2,14 +2,14 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
+import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
 
 # User defined
-from qlip_rk.base import class_solvers_nl
-from qlip_rk.base import class_solvers_sp
+from fatDAE.base import class_solvers_nl
+from fatDAE.base import class_solvers_sp
 
-import qlip_rk.class_butcher
-import qlip_rk.class_problem
+import fatDAE.class_butcher
+import fatDAE.class_problem
 
 def build(butcher_json, embedded_1, embedded_2):
     '''Instances a solver from a Butcher table.
@@ -25,15 +25,15 @@ def build(butcher_json, embedded_1, embedded_2):
 
     if butcher_json['type'] == 'RW':
 
-        advancing_table = qlip_rk.class_butcher.Generalized(butcher_json, embedded_1)
-        estimator_table = qlip_rk.class_butcher.Generalized(butcher_json, embedded_2)
+        advancing_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_1)
+        estimator_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_2)
 
         solver = RW(advancing_table, estimator_table)
 
     else:
 
-        advancing_table = qlip_rk.class_butcher.Butcher(butcher_json, embedded_1)
-        estimator_table = qlip_rk.class_butcher.Butcher(butcher_json, embedded_2)
+        advancing_table = fatDAE.class_butcher.Butcher(butcher_json, embedded_1)
+        estimator_table = fatDAE.class_butcher.Butcher(butcher_json, embedded_2)
 
         if butcher_json['type'] == 'DIRK':
             solver = DIRK(advancing_table, estimator_table)

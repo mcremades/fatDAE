@@ -2,11 +2,11 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
-import sys; sys.path.insert(0,'..'); from qlip_rk.base.basic_import import *
+import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
 
 # User defined
-import qlip_rk.class_butcher
-import qlip_rk.class_solvers
+import fatDAE.class_butcher
+import fatDAE.class_solvers
 
 class Problem(object):
     ''' Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.
@@ -550,7 +550,7 @@ if __name__ == '__main__':
         else:
             raise NameError('Choose between 1 or 2 for advancing method...')
 
-    solver = qlip_rk.class_solvers.build(butcher_json, embedded_1, embedded_2)
+    solver = fatDAE.class_solvers.build(butcher_json, embedded_1, embedded_2)
 
     '''
         Dahlquist problem
