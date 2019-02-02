@@ -292,35 +292,35 @@ class Problem(object):
         ''' Plot stored times versus stored states.
         '''
 
-        nrows = len(self.x_list[0])
-        ncols = len(self.x_list[0])
+        #nrows = len(self.x_list[0])
+        #ncols = len(self.x_list[0])
 
-        print(self.t_list)
+        #print(self.t_list)
 
-        image = []
+        #image = []
 
-        for i in range(len(self.x_list[0])):
+        #for i in range(len(self.x_list[0])):
 
-            for j in range(len(self.x_list[0])):
+        #    for j in range(len(self.x_list[0])):
 
-                image.append(numpy.trapz(self.get_delta_x(i, j), x=self.t_list) / (self.t_list[-1]))
+        #        image.append(numpy.trapz(self.get_delta_x(i, j), x=self.t_list) / (self.t_list[-1]))
 
-        image = numpy.array(image); image = image.reshape((nrows, ncols))
+        #image = numpy.array(image); image = image.reshape((nrows, ncols))
 
-        row_labels = []
-        col_labels = []
+        #row_labels = []
+        #col_labels = []
 
-        for i in range(len(self.x_list[0])):
-            row_labels.append('$x_{'+str(i)+'}$')
-            col_labels.append('$x_{'+str(i)+'}$')
+        #for i in range(len(self.x_list[0])):
+        #    row_labels.append('$x_{'+str(i)+'}$')
+        #    col_labels.append('$x_{'+str(i)+'}$')
 
-        matplotlib.pyplot.matshow(image)
-        matplotlib.pyplot.xticks(range(len(self.x_list[0])), col_labels)
-        matplotlib.pyplot.yticks(range(len(self.x_list[0])), row_labels)
+        #matplotlib.pyplot.matshow(image)
+        #matplotlib.pyplot.xticks(range(len(self.x_list[0])), col_labels)
+        #matplotlib.pyplot.yticks(range(len(self.x_list[0])), row_labels)
 
-        matplotlib.pyplot.colorbar()
+        #matplotlib.pyplot.colorbar()
 
-        matplotlib.pyplot.show()
+        #matplotlib.pyplot.show()
 
         if len(self.delta_x_list) > 0:
 
@@ -577,14 +577,14 @@ if __name__ == '__main__':
 
     def f(t, x):
 
-        b = numpy.array([- lmb * x[0] - lmb * x[1], \
+        b = numpy.array([- lmb * x[0], \
                          - dlt * x[1]])
 
         return b
 
     def dfdx(t, x):
 
-        A = numpy.array([[- lmb, -lmb], \
+        A = numpy.array([[- lmb, 0.], \
                          [0., -dlt]])
 
         return scipy.sparse.csc_matrix(A)
@@ -597,7 +597,7 @@ if __name__ == '__main__':
         return b
 
     x_0 = numpy.array([1., \
-                       2.])
+                       1.])
 
     t_0 = 0.
     t_f = 1.
@@ -616,4 +616,4 @@ if __name__ == '__main__':
 
     problem.exact = x
 
-    problem.solve(solver, h=5.e-2, tlm=True); problem.plot()
+    problem.solve(solver, h=5.e-2, tlm=False); problem.plot()
