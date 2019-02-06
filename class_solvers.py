@@ -1367,9 +1367,8 @@ class RW(RK):
 
         RK.__init__(self, advancing_table, estimator_table)
 
-        self.spsolver = class_solvers_sp.Solver()
-
-        self.lqsolver = class_solvers_sp.Least_Squares()
+        self.spsolver = class_solvers_sp.solver_sp()
+        self.lqsolver = class_solvers_sp.solver_lq()
 
     def setup_frw(self, problem, h=None):
         '''Configures the solver for one forward resolution.
@@ -1612,8 +1611,7 @@ class RW(RK):
 
         else:
 
-            print "Possible order reduction, using fourth order finite differences on time..."
-
+            print("Possible order reduction, using fourth order finite differences on time...")
             dfdt = (48.0 * self.f(t + self.h, x) - 36.0 * self.f(t + 2.0 * self.h, x) \
                                                  + 16.0 * self.f(t + 3.0 * self.h, x) - 3.0 * self.f(t + 4.0 * self.h, x) - 25.0 * self.f(t, x)) / (12.0 * self.h)
 
@@ -1650,7 +1648,7 @@ class RW(RK):
 
         else:
 
-            print "Possible order reduction, using fourth order finite differences on time..."
+            print("Possible order reduction, using fourth order finite differences on time...")
 
             dMdt = (48.0 * self.M(t + self.h, x) - 36.0 * self.M(t + 2.0 * self.h, x) \
                                                  + 16.0 * self.M(t + 3.0 * self.h, x) - 3.0 * self.M(t + 4.0 * self.h, x) - 25.0 * self.M(t, x)) / (12.0 * self.h)
