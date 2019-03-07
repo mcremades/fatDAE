@@ -131,6 +131,24 @@ class RK(Solver):
         else:
             self.setup_frw(problem, h)
 
+        if state_machine == None:
+            pass
+        else:
+            params = {'problem': problem, \
+                      'x_0': problem.x_0, \
+                      'x_k': problem.x_0, \
+                      'h_k': 0, \
+                      't_0': problem.t_0}
+
+            state_machine.actual_state.exec_ini(params)
+
+        problem.x_0 = problem.solve_initial(problem.x_0)
+
+        if self.adj == True:
+            pass
+        else:
+            self.setup_frw(problem, h)
+
         self.store_frw(problem)
 
         print("Solving...")
@@ -138,6 +156,14 @@ class RK(Solver):
         start = time.time()
 
         while self.t < self.t_f:
+
+            if state_machine == None:
+                pass
+            else:
+                if state_machine.number_states >= state_machine.max_number_states:
+                    print ('Finished simulation...')
+
+                    return
 
             print('Time ->', self.t)
 
@@ -216,6 +242,19 @@ class RK(Solver):
         self.adj = adj
         self.tlm = tlm
 
+        if state_machine == None:
+            pass
+        else:
+            params = {'problem': problem, \
+                      'x_0': problem.x_0, \
+                      'x_k': problem.x_0, \
+                      'h_k': 0, \
+                      't_0': problem.t_0}
+
+            state_machine.actual_state.exec_ini(params)
+
+        problem.x_0 = problem.solve_initial(problem.x_0)
+
         if self.adj == True:
             pass
         else:
@@ -236,6 +275,14 @@ class RK(Solver):
         start = time.time()
 
         while self.t < self.t_f:
+
+            if state_machine == None:
+                pass
+            else:
+                if state_machine.number_states >= state_machine.max_number_states:
+                    print ('Finished simulation...')
+
+                    return
 
             print('Time ->', self.t)
 
@@ -281,6 +328,9 @@ class RK(Solver):
 
                         self.tstep_tlm()
                         self.updat_tlm()
+
+                    self.x = problem.solve_initial(self.x)
+                    self.h=0.1
 
                     self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
