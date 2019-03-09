@@ -130,7 +130,7 @@ class Problem(object):
             h = (self.t_f - self.t_0) / 1000.
 
         if adj:
-            return solver.solve_adj(self, state_machine, h, adp, tlm)
+            return solver.solve_adj(self, state_machine, h, adp)
         else:
 
             if adp:

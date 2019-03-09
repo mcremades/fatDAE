@@ -161,7 +161,8 @@ class RK(Solver):
                 pass
             else:
                 if state_machine.number_states >= state_machine.max_number_states:
-                    print ('Finished simulation...')
+
+                    print("Elapsed time: ", time.time() - start)
 
                     return
 
@@ -211,7 +212,6 @@ class RK(Solver):
                 if self.tlm == False:
 
                     self.updat_frw()
-
                     self.store_frw(problem)
 
                 else:
@@ -220,7 +220,6 @@ class RK(Solver):
 
                     self.updat_frw()
                     self.updat_tlm()
-
                     self.store_frw(problem)
 
         if self.J == None:
@@ -280,7 +279,12 @@ class RK(Solver):
                 pass
             else:
                 if state_machine.number_states >= state_machine.max_number_states:
-                    print ('Finished simulation...')
+
+                    print("Elapsed time: ", time.time() - start)
+
+                    print('Acept. steps: ', self.a_steps)
+                    print('Rejec. steps: ', self.r_steps)
+                    print('Divrg. steps: ', self.d_steps)
 
                     return
 
@@ -330,7 +334,7 @@ class RK(Solver):
                         self.updat_tlm()
 
                     self.x = problem.solve_initial(self.x)
-                    self.h=0.1
+                    self.h=1.0
 
                     self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
@@ -345,7 +349,6 @@ class RK(Solver):
                         if self.tlm == False:
 
                             self.updat_frw()
-
                             self.store_frw(problem)
 
                         else:
@@ -354,7 +357,6 @@ class RK(Solver):
 
                             self.updat_frw()
                             self.updat_tlm()
-
                             self.store_frw(problem)
 
                         self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
