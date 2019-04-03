@@ -1,4 +1,4 @@
-# Date: 06/03/2019
+# Date: 01/04/2019
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 # Basic modules
@@ -32,7 +32,10 @@ class Machine(object):
 
         self.events = []
 
-        self.max_number_states = max_number_states; self.number_states = 0
+        self.max_number_states = max_number_states;
+
+        self.number_states_total = 0
+        self.number_states_count = 0
 
     def check(self, params):
         ''' Checks the actual state event. If the event is accepted then jumps to next state.
@@ -42,6 +45,9 @@ class Machine(object):
         '''
 
         params['state_t'] = self.actual_state.t
+
+        params['number_states_total'] = self.number_states_total
+        params['number_states_count'] = self.number_states_count
 
         x, h, event, accept = self.actual_state.check(params)
 
@@ -53,7 +59,8 @@ class Machine(object):
 
                 self.actual_state.exec_ini(params)
 
-                self.number_states += 1
+                self.number_states_total += 1
+                self.number_states_count += 1
 
 
         return x, h, event, accept
@@ -83,12 +90,14 @@ class State(object):
 
         self.next_state = None
 
+        self.params = {}
+
     def exec_ini(self, params):
         ''' To be executed when the state is changed.
         '''
         pass
 
-    def exec_dur(self, params):
+    def exec_dur(self, params, accept=False):
         ''' To be executed every time :meth:`check` is called.
         '''
         pass
@@ -108,6 +117,8 @@ class State(object):
             - (:obj:`bool`): True if some event is accepted, False otherwise.
 
         '''
+
+        params['state_params'] = self.params
 
         self.exec_dur(params)
 

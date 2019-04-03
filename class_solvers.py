@@ -160,8 +160,9 @@ class RK(Solver):
             if state_machine == None:
                 pass
             else:
-                if state_machine.number_states >= state_machine.max_number_states:
-                    print ('Finished simulation...')
+                if state_machine.number_states_t >= state_machine.max_number_states:
+
+                    print("Elapsed time: ", time.time() - start)
 
                     return
 
@@ -211,7 +212,6 @@ class RK(Solver):
                 if self.tlm == False:
 
                     self.updat_frw()
-
                     self.store_frw(problem)
 
                 else:
@@ -220,7 +220,6 @@ class RK(Solver):
 
                     self.updat_frw()
                     self.updat_tlm()
-
                     self.store_frw(problem)
 
         if self.J == None:
@@ -279,8 +278,13 @@ class RK(Solver):
             if state_machine == None:
                 pass
             else:
-                if state_machine.number_states >= state_machine.max_number_states:
-                    print ('Finished simulation...')
+                if state_machine.number_states_total >= state_machine.max_number_states:
+
+                    print("Elapsed time: ", time.time() - start)
+
+                    print('Accept. steps: ', self.a_steps)
+                    print('Reject. steps: ', self.r_steps)
+                    print('Diverg. steps: ', self.d_steps)
 
                     return
 
@@ -318,19 +322,16 @@ class RK(Solver):
 
                 if accept == True:
 
-                    self.x = x[0]
                     self.t = self.t + self.h
+                    self.x = x[0]
 
-                    if self.tlm == False:
-                        self.store_frw(problem)
-                    else:
-                        self.store_frw(problem)
+                    self.store_frw(problem)
 
+                    if self.tlm == True:
                         self.tstep_tlm()
                         self.updat_tlm()
 
-                    self.x = problem.solve_initial(self.x)
-                    self.h=0.1
+                    self.x = problem.solve_initial(self.x); self.h = 1.0
 
                     self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
@@ -343,19 +344,25 @@ class RK(Solver):
                     if self.error_est < 1.0:
 
                         if self.tlm == False:
-
                             self.updat_frw()
-
-                            self.store_frw(problem)
-
                         else:
-
                             self.tstep_tlm()
-
                             self.updat_frw()
                             self.updat_tlm()
 
-                            self.store_frw(problem)
+                        self.store_frw(problem)
+
+                        if state_machine == None:
+                            pass
+                        else:
+
+                            params = {'problem': problem, \
+                                      'x_0': x_0, \
+                                      'x_k': x_k, \
+                                      'h_k': self.h, \
+                                      't_0': self.t}
+
+                            state_machine.actual_state.exec_dur(params, accept=True)
 
                         self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
@@ -364,7 +371,6 @@ class RK(Solver):
                         self.r_steps = self.r_steps + 1; self.r_list.append([self.t, self.h])
 
                     self.adapt()
-
 
                 else:
 
@@ -379,9 +385,9 @@ class RK(Solver):
 
         print("Elapsed time: ", time.time() - start)
 
-        print('Acept. steps: ', self.a_steps)
-        print('Rejec. steps: ', self.r_steps)
-        print('Divrg. steps: ', self.d_steps)
+        print('Accept. steps: ', self.a_steps)
+        print('Reject. steps: ', self.r_steps)
+        print('Diverg. steps: ', self.d_steps)
 
     def solve_adj(self, problem, state_machine = None, h=None, adp=False):
         '''Solves an optimization problem and computes the gradient of a cost function by the adjoint method.
