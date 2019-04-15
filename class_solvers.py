@@ -126,12 +126,14 @@ class RK(Solver):
         self.adj = adj
         self.tlm = tlm
 
+        self.state_machine = state_machine
+
         if self.adj == True:
             pass
         else:
             self.setup_frw(problem, h)
 
-        if state_machine == None:
+        if self.state_machine == None:
             pass
         else:
             params = {'problem': problem, \
@@ -140,7 +142,7 @@ class RK(Solver):
                       'h_k': 0, \
                       't_0': problem.t_0}
 
-            state_machine.actual_state.exec_ini(params)
+            self.state_machine.actual_state.exec_ini(params)
 
         problem.x_0 = problem.solve_initial(problem.x_0)
 
@@ -157,10 +159,10 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
-            if state_machine == None:
+            if self.state_machine == None:
                 pass
             else:
-                if state_machine.number_states_t >= state_machine.max_number_states:
+                if self.state_machine.number_states_total >= self.state_machine.max_number_states:
 
                     print("Elapsed time: ", time.time() - start)
 
@@ -176,7 +178,7 @@ class RK(Solver):
             __, x_0 = self.state_frw(0)
             __, x_k = self.state_frw(self.advancing_table.s - 1)
 
-            if state_machine == None:
+            if self.state_machine == None:
                 trigged = False
             else:
 
@@ -186,7 +188,7 @@ class RK(Solver):
                           'h_k': self.h, \
                           't_0': self.t}
 
-                x, h, trigged, accept = state_machine.check(params)
+                x, h, trigged, accept = self.state_machine.check(params)
 
             if trigged == True:
 
@@ -241,7 +243,9 @@ class RK(Solver):
         self.adj = adj
         self.tlm = tlm
 
-        if state_machine == None:
+        self.state_machine = state_machine
+
+        if self.state_machine == None:
             pass
         else:
             params = {'problem': problem, \
@@ -250,7 +254,7 @@ class RK(Solver):
                       'h_k': 0, \
                       't_0': problem.t_0}
 
-            state_machine.actual_state.exec_ini(params)
+            self.state_machine.actual_state.exec_ini(params)
 
         problem.x_0 = problem.solve_initial(problem.x_0)
 
@@ -275,10 +279,10 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
-            if state_machine == None:
+            if self.state_machine == None:
                 pass
             else:
-                if state_machine.number_states_total >= state_machine.max_number_states:
+                if self.state_machine.number_states_total >= self.state_machine.max_number_states:
 
                     print("Elapsed time: ", time.time() - start)
 
@@ -304,7 +308,7 @@ class RK(Solver):
             __, x_0 = self.state_frw(0)
             __, x_k = self.state_frw(self.advancing_table.s - 1)
 
-            if state_machine == None:
+            if self.state_machine == None:
                 trigged = False
             else:
 
@@ -314,7 +318,7 @@ class RK(Solver):
                           'h_k': self.h, \
                           't_0': self.t}
 
-                x, h, trigged, accept = state_machine.check(params)
+                x, h, trigged, accept = self.state_machine.check(params)
 
             if trigged == True:
 
@@ -352,7 +356,7 @@ class RK(Solver):
 
                         self.store_frw(problem)
 
-                        if state_machine == None:
+                        if self.state_machine == None:
                             pass
                         else:
 
@@ -362,7 +366,7 @@ class RK(Solver):
                                       'h_k': self.h, \
                                       't_0': self.t}
 
-                            state_machine.actual_state.exec_dur(params, accept=True)
+                            self.state_machine.actual_state.exec_dur(params, accept=True)
 
                         self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
