@@ -175,8 +175,11 @@ class RK(Solver):
 
             self.tstep_frw()
 
-            __, x_0 = self.state_frw(0)
-            __, x_k = self.state_frw(self.advancing_table.s - 1)
+            x_0 = self.x
+            x_k = self.x
+
+            for j in range(self.advancing_table.s):
+                x_k = x_k + self.advancing_table.b[j] * self.K[j, :]
 
             if self.state_machine == None:
                 trigged = False
@@ -305,8 +308,11 @@ class RK(Solver):
 
             self.tstep_frw()
 
-            __, x_0 = self.state_frw(0)
-            __, x_k = self.state_frw(self.advancing_table.s - 1)
+            x_0 = self.x
+            x_k = self.x
+
+            for j in range(self.advancing_table.s):
+                x_k = x_k + self.advancing_table.b[j] * self.K[j, :]
 
             if self.state_machine == None:
                 trigged = False
