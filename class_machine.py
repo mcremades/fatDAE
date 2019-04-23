@@ -150,7 +150,7 @@ class State(object):
 
             if i_accepted.size > 0:
 
-                self.exec_out(params)
+                self.exec_out(params, self.transitions[i_trigered[0]].reset)
 
                 self.next_state = self.transitions[i_trigered[0]].fin_state
 
@@ -173,6 +173,9 @@ class State(object):
 
         self.transitions.append(transitions)
 
+class End(State):
+    pass
+    
 class Transition(object):
     ''' Transition between states.
 
@@ -181,9 +184,11 @@ class Transition(object):
         fin_state (:obj:`state_machine.class_state_machine.State):
     '''
 
-    def __init__(self, ini_state, fin_state):
+    def __init__(self, ini_state, fin_state, reset=0):
 
         self.events = []
+
+        self.reset = reset
 
         self.ini_state = ini_state
         self.fin_state = fin_state
