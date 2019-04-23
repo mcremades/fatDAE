@@ -84,13 +84,18 @@ class State(object):
     ''' State of operation.
     '''
 
-    def __init__(self):
+    def __init__(self, name=''):
+
+        self.name = name
 
         self.transitions = []
 
         self.next_state = None
 
         self.params = {}
+
+    def plot(self):
+        pass
 
     def exec_ini(self, params):
         ''' To be executed when the state is changed.
@@ -175,7 +180,7 @@ class State(object):
 
 class End(State):
     pass
-    
+
 class Transition(object):
     ''' Transition between states.
 
@@ -248,7 +253,7 @@ class Wait(Event):
     ''' Event of a transition.
     '''
 
-    def __init__(self, t, tol_a = 1e-4, tol_r = 1e-2):
+    def __init__(self, t, tol_a=1e-4, tol_r=1e-2):
 
         Event.__init__(self)
 
