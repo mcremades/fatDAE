@@ -53,7 +53,11 @@ class Machine(object):
 
         if event:
 
+            #print('TRIGED')
             if accept:
+                #print('Acepted')
+                #print(self.actual_state.next_state)
+                #self.print_states()
 
                 self.actual_state = self.actual_state.next_state
 
@@ -130,47 +134,112 @@ class State(object):
         trigered_list = []
         accepted_list = []
 
+        jump_list = []
+        jump_step = []
+
         x_list = []
         h_list = []
 
+        i = 0
         for transition in self.transitions:
 
-            x, h, triged, accept = transition.check(params)
+            x, h, trigered, accepted = transition.check(params)
 
-            trigered_list.append(triged)
-            accepted_list.append(accept)
+            #trigered_list.append(trigered)
+            #accepted_list.append(accepted)
+
+            if True in trigered:
+                trigered_list.append(True)
+            else:
+                trigered_list.append(False)
+
+            if False in accepted:
+                accepted_list.append(False)
+            else:
+                accepted_list.append(True)
+
+            if True in trigered and True in accepted:
+                jump_list.append(i)
+                jump_step.append(min(h))
+            i += 1
 
             x_list.append(x)
             h_list.append(h)
 
-        i_trigered = numpy.where(numpy.array(trigered_list))[0]
-        i_accepted = numpy.where(numpy.array(accepted_list))[0]
+            #print('th',h)
 
-        trigered = False
-        accepted = False
+        #print(trigered_list)
+        #print(accepted_list)
 
-        if i_trigered.size > 0:
-
+        if True in trigered_list:
             trigered = True
-
-            if i_accepted.size > 0:
-
-                self.exec_out(params, self.transitions[i_trigered[0]].reset)
-
-                self.next_state = self.transitions[i_trigered[0]].fin_state
-
-                accepted = True
-
-            else:
-                accepted = False
-
         else:
+            trigered = False
 
-            if i_accepted.size > 0:
+        if False in accepted_list:
+            accepted = False
+        else:
+            accepted = True
 
-                accepted = True
+        if len(jump_list) > 0:
 
-        return x, h, trigered, accepted
+            k = numpy.argmin(numpy.array(jump_step))
+            self.exec_out(params, self.transitions[jump_list[k]].reset)
+
+            self.next_state = self.transitions[jump_list[k]].fin_state
+
+            return x, jump_step[k], trigered, accepted
+        return x, min(h_list)[0], trigered, accepted
+
+        #i_trigered = numpy.where(numpy.array(trigered_list))[0]
+        #i_accepted = numpy.where(numpy.array(accepted_list))[0]
+
+        #trigered = False
+        #accepted = True
+
+        #if [True] in trigered_list:
+        #    trigered = True
+        #if [False] in accepted_list:
+        #    accepted = False
+
+        #if len(jump_list) > 0:
+
+        #    print('jump list', jump_list)
+
+        #    ind = numpy.argmin(jump_list)
+
+        #    self.exec_out(params, self.transitions[jump_list[ind]].reset); self.next_state = self.transitions[jump_list[ind]].fin_state
+
+        #    trigered = True
+        #    accepted = True
+
+        #if i_trigered.size > 0:
+
+        #    trigered = True
+
+        #    print('trig',i_trigered)
+        #    print('acep',i_accepted)
+
+        #    if i_trigered[0] in i_accepted:
+
+        #        self.exec_out(params, self.transitions[i_trigered[0]].reset)
+
+        #        self.next_state = self.transitions[i_trigered[0]].fin_state
+
+        #        accepted = True
+
+        #    else:
+        #        accepted = False
+
+        #else:
+
+        #    if i_accepted.size > 0:
+
+        #        accepted = True
+
+        #print('check state', trigered, accepted)
+
+        #return x, min(h_list), trigered, accepted
 
     def add_transitions(self, transitions):
         ''' Appends a list of transitions to the current list.
@@ -219,11 +288,15 @@ class Transition(object):
 
             x, h, trigered, accepted = event.check(params)
 
+            #print('event h',h)
+
             x_list.append(x)
             h_list.append(h)
 
             trigered_list.append(trigered)
             accepted_list.append(accepted)
+
+        #print(h_list)
 
         return x_list, h_list, trigered_list, accepted_list
 
@@ -287,8 +360,10 @@ class Wait(Event):
 
                 h_k = (params['state_t'] + self.t) - t_0
 
+                #print('h_k',h_k)
+
                 return x_k, h_k, True, False
 
             else:
 
-                return x_k, h_k, False, False
+                return x_k, h_k, False, True

@@ -324,11 +324,14 @@ class RK(Solver):
                           'h_k': self.h, \
                           't_0': self.t}
 
+                #print('precheck')
                 x, h, trigged, accept = self.state_machine.check(params)
+
+                #print('h, trig, acc', h, trigged, accept)
 
             if trigged == True:
 
-                self.h = h[0]
+                self.h = h
 
                 if accept == True:
 
