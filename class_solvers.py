@@ -159,6 +159,9 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
+            if self.h > self.h_max:
+                self.h = self.h_max
+
             if self.state_machine == None:
                 pass
             else:
@@ -281,6 +284,9 @@ class RK(Solver):
         start = time.time()
 
         while self.t < self.t_f:
+
+            if self.h > self.h_max:
+                self.h = self.h_max
 
             if self.state_machine == None:
                 pass
