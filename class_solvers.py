@@ -162,7 +162,7 @@ class RK(Solver):
             if self.state_machine == None:
                 pass
             else:
-                if self.state_machine.number_states_total >= self.state_machine.max_number_states or type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
 
                     print("Elapsed time: ", time.time() - start)
 
@@ -285,7 +285,7 @@ class RK(Solver):
             if self.state_machine == None:
                 pass
             else:
-                if self.state_machine.number_states_total >= self.state_machine.max_number_states or type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
 
                     print("Elapsed time: ", time.time() - start)
 
