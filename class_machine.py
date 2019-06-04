@@ -98,12 +98,17 @@ class State(object):
 
         self.params = {}
 
+        self.params['number_states_count']=0
+        self.params['number_states_total']=0
+
     def plot(self):
         pass
 
     def exec_ini(self, params):
         ''' To be executed when the state is changed.
         '''
+        self.params['number_states_count']+=1
+        self.params['number_states_total']+=1
         pass
 
     def exec_dur(self, params, accept=False):
@@ -321,6 +326,29 @@ class Event(object):
 
     def f(self):
         pass
+
+class MaxCycles(Event):
+
+    def __init__(self, n=1):
+
+        Event.__init__(self)
+
+        self.n = n
+
+    def check(self, params):
+
+        x_k = params['x_k']
+        h_k = params['h_k']
+
+        if params['state_params']['number_states_count'] > self.n:
+
+            print('Event located')
+
+            return x_k, h_k, True, True
+
+        else:
+
+            return x_k, h_k, False, True
 
 class Wait(Event):
     ''' Event of a transition.
