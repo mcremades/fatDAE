@@ -11,7 +11,7 @@ from fatDAE.base import class_solvers_sp
 import fatDAE.class_butcher
 import fatDAE.class_problem
 
-def build(butcher_json, embedded_1, embedded_2):
+def build(butcher_json, embedded_1, embedded_2, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
     '''Instances a solver from a Butcher table.
 
     Args:
@@ -28,7 +28,7 @@ def build(butcher_json, embedded_1, embedded_2):
         advancing_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_1)
         estimator_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_2)
 
-        solver = RW(advancing_table, estimator_table)
+        solver = RW(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
     else:
 
@@ -36,16 +36,16 @@ def build(butcher_json, embedded_1, embedded_2):
         estimator_table = fatDAE.class_butcher.Butcher(butcher_json, embedded_2)
 
         if butcher_json['type'] == 'DIRK':
-            solver = DIRK(advancing_table, estimator_table)
+            solver = DIRK(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
         else:
             if butcher_json['type'] == 'SDIRK':
-                solver = SDIRK(advancing_table, estimator_table)
+                solver = SDIRK(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
             else:
                 if butcher_json['type'] == 'EDIRK':
-                    solver = EDIRK(advancing_table, estimator_table)
+                    solver = EDIRK(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
                 else:
                     if butcher_json['type'] == 'ESDIRK':
-                        solver = ESDIRK(advancing_table, estimator_table)
+                        solver = ESDIRK(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
                     else:
                         raise NameError('Unknown method or method not implemented yet...')
 
@@ -1432,9 +1432,9 @@ class RW(RK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        RK.__init__(self, advancing_table, estimator_table)
+        RK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
         self.spsolver = class_solvers_sp.solver_sp()
         self.lqsolver = class_solvers_sp.solver_lq()
