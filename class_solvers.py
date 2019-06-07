@@ -195,7 +195,7 @@ class RK(Solver):
 
             if trigged == True:
 
-                self.h = h[0]
+                self.h = h
 
                 if accept == True:
 
@@ -211,6 +211,8 @@ class RK(Solver):
                         self.updat_tlm()
 
                     self.x = problem.solve_initial(self.x)
+
+                    self.h = 10
 
             else:
 
