@@ -101,7 +101,7 @@ class State(object):
         self.params['number_states_count']=0
         self.params['number_states_total']=0
 
-    def plot(self):
+    def plot(self, save_path=None):
         pass
 
     def exec_ini(self, params):
