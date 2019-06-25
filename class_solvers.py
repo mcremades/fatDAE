@@ -308,6 +308,9 @@ class RK(Solver):
 
                 return
 
+            if self.h > self.h_max:
+                self.h = self.h_max
+
             self.tstep_frw()
 
             x_0 = self.x
