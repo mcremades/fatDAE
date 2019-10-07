@@ -159,15 +159,6 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
-            if self.state_machine == None:
-                pass
-            else:
-                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
-
-                    print("Elapsed time: ", time.time() - start)
-
-                    return
-
             print('Time ->', self.t)
 
             if self.t + self.h > self.t_f:
@@ -193,6 +184,12 @@ class RK(Solver):
 
                 x, h, trigged, accept = self.state_machine.check(params)
 
+                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+
+                    print("Elapsed time: ", time.time() - start)
+
+                    return 2
+
             if trigged == True:
 
                 self.h = h
@@ -210,9 +207,7 @@ class RK(Solver):
                         self.tstep_tlm()
                         self.updat_tlm()
 
-                    self.x = problem.solve_initial(self.x)
-
-                    self.h = 10
+                    self.x = problem.solve_initial(self.x); self.h = 1
 
             else:
 
@@ -235,6 +230,8 @@ class RK(Solver):
             self.cst = self.cst + self.J(self.t, self.x)
 
         print("Elapsed time: ", time.time() - start)
+
+        return 1
 
     def solve_adp(self, problem, state_machine = None, h=None, adj=False, tlm=False):
         '''Solves a problem with adaptive step size.
@@ -284,19 +281,6 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
-            if self.state_machine == None:
-                pass
-            else:
-                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
-
-                    print("Elapsed time: ", time.time() - start)
-
-                    print('Accept. steps: ', self.a_steps)
-                    print('Reject. steps: ', self.r_steps)
-                    print('Diverg. steps: ', self.d_steps)
-
-                    return
-
             print('Time ->', self.t)
 
             if self.t + self.h > self.t_f:
@@ -306,7 +290,7 @@ class RK(Solver):
 
                 print ('Minimum stepsize reached...')
 
-                return
+                return 0
 
             if self.h > self.h_max:
                 self.h = self.h_max
@@ -329,10 +313,17 @@ class RK(Solver):
                           'h_k': self.h, \
                           't_0': self.t}
 
-                #print('precheck')
                 x, h, trigged, accept = self.state_machine.check(params)
 
-                #print('h, trig, acc', h, trigged, accept)
+                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+
+                    print("Elapsed time: ", time.time() - start)
+
+                    print('Accept. steps: ', self.a_steps)
+                    print('Reject. steps: ', self.r_steps)
+                    print('Diverg. steps: ', self.d_steps)
+
+                    return 2
 
             if trigged == True:
 
@@ -406,6 +397,10 @@ class RK(Solver):
         print('Accept. steps: ', self.a_steps)
         print('Reject. steps: ', self.r_steps)
         print('Diverg. steps: ', self.d_steps)
+
+        print('Maximum simulation time exceeded')
+
+        return 1
 
     def solve_adj(self, problem, state_machine = None, h=None, adp=False):
         '''Solves an optimization problem and computes the gradient of a cost function by the adjoint method.

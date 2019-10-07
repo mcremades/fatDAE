@@ -121,6 +121,9 @@ class State(object):
         '''
         pass
 
+    def store(self, params):
+        pass
+        
     def check(self, params):
         ''' Checks if the state must change by checking its transitions, and performs the change of state.
 

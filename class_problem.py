@@ -129,15 +129,19 @@ class Problem(object):
         if h == None:
             h = (self.t_f - self.t_0) / 1000.
 
-        if adj:
-            return solver.solve_adj(self, state_machine, h, adp, tlm)
-        else:
+        try:
 
-            if adp:
-                return solver.solve_adp(self, state_machine, h, adj, tlm)
+            if adj:
+                return solver.solve_adj(self, state_machine, h, adp, tlm)
             else:
-                return solver.solve_fxd(self, state_machine, h, adj, tlm)
 
+                if adp:
+                    return solver.solve_adp(self, state_machine, h, adj, tlm)
+                else:
+                    return solver.solve_fxd(self, state_machine, h, adj, tlm)
+        except:
+            return 0
+            
     def error(self, x, y, a_tol=1e-2, r_tol=1e-2):
         ''' Computes the error between two states.
 
