@@ -653,9 +653,9 @@ class RK(Solver):
             self.L_list.append(self.L)
 
         if self.tlm == True:
-            problem.store(self.t, self.x, self.delta_x)
+            problem.store(self.t, self.x, self.delta_x, problem.store_level)
         else:
-            problem.store(self.t, self.x)
+            problem.store(self.t, self.x, problem.store_level)
 
     def state_frw(self, i):
         '''Compute :math:`i`-th forward intermediate time and state.

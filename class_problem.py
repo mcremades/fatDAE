@@ -141,7 +141,7 @@ class Problem(object):
                     return solver.solve_fxd(self, state_machine, h, adj, tlm)
         except:
             return 0
-            
+
     def error(self, x, y, a_tol=1e-2, r_tol=1e-2):
         ''' Computes the error between two states.
 
