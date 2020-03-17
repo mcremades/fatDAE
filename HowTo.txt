@@ -1,0 +1,6 @@
+Sphinx documentation
+* sphinx-quickstart
+  sphinx-apidoc -o source/ ../../fatDAE
+  make html
+
+  documentation is generated. The HTML pages are in doc/_build/html
