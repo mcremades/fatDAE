@@ -1,0 +1,30 @@
+dolfin\_interface package
+=========================
+
+Submodules
+----------
+
+dolfin\_interface.class\_control module
+---------------------------------------
+
+.. automodule:: dolfin_interface.class_control
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dolfin\_interface.class\_problem module
+---------------------------------------
+
+.. automodule:: dolfin_interface.class_problem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: dolfin_interface
+   :members:
+   :undoc-members:
+   :show-inheritance:

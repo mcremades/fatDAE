@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE.class_machine &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fatDAE.class_machine</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fatDAE.class_machine</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Date: 01/04/2019</span>
+<span class="c1"># Auth: Manuel Cremades, manuel.cremades@usc.es</span>
+
+<span class="c1"># Basic modules</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">fatDAE.base.basic_import</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="Machine"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Machine">[docs]</a><span class="k">class</span> <span class="nc">Machine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; State machine.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Machine.print_states"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Machine.print_states">[docs]</a>    <span class="k">def</span> <span class="nf">print_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;event -&gt;&#39;</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;state -&gt;&#39;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;transition -&gt;&#39;</span><span class="p">,</span> <span class="n">transition</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ini_state -&gt;&#39;</span><span class="p">,</span><span class="n">transition</span><span class="o">.</span><span class="n">ini_state</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;end_state -&gt;&#39;</span><span class="p">,</span><span class="n">transition</span><span class="o">.</span><span class="n">fin_state</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">transition</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;event -&gt;&#39;</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_number_states</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">[];</span> <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_number_states</span> <span class="o">=</span> <span class="n">max_number_states</span><span class="p">;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_states_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_states_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Machine.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Machine.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Checks the actual state event. If the event is accepted then jumps to next state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (:obj:`bool`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_t&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span><span class="o">.</span><span class="n">t</span>
+
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_total&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_states_total</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_states_count</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">accept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">event</span><span class="p">:</span>
+
+            <span class="c1">#print(&#39;TRIGED&#39;)</span>
+            <span class="k">if</span> <span class="n">accept</span><span class="p">:</span>
+                <span class="c1">#print(&#39;Acepted&#39;)</span>
+                <span class="c1">#print(self.actual_state.next_state)</span>
+                <span class="c1">#self.print_states()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span><span class="o">.</span><span class="n">next_state</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">actual_state</span><span class="o">.</span><span class="n">exec_ini</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">number_states_total</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">number_states_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">accept</span></div>
+
+<div class="viewcode-block" id="Machine.add_states"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Machine.add_states">[docs]</a>    <span class="k">def</span> <span class="nf">add_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Appends a list of states to the current list and the associated transitions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            states (:obj:`list`): List of :obj:`state_machine.class_state_machine.State` instances.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">transition</span><span class="o">.</span><span class="n">events</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="State"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State">[docs]</a><span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; State of operation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_count&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_total&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+
+<div class="viewcode-block" id="State.plot"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="State.exec_ini"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.exec_ini">[docs]</a>    <span class="k">def</span> <span class="nf">exec_ini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; To be executed when the state is changed.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_count&#39;</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;number_states_total&#39;</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="State.exec_dur"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.exec_dur">[docs]</a>    <span class="k">def</span> <span class="nf">exec_dur</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; To be executed every time :meth:`check` is called.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="State.exec_out"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.exec_out">[docs]</a>    <span class="k">def</span> <span class="nf">exec_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; To be executed when the state is changed.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="State.store"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+        
+<div class="viewcode-block" id="State.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Checks if the state must change by checking its transitions, and performs the change of state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (tuple): Tuple containing:</span>
+
+<span class="sd">            - (:obj:`bool`): True if some event is trigered, False otherwise.</span>
+<span class="sd">            - (:obj:`bool`): True if some event is accepted, False otherwise.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">exec_dur</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="n">trigered_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">accepted_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">jump_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">jump_step</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">h_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">transition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">:</span>
+
+            <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">trigered</span><span class="p">,</span> <span class="n">accepted</span> <span class="o">=</span> <span class="n">transition</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+            <span class="c1">#trigered_list.append(trigered)</span>
+            <span class="c1">#accepted_list.append(accepted)</span>
+
+            <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">trigered</span><span class="p">:</span>
+                <span class="n">trigered_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trigered_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="n">accepted</span><span class="p">:</span>
+                <span class="n">accepted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">accepted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">trigered</span> <span class="ow">and</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">accepted</span><span class="p">:</span>
+                <span class="n">jump_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">jump_step</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">h_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+            <span class="c1">#print(&#39;th&#39;,h)</span>
+
+        <span class="c1">#print(trigered_list)</span>
+        <span class="c1">#print(accepted_list)</span>
+
+        <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">trigered_list</span><span class="p">:</span>
+            <span class="n">trigered</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trigered</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="n">accepted_list</span><span class="p">:</span>
+            <span class="n">accepted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">accepted</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">jump_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">k</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jump_step</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_out</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">jump_list</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span><span class="o">.</span><span class="n">reset</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="p">[</span><span class="n">jump_list</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span><span class="o">.</span><span class="n">fin_state</span>
+
+            <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">jump_step</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">trigered</span><span class="p">,</span> <span class="n">accepted</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">h_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trigered</span><span class="p">,</span> <span class="n">accepted</span></div>
+
+        <span class="c1">#i_trigered = numpy.where(numpy.array(trigered_list))[0]</span>
+        <span class="c1">#i_accepted = numpy.where(numpy.array(accepted_list))[0]</span>
+
+        <span class="c1">#trigered = False</span>
+        <span class="c1">#accepted = True</span>
+
+        <span class="c1">#if [True] in trigered_list:</span>
+        <span class="c1">#    trigered = True</span>
+        <span class="c1">#if [False] in accepted_list:</span>
+        <span class="c1">#    accepted = False</span>
+
+        <span class="c1">#if len(jump_list) &gt; 0:</span>
+
+        <span class="c1">#    print(&#39;jump list&#39;, jump_list)</span>
+
+        <span class="c1">#    ind = numpy.argmin(jump_list)</span>
+
+        <span class="c1">#    self.exec_out(params, self.transitions[jump_list[ind]].reset); self.next_state = self.transitions[jump_list[ind]].fin_state</span>
+
+        <span class="c1">#    trigered = True</span>
+        <span class="c1">#    accepted = True</span>
+
+        <span class="c1">#if i_trigered.size &gt; 0:</span>
+
+        <span class="c1">#    trigered = True</span>
+
+        <span class="c1">#    print(&#39;trig&#39;,i_trigered)</span>
+        <span class="c1">#    print(&#39;acep&#39;,i_accepted)</span>
+
+        <span class="c1">#    if i_trigered[0] in i_accepted:</span>
+
+        <span class="c1">#        self.exec_out(params, self.transitions[i_trigered[0]].reset)</span>
+
+        <span class="c1">#        self.next_state = self.transitions[i_trigered[0]].fin_state</span>
+
+        <span class="c1">#        accepted = True</span>
+
+        <span class="c1">#    else:</span>
+        <span class="c1">#        accepted = False</span>
+
+        <span class="c1">#else:</span>
+
+        <span class="c1">#    if i_accepted.size &gt; 0:</span>
+
+        <span class="c1">#        accepted = True</span>
+
+        <span class="c1">#print(&#39;check state&#39;, trigered, accepted)</span>
+
+        <span class="c1">#return x, min(h_list), trigered, accepted</span>
+
+<div class="viewcode-block" id="State.add_transitions"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.State.add_transitions">[docs]</a>    <span class="k">def</span> <span class="nf">add_transitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transitions</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Appends a list of transitions to the current list.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transitions</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="End"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.End">[docs]</a><span class="k">class</span> <span class="nc">End</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Transition"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Transition">[docs]</a><span class="k">class</span> <span class="nc">Transition</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Transition between states.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ini_state (:obj:`state_machine.class_state_machine.State):</span>
+<span class="sd">        fin_state (:obj:`state_machine.class_state_machine.State):</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ini_state</span><span class="p">,</span> <span class="n">fin_state</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span> <span class="o">=</span> <span class="n">reset</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ini_state</span> <span class="o">=</span> <span class="n">ini_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fin_state</span> <span class="o">=</span> <span class="n">fin_state</span>
+
+<div class="viewcode-block" id="Transition.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Transition.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Checks if the transitions happens by checking its triggers.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (tuple): Tuple containing:</span>
+
+<span class="sd">            - (:obj:`bool`): True if some trigger is trigered, False otherwise.</span>
+<span class="sd">            - (:obj:`bool`): True if some trigger is accepted, False otherwise.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">h_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">trigered_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">accepted_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+
+            <span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">trigered</span><span class="p">,</span> <span class="n">accepted</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+            <span class="c1">#print(&#39;event h&#39;,h)</span>
+
+            <span class="n">x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">h_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+            <span class="n">trigered_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trigered</span><span class="p">)</span>
+            <span class="n">accepted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accepted</span><span class="p">)</span>
+
+        <span class="c1">#print(h_list)</span>
+
+        <span class="k">return</span> <span class="n">x_list</span><span class="p">,</span> <span class="n">h_list</span><span class="p">,</span> <span class="n">trigered_list</span><span class="p">,</span> <span class="n">accepted_list</span></div>
+
+<div class="viewcode-block" id="Transition.add_events"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Transition.add_events">[docs]</a>    <span class="k">def</span> <span class="nf">add_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Appends a list of events to the current list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            states (:obj:`list`): List of :obj:`state_machine.class_state_machine.Event` instances.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">events</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Event of a transition.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Event.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Event.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Event.f"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Event.f">[docs]</a>    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="MaxCycles"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.MaxCycles">[docs]</a><span class="k">class</span> <span class="nc">MaxCycles</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+
+<div class="viewcode-block" id="MaxCycles.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.MaxCycles.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+
+        <span class="n">x_k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;x_k&#39;</span><span class="p">]</span>
+        <span class="n">h_k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;h_k&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_params&#39;</span><span class="p">][</span><span class="s1">&#39;number_states_count&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Event located&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">x_k</span><span class="p">,</span> <span class="n">h_k</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="n">x_k</span><span class="p">,</span> <span class="n">h_k</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span></div></div>
+
+<div class="viewcode-block" id="Wait"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Wait">[docs]</a><span class="k">class</span> <span class="nc">Wait</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Event of a transition.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">tol_a</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">tol_r</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tol_a</span> <span class="o">=</span> <span class="n">tol_a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tol_r</span> <span class="o">=</span> <span class="n">tol_r</span>
+
+<div class="viewcode-block" id="Wait.check"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_machine.Wait.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;problem&#39;</span><span class="p">]</span>
+
+        <span class="n">x_0</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;x_0&#39;</span><span class="p">]</span>
+        <span class="n">x_k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;x_k&#39;</span><span class="p">]</span>
+        <span class="n">t_0</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;t_0&#39;</span><span class="p">]</span>
+        <span class="n">h_k</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;h_k&#39;</span><span class="p">]</span>
+
+        <span class="n">t_k</span> <span class="o">=</span> <span class="n">t_0</span> <span class="o">+</span> <span class="n">h_k</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">((</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_t&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">t_k</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tol_a</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Event located&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">x_k</span><span class="p">,</span> <span class="n">h_k</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_t&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">t_k</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Locating event... &#39;</span><span class="p">)</span>
+
+                <span class="n">h_k</span> <span class="o">=</span> <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;state_t&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">t_0</span>
+
+                <span class="c1">#print(&#39;h_k&#39;,h_k)</span>
+
+                <span class="k">return</span> <span class="n">x_k</span><span class="p">,</span> <span class="n">h_k</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">return</span> <span class="n">x_k</span><span class="p">,</span> <span class="n">h_k</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

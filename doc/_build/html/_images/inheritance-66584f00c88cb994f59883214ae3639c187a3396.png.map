@@ -1,0 +1,12 @@
+<map id="inheritancee94797469c" name="inheritancee94797469c">
+<area shape="rect" id="node1" href="#fatDAE.class_solvers.DIRK" target="_top" title="Diagonally implicit Runge&#45;Kutta solver." alt="" coords="365,38,435,79"/>
+<area shape="rect" id="node5" href="#fatDAE.class_solvers.ESDIRK" target="_top" title="Singly diagonally implicit Runge&#45;Kutta with an explicit first stage solver." alt="" coords="482,5,571,47"/>
+<area shape="rect" id="node10" href="#fatDAE.class_solvers.SDIRK" target="_top" title="Singly diagonally implicit Runge&#45;Kutta solver." alt="" coords="487,70,565,111"/>
+<area shape="rect" id="node2" href="#fatDAE.class_solvers.IRK" target="_top" title="Abstract class for a implicit Runge&#45;Kutta solver." alt="" coords="249,70,318,111"/>
+<area shape="rect" id="node6" href="#fatDAE.class_solvers.FIRK" target="_top" title="Full implicit Runge&#45;Kutta solver." alt="" coords="365,102,435,144"/>
+<area shape="rect" id="node3" href="#fatDAE.class_solvers.ERK" target="_top" title="Explicit Runge&#45;Kutta solver." alt="" coords="249,135,318,176"/>
+<area shape="rect" id="node4" href="#fatDAE.class_solvers.RK" target="_top" title="Abstract class for a Runge&#45;Kutta solver." alt="" coords="132,135,202,176"/>
+<area shape="rect" id="node9" href="#fatDAE.class_solvers.RW" target="_top" title="Rosenbrock&#45;Wanner solver." alt="" coords="249,199,318,241"/>
+<area shape="rect" id="node7" href="#fatDAE.class_solvers.LM" target="_top" title="Abstract class for a linear multistep solver." alt="" coords="132,199,202,241"/>
+<area shape="rect" id="node8" href="#fatDAE.class_solvers.Solver" target="_top" title="Abstract class for a solver." alt="" coords="5,167,85,208"/>
+</map>

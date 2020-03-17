@@ -1,0 +1,1003 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE.dolfin_interface.class_problem &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fatDAE.dolfin_interface.class_problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fatDAE.dolfin_interface.class_problem</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Date: 24/07/2017</span>
+<span class="c1"># Auth: Manuel Cremades, manuel.cremades@usc.es</span>
+
+<span class="c1"># Basic modules</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">fatDAE.base.basic_import</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Dolfin package</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># User defined</span>
+<span class="kn">import</span> <span class="nn">fatDAE.class_problem</span>
+
+<div class="viewcode-block" id="UFL_Problem"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem">[docs]</a><span class="k">class</span> <span class="nc">UFL_Problem</span><span class="p">(</span><span class="n">fatDAE</span><span class="o">.</span><span class="n">class_problem</span><span class="o">.</span><span class="n">Problem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Initial value problem.</span>
+
+<span class="sd">    It takes a variational formulation, for example: Find :math:`u \in L^2((t_0,t_f];H_0^1(\Omega))` such that</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{equation}</span>
+<span class="sd">            \\int_\\Omega p(u)\\frac{\\partial u}{\\partial t}v\\;d\\Omega - \\int_{\\Omega}q(u)\\nabla u \\cdot \\nabla v\\;d\\Omega - \\int_{\\Omega}fv\\;d\\Omega = 0,\\quad \\forall v\\in H_{0}^{1}(\\Omega)</span>
+<span class="sd">        \\end{equation}</span>
+
+<span class="sd">    (were the time derivative must be declared as a trial function) in order to extract:</span>
+
+<span class="sd">        - a bilinear form :attr:`M_form`, defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                M(\\frac{\\partial u}{\\partial t}, v; u) = \\int_\\Omega p(u)\\frac{\\partial u}{\\partial t}v\\;d\\Omega</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        - a bilinear form :attr:`f_form`, defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                \\hspace{4cm} f(v; u) = \\int_{\\Omega}q(u)\\nabla u \\cdot \\nabla v\\;d\\Omega + \\int_{\\Omega}fv\\;d\\Omega</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        M_form (:obj:`ufl.form.Form`): 2-form associated to the time derivative.</span>
+<span class="sd">        f_form (:obj:`ufl.form.Form`): 1-form associated to the right hand side.</span>
+<span class="sd">        I_interior (:obj:`scipy.sparse.csr_matrix`): Diagonal matrix with 1&#39;s in the diagonal for interior nodes and 0&#39;s otherwise, created by :meth:`set_boundary`.</span>
+<span class="sd">        I_boundary (:obj:`scipy.sparse.csr_matrix`): Diagonal matrix with 0&#39;s in the diagonal for interior nodes and 1&#39;s otherwise, created by :meth:`set_boundary`.</span>
+<span class="sd">        boundary_conditions (:obj:`list`): List of :obj:`dolfin.fem.bcs.DirichletBC` items, created by :meth:`set_boundary`.</span>
+<span class="sd">        boundary_dervatives (:obj:`list`): List of :obj:`dolfin.fem.bcs.DirichletBC` items, created by :meth:`set_boundary`.</span>
+<span class="sd">        dfdx_form: 2-form arising from the differentiation of :attr:`f_form`.</span>
+<span class="sd">        dfdt_form: 1-form arising from the differentiation of :attr:`f_form`.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        The time in the variational formulation...</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="UFL_Problem.update"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_form</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F_var</span><span class="p">),</span> <span class="n">rhs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F_var</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">boundary_condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="p">:</span>
+                <span class="n">boundary_condition</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_dfdx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_v</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_dfdt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dMdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dMdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdx_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dMdt_form</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_v</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dMdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdt_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;dMdx&#39;</span><span class="p">:</span> <span class="n">dMdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dMdt&#39;</span><span class="p">:</span> <span class="n">dMdt</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdx&#39;</span><span class="p">:</span> <span class="n">dfdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdt&#39;</span><span class="p">:</span> <span class="n">dfdt</span>
+                        <span class="p">}</span>
+
+        <span class="c1"># Matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+
+        <span class="c1"># Source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_0</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_0</span> <span class="o">=</span> <span class="n">x</span>
+
+        <span class="c1"># Matrix derivatives</span>
+        <span class="k">if</span> <span class="s1">&#39;dMdx&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dMdt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Source derivatives</span>
+        <span class="k">if</span> <span class="s1">&#39;dfdx&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dfdt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_form</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_form</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">(</span><span class="n">v_form</span><span class="p">),</span> <span class="n">rhs</span><span class="p">(</span><span class="n">v_form</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">boundary_condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="p">:</span>
+                <span class="n">boundary_condition</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_dfdx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_v</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_dfdt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dMdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dMdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdx_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dMdt_form</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_v</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dMdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdt_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;dMdx&#39;</span><span class="p">:</span> <span class="n">dMdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dMdt&#39;</span><span class="p">:</span> <span class="n">dMdt</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdx&#39;</span><span class="p">:</span> <span class="n">dfdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdt&#39;</span><span class="p">:</span> <span class="n">dfdt</span>
+                        <span class="p">}</span>
+
+        <span class="n">fatDAE</span><span class="o">.</span><span class="n">class_problem</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UFL_Problem.assemble_csr"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.assemble_csr">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_csr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Assembles a bilinear form.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`scipy.sparse.csr_matrix`</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">PETScMatrix</span><span class="p">()</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">tensor</span> <span class="o">=</span> <span class="n">M</span><span class="p">)</span>
+
+        <span class="n">M_csr</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">mat</span><span class="p">()</span><span class="o">.</span><span class="n">getValuesCSR</span><span class="p">()</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">M_csr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">M_csr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">M_csr</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">M</span></div>
+
+<div class="viewcode-block" id="UFL_Problem.assemble_M"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.assemble_M">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Assembles a bilinear form and set to 0 the boundary nodes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`scipy.sparse.csc_matrix`</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_csr</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bc</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="c1"># Dirichlet boundary conditions</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;I_interior&#39;</span><span class="p">):</span>
+                <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">I_interior</span> <span class="o">*</span> <span class="n">M</span>
+
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">M</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UFL_Problem.assemble_f"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.assemble_f">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">bc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Assembles a linear form and applies Dirichlet boundary conditions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`numpy.ndarray`</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bc</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="c1"># Dirichlet boundary conditions</span>
+            <span class="k">for</span> <span class="n">boundary_condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="p">:</span>
+                <span class="n">boundary_condition</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UFL_Problem.assemble_dfdx"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.assemble_dfdx">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_dfdx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Assembles a bilinear form and set to 1 the boundary nodes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`scipy.sparse.csc_matrix`</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            Not suited for non-linear Dirichlet boundary conditions.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">dfdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_csr</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+
+        <span class="c1"># Dirichlet boundary conditions</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;I_interior&#39;</span><span class="p">):</span>
+            <span class="n">dfdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">I_interior</span> <span class="o">*</span> <span class="n">dfdx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">I_boundary</span>
+
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">dfdx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UFL_Problem.assemble_dfdt"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.assemble_dfdt">[docs]</a>    <span class="k">def</span> <span class="nf">assemble_dfdt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Assembles a linear form and applies Dirichlet boundary conditions time derivatives.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`numpy.ndarray`</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">dfdt</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+
+        <span class="c1"># Dirichlet boundary conditions</span>
+        <span class="k">for</span> <span class="n">boundary_derivative</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_dervatives</span><span class="p">:</span>
+            <span class="n">boundary_derivative</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dfdt</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dfdt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UFL_Problem.set_boundary"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Problem.set_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">set_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">exp_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">der_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">bnd_list</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&#39;&#39;&#39; Build a list of Dirichlet boundary conditions from lists of variables, expressions, derivatives and boundaries.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            var_list</span>
+<span class="sd">            exp_list</span>
+<span class="sd">            der_list</span>
+<span class="sd">            bnd_list</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1"># List with Dirichlet boundary conditions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boundary_dervatives</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Non linear treatment of Dirichlet boundary conditions</span>
+        <span class="n">nl_exp_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nl_der_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nl_fsp_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exp_list</span><span class="p">)):</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+                <span class="n">nl_fsp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">function_space</span><span class="p">())</span>
+
+                <span class="n">nl_exp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;u - g&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">g</span> <span class="o">=</span> <span class="n">exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="n">nl_der_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;0 - g&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">g</span> <span class="o">=</span> <span class="n">der_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+
+                    <span class="n">nl_fsp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">function_space</span><span class="p">()</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+
+                    <span class="n">nl_exp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;u - g&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">g</span> <span class="o">=</span> <span class="n">exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]))</span>
+                    <span class="n">nl_der_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s2">&quot;0 - g&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">g</span> <span class="o">=</span> <span class="n">der_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exp_list</span><span class="p">)):</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DirichletBC</span><span class="p">(</span><span class="n">nl_fsp_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nl_exp_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bnd_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">boundary_dervatives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DirichletBC</span><span class="p">(</span><span class="n">nl_fsp_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nl_der_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bnd_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="c1"># Matrices to apply Dirichlet boundary conditions</span>
+        <span class="n">chi_interior</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">);</span> <span class="n">chi_boundary</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">boundary_condition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">boundary_condition</span><span class="o">.</span><span class="n">get_boundary_values</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">chi_interior</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">chi_boundary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">I_interior</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">chi_interior</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">I_boundary</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">chi_boundary</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="UFL_Control"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_problem.UFL_Control">[docs]</a><span class="k">class</span> <span class="nc">UFL_Control</span><span class="p">(</span><span class="n">fatDAE</span><span class="o">.</span><span class="n">class_problem</span><span class="o">.</span><span class="n">Control</span><span class="p">,</span> <span class="n">UFL_Problem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Optimal control problem.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    Attributes:</span>
+
+<span class="sd">        J_form (:obj:`ufl.form.Form`): 0-form associated to the cost functional.</span>
+<span class="sd">        dJdx_form (:obj:`ufl.form.Form`): 1-form associated to :attr:`J_form` derivatives with respect to the state.</span>
+<span class="sd">        dJdu_form (:obj:`list`): List with 1-forms associated to :attr:`J_form` derivatives with respect to the control.</span>
+<span class="sd">        g_form (:obj:`ufl.form.Form`): 0-form associated to the cost functional.</span>
+<span class="sd">        dgdx_form (:obj:`ufl.form.Form`): 1-form associated to :attr:`g_form` derivatives with respect to the state.</span>
+<span class="sd">        dgdu_form (:obj:`list`): List with 1-forms associated to :attr:`g_form` derivatives with respect to the control.</span>
+<span class="sd">        d2fdxdx_form (:obj:`ufl.form.Form`): 2-form associated to :attr:`dolfin_interface.class_problem.Problem.dfdx_form` derivatives with respect to the state.</span>
+<span class="sd">        d2fdxdt_form (:obj:`ufl.form.Form`): 2-form associated to :attr:`dolfin_interface.class_problem.Problem.dfdx_form` derivatives with respect to the times.</span>
+<span class="sd">        d2fdxdu_form (:obj:`list`): List with 2-forms associated to :attr:`dolfin_interface.class_problem.Problem.dfdx_form` derivatives with respect to the control.</span>
+<span class="sd">        d2fdtdu_form (:obj:`list`): List with 2-forms associated to :attr:`dolfin_interface.class_problem.Problem.dfdt_form` derivatives with respect to the control.</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">J_form</span><span class="p">,</span> <span class="n">g_form</span><span class="p">,</span> <span class="n">v_form</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">):</span>
+
+
+        <span class="n">UFL_Problem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_form</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.</span><span class="p">)):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;constant&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_form</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dMdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> \
+                              <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)))</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+
+                    <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                            <span class="n">A</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dMdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dfdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)))</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+
+                    <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                            <span class="n">A</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+
+
+
+
+
+
+
+
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J_form</span> <span class="o">=</span> <span class="n">J_form</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_form</span> <span class="o">=</span> <span class="n">g_form</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">J_form</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">J</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">return</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J_form</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">dJdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dJdx_form</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.</span><span class="p">)):</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+            <span class="k">def</span> <span class="nf">dJdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">))</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                            <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+
+                        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                                <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dJdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">]))))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">b</span>
+
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_form</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">return</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_form</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">dgdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dgdx_form</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.</span><span class="p">)):</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+            <span class="k">def</span> <span class="nf">dgdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+
+                <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                    <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                    <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">))</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                            <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+
+                        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                                <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dgdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">]))))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">b</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdx_form</span> <span class="o">=</span> <span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">d2fdxdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdx_form</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdt_form</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_v</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">d2fdxdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdt_form</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdx_form</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">d2fdxdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> \
+                              <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)))</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+
+                    <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                            <span class="n">A</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">derivative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfdt_form</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">d2fdtdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">vector</span><span class="p">()[:]</span> <span class="o">=</span> <span class="n">x</span>
+
+
+            <span class="k">for</span> <span class="n">expression</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_dependent_expresions</span><span class="p">:</span>
+                <span class="n">expression</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+
+                <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)))</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
+                        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;vector&#39;</span><span class="p">:</span>
+
+                    <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">)):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">:</span>
+                            <span class="n">A</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">assemble_M</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu_form</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Mixing Constant and Function controls is not possible&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Control must be Constant or Function&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;dMdx&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dMdt&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span><span class="p">,</span>
+                        <span class="s1">&#39;dMdu&#39;</span><span class="p">:</span> <span class="n">dMdu</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdx&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdt&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span><span class="p">,</span>
+                        <span class="s1">&#39;dfdu&#39;</span><span class="p">:</span> <span class="n">dfdu</span><span class="p">,</span>
+                        <span class="s1">&#39;dJdx&#39;</span><span class="p">:</span> <span class="n">dJdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dJdu&#39;</span><span class="p">:</span> <span class="n">dJdu</span><span class="p">,</span>
+                        <span class="s1">&#39;dgdx&#39;</span><span class="p">:</span> <span class="n">dgdx</span><span class="p">,</span>
+                        <span class="s1">&#39;dgdu&#39;</span><span class="p">:</span> <span class="n">dgdu</span><span class="p">,</span>
+                        <span class="s1">&#39;d2fdxdx&#39;</span><span class="p">:</span> <span class="n">d2fdxdx</span><span class="p">,</span>
+                        <span class="s1">&#39;d2fdxdt&#39;</span><span class="p">:</span> <span class="n">d2fdxdt</span><span class="p">,</span>
+                        <span class="s1">&#39;d2fdxdu&#39;</span><span class="p">:</span> <span class="n">d2fdxdu</span><span class="p">,</span>
+                        <span class="s1">&#39;d2fdtdu&#39;</span><span class="p">:</span> <span class="n">d2fdtdu</span>
+                        <span class="p">}</span>
+
+        <span class="n">fatDAE</span><span class="o">.</span><span class="n">class_problem</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">derivatives</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

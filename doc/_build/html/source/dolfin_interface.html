@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>dolfin_interface package &#8212; FATDAE beta documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dolfin-interface-package">
+<h1>dolfin_interface package<a class="headerlink" href="#dolfin-interface-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dolfin_interface.class_control">
+<span id="dolfin-interface-class-control-module"></span><h2>dolfin_interface.class_control module<a class="headerlink" href="#module-dolfin_interface.class_control" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dolfin_interface.class_control.Bernstein">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_control.</code><code class="sig-name descname">Bernstein</code><span class="sig-paren">(</span><em class="sig-param">t_list</em>, <em class="sig-param">t_vrbl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Bernstein"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Bernstein" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dolfin_interface.class_control.Control" title="dolfin_interface.class_control.Control"><code class="xref py py-class docutils literal notranslate"><span class="pre">dolfin_interface.class_control.Control</span></code></a></p>
+<p>Time dependent control using Bernstein interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+<li><p><strong>t_vrbl</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Bernstein.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#dolfin_interface.class_control.Bernstein.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Bernstein.u_list">
+<code class="sig-name descname">u_list</code><a class="headerlink" href="#dolfin_interface.class_control.Bernstein.u_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Bernstein.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#dolfin_interface.class_control.Bernstein.u" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.algebra.Sum</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Bernstein.build_ctrl">
+<code class="sig-name descname">build_ctrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Bernstein.build_ctrl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Bernstein.build_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates the control using Bernstein basis functions.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    u(t) = \sum_{i=0}^{n} u_i b_i(t)
+\end{equation}\]</div>
+<p>were we have introduced</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    b_i(t) = {{i}\choose{n}} t^i (1 - t) ^ {(n - i)},\quad i=1,\dots, n
+\end{equation}\]</div>
+<p>known as Bernstein polynomials.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This interpolation only works if the control is defined within the unit interval…</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dolfin_interface.class_control.Control">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_control.</code><code class="sig-name descname">Control</code><span class="sig-paren">(</span><em class="sig-param">t_list</em>, <em class="sig-param">t_vrbl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Time dependent control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+<li><p><strong>t_vrbl</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Control.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#dolfin_interface.class_control.Control.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Control.u_list">
+<code class="sig-name descname">u_list</code><a class="headerlink" href="#dolfin_interface.class_control.Control.u_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Control.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#dolfin_interface.class_control.Control.u" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.algebra.Sum</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Control.build_expr">
+<code class="sig-name descname">build_expr</code><span class="sig-paren">(</span><em class="sig-param">u_expr</em>, <em class="sig-param">f_spce</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Control.build_expr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Control.build_expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a list of controls by interpolating and expression into a function space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u_expr</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dolfin.functions.expression.CompiledExpression</span></code>) – </p></li>
+<li><p><strong>f_spce</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">dolfin.functions.functionspace.FunctionSpace</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Control.build_list">
+<code class="sig-name descname">build_list</code><span class="sig-paren">(</span><em class="sig-param">u_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Control.build_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Control.build_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a list of controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dolfin_interface.class_control.Lagrange">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_control.</code><code class="sig-name descname">Lagrange</code><span class="sig-paren">(</span><em class="sig-param">t_list</em>, <em class="sig-param">t_vrbl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Lagrange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Lagrange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dolfin_interface.class_control.Control" title="dolfin_interface.class_control.Control"><code class="xref py py-class docutils literal notranslate"><span class="pre">dolfin_interface.class_control.Control</span></code></a></p>
+<p>Time dependent control using Lagrange interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+<li><p><strong>t_vrbl</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Lagrange.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Lagrange.u_list">
+<code class="sig-name descname">u_list</code><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.u_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Lagrange.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.u" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.algebra.Sum</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Lagrange.chi_list">
+<code class="sig-name descname">chi_list</code><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.chi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.Lagrange.phi_list">
+<code class="sig-name descname">phi_list</code><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.phi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Lagrange.build_chi">
+<code class="sig-name descname">build_chi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Lagrange.build_chi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.build_chi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the characteristic functions.</p>
+<p>They take the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \chi_i(t) = \{
+    \begin{array}{cll}
+        1 &amp; if &amp; t_i &lt; t \leq  t_{i+1}\\
+        0 &amp; otherwise &amp;
+    \end{array}
+\end{equation}\end{split}\]</div>
+<p>for <span class="math notranslate nohighlight">\(i=1,\dots, n-1\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \chi_0(t) = \{
+    \begin{array}{cll}
+        1 &amp; if &amp; t_0 \leq t \leq  t_{1}\\
+        0 &amp; otherwise &amp;
+    \end{array}
+\end{equation}\end{split}\]</div>
+<p>and store them in <a class="reference internal" href="#dolfin_interface.class_control.Lagrange.chi_list" title="dolfin_interface.class_control.Lagrange.chi_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">chi_list</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Lagrange.build_ctrl">
+<code class="sig-name descname">build_ctrl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Lagrange.build_ctrl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.build_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates the control using Lagrange basis functions.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    u(t) = \sum_{i=1}^{n}u_i\varphi_i(t)
+\end{equation}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.Lagrange.build_phi">
+<code class="sig-name descname">build_phi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#Lagrange.build_phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.Lagrange.build_phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the basis functions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dolfin_interface.class_control.P0">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_control.</code><code class="sig-name descname">P0</code><span class="sig-paren">(</span><em class="sig-param">t_list</em>, <em class="sig-param">t_vrbl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#P0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.P0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dolfin_interface.class_control.Lagrange" title="dolfin_interface.class_control.Lagrange"><code class="xref py py-class docutils literal notranslate"><span class="pre">dolfin_interface.class_control.Lagrange</span></code></a></p>
+<p>Time dependent control using Lagrange interpolation of 0-th order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+<li><p><strong>t_vrbl</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P0.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#dolfin_interface.class_control.P0.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P0.u_list">
+<code class="sig-name descname">u_list</code><a class="headerlink" href="#dolfin_interface.class_control.P0.u_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P0.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#dolfin_interface.class_control.P0.u" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.algebra.Sum</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P0.chi_list">
+<code class="sig-name descname">chi_list</code><a class="headerlink" href="#dolfin_interface.class_control.P0.chi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P0.phi_list">
+<code class="sig-name descname">phi_list</code><a class="headerlink" href="#dolfin_interface.class_control.P0.phi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.P0.build_phi">
+<code class="sig-name descname">build_phi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#P0.build_phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.P0.build_phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the basis functions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dolfin_interface.class_control.P1">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_control.</code><code class="sig-name descname">P1</code><span class="sig-paren">(</span><em class="sig-param">t_list</em>, <em class="sig-param">t_vrbl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#P1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.P1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dolfin_interface.class_control.Lagrange" title="dolfin_interface.class_control.Lagrange"><code class="xref py py-class docutils literal notranslate"><span class="pre">dolfin_interface.class_control.Lagrange</span></code></a></p>
+<p>Time dependent control using Lagrange interpolation of 1-th order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_list</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+<li><p><strong>t_vrbl</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P1.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#dolfin_interface.class_control.P1.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P1.u_list">
+<code class="sig-name descname">u_list</code><a class="headerlink" href="#dolfin_interface.class_control.P1.u_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P1.u">
+<code class="sig-name descname">u</code><a class="headerlink" href="#dolfin_interface.class_control.P1.u" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.algebra.Sum</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P1.chi_list">
+<code class="sig-name descname">chi_list</code><a class="headerlink" href="#dolfin_interface.class_control.P1.chi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_control.P1.phi_list">
+<code class="sig-name descname">phi_list</code><a class="headerlink" href="#dolfin_interface.class_control.P1.phi_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_control.P1.build_phi">
+<code class="sig-name descname">build_phi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_control.html#P1.build_phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_control.P1.build_phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the basis functions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dolfin_interface.class_problem">
+<span id="dolfin-interface-class-problem-module"></span><h2>dolfin_interface.class_problem module<a class="headerlink" href="#module-dolfin_interface.class_problem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dolfin_interface.class_problem.UFL_Control">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_problem.</code><code class="sig-name descname">UFL_Control</code><span class="sig-paren">(</span><em class="sig-param">control</em>, <em class="sig-param">J_form</em>, <em class="sig-param">g_form</em>, <em class="sig-param">v_form</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_problem.Control</span></code>, <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem" title="dolfin_interface.class_problem.UFL_Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">dolfin_interface.class_problem.UFL_Problem</span></code></a></p>
+<p>Optimal control problem.</p>
+<p>Args:</p>
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.J_form">
+<code class="sig-name descname">J_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.J_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>0-form associated to the cost functional.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.dJdx_form">
+<code class="sig-name descname">dJdx_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.dJdx_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>1-form associated to <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Control.J_form" title="dolfin_interface.class_problem.UFL_Control.J_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">J_form</span></code></a> derivatives with respect to the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.dJdu_form">
+<code class="sig-name descname">dJdu_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.dJdu_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>List with 1-forms associated to <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Control.J_form" title="dolfin_interface.class_problem.UFL_Control.J_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">J_form</span></code></a> derivatives with respect to the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.g_form">
+<code class="sig-name descname">g_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.g_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>0-form associated to the cost functional.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.dgdx_form">
+<code class="sig-name descname">dgdx_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.dgdx_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>1-form associated to <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Control.g_form" title="dolfin_interface.class_problem.UFL_Control.g_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g_form</span></code></a> derivatives with respect to the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.dgdu_form">
+<code class="sig-name descname">dgdu_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.dgdu_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>List with 1-forms associated to <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Control.g_form" title="dolfin_interface.class_problem.UFL_Control.g_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g_form</span></code></a> derivatives with respect to the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.d2fdxdx_form">
+<code class="sig-name descname">d2fdxdx_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.d2fdxdx_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>2-form associated to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dolfin_interface.class_problem.Problem.dfdx_form</span></code> derivatives with respect to the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.d2fdxdt_form">
+<code class="sig-name descname">d2fdxdt_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.d2fdxdt_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>2-form associated to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dolfin_interface.class_problem.Problem.dfdx_form</span></code> derivatives with respect to the times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.d2fdxdu_form">
+<code class="sig-name descname">d2fdxdu_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.d2fdxdu_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>List with 2-forms associated to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dolfin_interface.class_problem.Problem.dfdx_form</span></code> derivatives with respect to the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Control.d2fdtdu_form">
+<code class="sig-name descname">d2fdtdu_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Control.d2fdtdu_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>List with 2-forms associated to <code class="xref py py-attr docutils literal notranslate"><span class="pre">dolfin_interface.class_problem.Problem.dfdt_form</span></code> derivatives with respect to the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dolfin_interface.class_problem.UFL_Problem">
+<em class="property">class </em><code class="sig-prename descclassname">dolfin_interface.class_problem.</code><code class="sig-name descname">UFL_Problem</code><span class="sig-paren">(</span><em class="sig-param">v_form</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_problem.Problem</span></code></p>
+<p>Initial value problem.</p>
+<p>It takes a variational formulation, for example: Find <span class="math notranslate nohighlight">\(u \in L^2((t_0,t_f];H_0^1(\Omega))\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \int_\Omega p(u)\frac{\partial u}{\partial t}v\;d\Omega - \int_{\Omega}q(u)\nabla u \cdot \nabla v\;d\Omega - \int_{\Omega}fv\;d\Omega = 0,\quad \forall v\in H_{0}^{1}(\Omega)
+\end{equation}\]</div>
+<p>(were the time derivative must be declared as a trial function) in order to extract:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a bilinear form <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.M_form" title="dolfin_interface.class_problem.UFL_Problem.M_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">M_form</span></code></a>, defined as</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    M(\frac{\partial u}{\partial t}, v; u) = \int_\Omega p(u)\frac{\partial u}{\partial t}v\;d\Omega
+\end{equation}\]</div>
+<ul class="simple">
+<li><p>a bilinear form <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.f_form" title="dolfin_interface.class_problem.UFL_Problem.f_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">f_form</span></code></a>, defined as</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \hspace{4cm} f(v; u) = \int_{\Omega}q(u)\nabla u \cdot \nabla v\;d\Omega + \int_{\Omega}fv\;d\Omega
+\end{equation}\]</div>
+</div></blockquote>
+<p>Args:</p>
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.M_form">
+<code class="sig-name descname">M_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.M_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>2-form associated to the time derivative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.f_form">
+<code class="sig-name descname">f_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.f_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>1-form associated to the right hand side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ufl.form.Form</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.I_interior">
+<code class="sig-name descname">I_interior</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.I_interior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diagonal matrix with 1’s in the diagonal for interior nodes and 0’s otherwise, created by <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.set_boundary" title="dolfin_interface.class_problem.UFL_Problem.set_boundary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_boundary()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csr_matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.I_boundary">
+<code class="sig-name descname">I_boundary</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.I_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Diagonal matrix with 0’s in the diagonal for interior nodes and 1’s otherwise, created by <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.set_boundary" title="dolfin_interface.class_problem.UFL_Problem.set_boundary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_boundary()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csr_matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.boundary_conditions">
+<code class="sig-name descname">boundary_conditions</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.boundary_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <code class="xref py py-obj docutils literal notranslate"><span class="pre">dolfin.fem.bcs.DirichletBC</span></code> items, created by <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.set_boundary" title="dolfin_interface.class_problem.UFL_Problem.set_boundary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_boundary()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.boundary_dervatives">
+<code class="sig-name descname">boundary_dervatives</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.boundary_dervatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <code class="xref py py-obj docutils literal notranslate"><span class="pre">dolfin.fem.bcs.DirichletBC</span></code> items, created by <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.set_boundary" title="dolfin_interface.class_problem.UFL_Problem.set_boundary"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_boundary()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.dfdx_form">
+<code class="sig-name descname">dfdx_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.dfdx_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>2-form arising from the differentiation of <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.f_form" title="dolfin_interface.class_problem.UFL_Problem.f_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">f_form</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dolfin_interface.class_problem.UFL_Problem.dfdt_form">
+<code class="sig-name descname">dfdt_form</code><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.dfdt_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>1-form arising from the differentiation of <a class="reference internal" href="#dolfin_interface.class_problem.UFL_Problem.f_form" title="dolfin_interface.class_problem.UFL_Problem.f_form"><code class="xref py py-attr docutils literal notranslate"><span class="pre">f_form</span></code></a>.</p>
+</dd></dl>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The time in the variational formulation…</p>
+</div>
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.assemble_M">
+<code class="sig-name descname">assemble_M</code><span class="sig-paren">(</span><em class="sig-param">form</em>, <em class="sig-param">bc=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.assemble_M"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.assemble_M" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a bilinear form and set to 0 the boundary nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html#scipy.sparse.csc_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csc_matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.assemble_csr">
+<code class="sig-name descname">assemble_csr</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.assemble_csr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.assemble_csr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a bilinear form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csr_matrix</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.assemble_dfdt">
+<code class="sig-name descname">assemble_dfdt</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.assemble_dfdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.assemble_dfdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a linear form and applies Dirichlet boundary conditions time derivatives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.assemble_dfdx">
+<code class="sig-name descname">assemble_dfdx</code><span class="sig-paren">(</span><em class="sig-param">form</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.assemble_dfdx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.assemble_dfdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a bilinear form and set to 1 the boundary nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html#scipy.sparse.csc_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csc_matrix</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Not suited for non-linear Dirichlet boundary conditions.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.assemble_f">
+<code class="sig-name descname">assemble_f</code><span class="sig-paren">(</span><em class="sig-param">form</em>, <em class="sig-param">bc=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.assemble_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.assemble_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a linear form and applies Dirichlet boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>form</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.set_boundary">
+<code class="sig-name descname">set_boundary</code><span class="sig-paren">(</span><em class="sig-param">var_list=[]</em>, <em class="sig-param">exp_list=[]</em>, <em class="sig-param">der_list=[]</em>, <em class="sig-param">bnd_list=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.set_boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.set_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a list of Dirichlet boundary conditions from lists of variables, expressions, derivatives and boundaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_list</strong> – </p></li>
+<li><p><strong>exp_list</strong> – </p></li>
+<li><p><strong>der_list</strong> – </p></li>
+<li><p><strong>bnd_list</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="dolfin_interface.class_problem.UFL_Problem.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dolfin_interface/class_problem.html#UFL_Problem.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dolfin_interface.class_problem.UFL_Problem.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dolfin_interface">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dolfin_interface" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FATDAE</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Manuel Cremades.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/dolfin_interface.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

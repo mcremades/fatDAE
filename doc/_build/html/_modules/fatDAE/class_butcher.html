@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE.class_butcher &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fatDAE.class_butcher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fatDAE.class_butcher</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Date: 23/06/2018</span>
+<span class="c1"># Auth: Manuel Cremades, manuel.cremades@usc.es</span>
+
+<span class="c1"># Basic modules</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">fatDAE.base.basic_import</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="Butcher"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher">[docs]</a><span class="k">class</span> <span class="nc">Butcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Butcher table defining a Runge-Kutta method.</span>
+
+<span class="sd">    .. inheritance-diagram:: Generalized</span>
+<span class="sd">       :parts: 1</span>
+
+<span class="sd">    The coefficients defining a Runge-Kutta method are given in form of a table:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{equation}</span>
+<span class="sd">            \\begin{array}{c|ccc}</span>
+<span class="sd">            c_1     &amp; a_{11}  &amp; \\cdots &amp; a_{1s}  \\\\</span>
+<span class="sd">            \\vdots &amp; \\vdots &amp; \\ddots &amp; \\vdots \\\\</span>
+<span class="sd">            c_s     &amp; a_{s1}  &amp; \\cdots &amp; a_{ss}  \\\\</span>
+<span class="sd">            \\hline</span>
+<span class="sd">                    &amp; b_1     &amp; \\cdots &amp; b_s</span>
+<span class="sd">            \\end{array}</span>
+<span class="sd">            \\quad = \\quad</span>
+<span class="sd">            \\begin{array}{c|c}</span>
+<span class="sd">            \\mathbf{c} &amp; A             \\\\</span>
+<span class="sd">            \\hline</span>
+<span class="sd">                        &amp; \\mathbf{b}^T</span>
+<span class="sd">            \\end{array}</span>
+<span class="sd">        \\end{equation}</span>
+
+<span class="sd">    were :math:`A\\in\\mathbb{R}^{s\\times s}`, :math:`\\mathbf{b}\\in\\mathbb{R}^{s}` and :math:`\\mathbf{c}\\in\\mathbb{R}^{s}`.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        If :math:`\\mathbf{c}\\in\\mathbb{R}^{s}` is not given, it will be computed from</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                c_i = \\sum_{j=1}^{s}a_{ij}, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        known as row condition.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        A (:obj:`numpy.ndarray`): Matrix of coefficients, dimension :attr:`s` x :attr:`s`.</span>
+<span class="sd">        b (:obj:`numpy.ndarray`): Vector of coefficients, dimension :attr:`s`.</span>
+<span class="sd">        c (:obj:`numpy.ndarray`): Vector of coefficients, dimension :attr:`s`.</span>
+<span class="sd">        p (:obj:`int`): Order of the method.</span>
+<span class="sd">        s (:obj:`int`): Stages of the method.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">embedded</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Instances the Butcher table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json (:obj:`dict`): Dictionary defining the method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">json</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">embedded</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;b_2&quot;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">json</span><span class="p">[</span><span class="s2">&quot;p_2&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;b_1&quot;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">json</span><span class="p">[</span><span class="s2">&quot;p_1&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">size</span>
+
+<div class="viewcode-block" id="Butcher.P"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher.P">[docs]</a>    <span class="k">def</span> <span class="nf">P</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Stability polynomial.</span>
+
+<span class="sd">        it is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                P(z) = \\det(I - zA + z(\\mathbb{1}\\otimes \\mathbf{b}))</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        were :math:`I\\in \\mathbb{R}^{s\\times s}` is an identity matrix and :math:`\\mathbb{1} = (1,\\dots, 1)^T\\in \\mathbb{R}^{s}`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (:obj:`complex`): Point to be evaluated.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (:obj:`float`): Evaluation at the given point.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Butcher.Q"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher.Q">[docs]</a>    <span class="k">def</span> <span class="nf">Q</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Stability polynomial.</span>
+
+<span class="sd">        It is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                Q(z) = \\det(I - zA)</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        were :math:`I\\in \\mathbb{R}^{s\\times s}` is an identity matrix.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (:obj:`complex`): Point to be evaluated.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (:obj:`float`): Evaluation at the given point.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Butcher.R"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher.R">[docs]</a>    <span class="k">def</span> <span class="nf">R</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Stability polynomial.</span>
+
+<span class="sd">        It is defined as the quotient of two polynomials:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                R(z) = \\frac{P(z)}{Q(z)}</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        both defined in :meth:`P` and :meth:`Q` respectively.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z (:obj:`complex`): Point to be evaluated.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (:obj:`float`): Evaluation at the given point.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Butcher.build_transposed"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher.build_transposed">[docs]</a>    <span class="k">def</span> <span class="nf">build_transposed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Computes the table defining the transposed Runge-Kutta method.</span>
+
+<span class="sd">        The transposed Runge-Kutta method is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                a^t_{ij} = b_j\\frac{a_{ji}}{b_i}, \\quad b^t_i = b_i, \\quad c^t_i = 1 - c_i, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        which it is usefull for adjoint computations.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">A_T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Butcher.build_reflected"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Butcher.build_reflected">[docs]</a>    <span class="k">def</span> <span class="nf">build_reflected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Computes the table defining the reflected Runge-Kutta method.</span>
+
+<span class="sd">        The reflected Runge-Kutta method is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                a^r_{ij} = b_j - a_{ij}, \\quad b^r_i = b_i, \\quad c^r_i = 1 - c_i, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        which it is usefull for adjoint computations.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_R</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">A_R</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_R</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_R</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div></div>
+
+<div class="viewcode-block" id="Parallel"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Parallel">[docs]</a><span class="k">class</span> <span class="nc">Parallel</span><span class="p">(</span><span class="n">Butcher</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">embedded</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Instances the Butcher table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json (:obj:`dict`): Dictionary defining the method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">Butcher</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">embedded</span><span class="p">);</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;D&quot;</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="Generalized"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Generalized">[docs]</a><span class="k">class</span> <span class="nc">Generalized</span><span class="p">(</span><span class="n">Butcher</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Butcher table defining a Rosenbrock-Wanner method.</span>
+
+<span class="sd">    The coefficients defining a Rosenbrock-Wanner method are given in form of a table:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{equation}</span>
+<span class="sd">            \\begin{array}{c|ccc|ccc|c}</span>
+<span class="sd">            c_1     &amp; a_{11}  &amp; \\cdots &amp; a_{1s}  &amp; \\gamma_{11} &amp; \\cdots &amp; \\gamma_{1s} &amp; d_1     \\\\</span>
+<span class="sd">            \\vdots &amp; \\vdots &amp; \\ddots &amp; \\vdots &amp; \\vdots      &amp; \\ddots &amp; \\vdots      &amp; \\vdots \\\\</span>
+<span class="sd">            c_s     &amp; a_{s1}  &amp; \\cdots &amp; a_{ss}  &amp; \\gamma_{s1} &amp; \\cdots &amp; \\gamma_{ss} &amp; d_s     \\\\</span>
+<span class="sd">            \\hline</span>
+<span class="sd">                    &amp; b_1     &amp; \\cdots &amp; b_s     &amp;              &amp;         &amp;              &amp;</span>
+<span class="sd">            \\end{array}</span>
+<span class="sd">            \\quad = \\quad</span>
+<span class="sd">            \\begin{array}{c|c|c|c}</span>
+<span class="sd">            \\mathbf{c} &amp; A             &amp; G &amp; \\mathbf{d} \\\\</span>
+<span class="sd">            \\hline</span>
+<span class="sd">                        &amp; \\mathbf{b}^T &amp;   &amp;</span>
+<span class="sd">            \\end{array}</span>
+<span class="sd">        \\end{equation}</span>
+
+<span class="sd">    were :math:`A \\in\\mathbb{R}^{s\\times s}`, :math:`G\\in\\mathbb{R}^{s\\times s}`, :math:`\\mathbf{b}\\in\\mathbb{R}^{s}`, :math:`\\mathbf{c}\\in\\mathbb{R}^{s}` and :math:`\\mathbf{d}\\in\\mathbb{R}^{s}`.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        If :math:`\\mathbf{c}\\in\\mathbb{R}^{s}` or :math:`\\mathbf{d}\\in\\mathbb{R}^{s}` are not given, they will be computed from</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                c_i = \\sum_{j=1}^{s}a_{ij}, \\quad d_i = \\sum_{j=1}^{s}\gamma_{ij}, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        known as row condition.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        A (:obj:`numpy.ndarray`): Matrix of coefficients, dimension :attr:`s` x :attr:`s`.</span>
+<span class="sd">        G (:obj:`numpy.ndarray`): Matrix of coefficients, dimension :attr:`s` x :attr:`s`.</span>
+<span class="sd">        b (:obj:`numpy.ndarray`): Vector of coefficients, dimension :attr:`s`.</span>
+<span class="sd">        c (:obj:`numpy.ndarray`): Vector of coefficients, dimension :attr:`s`.</span>
+<span class="sd">        d (:obj:`numpy.ndarray`): Vector of coefficients, dimension :attr:`s`.</span>
+<span class="sd">        p (:obj:`int`): Order of the method.</span>
+<span class="sd">        s (:obj:`int`): Stage of the method.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">embedded</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Instances the Butcher table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json (:obj:`dict`): Dictionary defining the method.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">Butcher</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">embedded</span><span class="p">);</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;G&quot;</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+
+<div class="viewcode-block" id="Generalized.build_transposed"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_butcher.Generalized.build_transposed">[docs]</a>    <span class="k">def</span> <span class="nf">build_transposed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Computes the table defining the transposed Rosenbrock-Wanner method.</span>
+
+<span class="sd">        The transposed Runge-Kutta method is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                a^t_{ij} = b_j\\frac{a_{ji}}{b_i}, \\quad b^t_i = b_i, \\quad c^t_i = 1 - c_i, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        and</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                \\gamma^t_{ij} = b_j\\frac{\\gamma_{ji}}{b_i}, \\quad i=1,\\dots, s</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        which it is usefull for adjoint computations.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">A_T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">G_T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_T</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Main.</span>
+
+<span class="sd">    .. todo::</span>
+<span class="sd">        Check order and plot stability.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

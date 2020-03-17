@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE.dolfin_interface.class_control &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fatDAE.dolfin_interface.class_control</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fatDAE.dolfin_interface.class_control</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Date: 24/07/2017</span>
+<span class="c1"># Auth: Manuel Cremades, manuel.cremades@usc.es</span>
+
+<span class="c1"># Basic modules</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;../..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">fatDAE.base.basic_import</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Dolfin package</span>
+<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="Control"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Control">[docs]</a><span class="k">class</span> <span class="nc">Control</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Time dependent control.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        t_vrbl (:obj:`list`)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        u_list (:obj:`list`)</span>
+<span class="sd">        u (:obj:`ufl.algebra.Sum`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span> <span class="o">=</span> <span class="n">t_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span> <span class="o">=</span> <span class="n">t_vrbl</span>
+
+<div class="viewcode-block" id="Control.build_list"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Control.build_list">[docs]</a>    <span class="k">def</span> <span class="nf">build_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u_list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build a list of controls.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u_list(:obj:`list`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_list</span> <span class="o">=</span> <span class="n">u_list</span></div>
+
+<div class="viewcode-block" id="Control.build_expr"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Control.build_expr">[docs]</a>    <span class="k">def</span> <span class="nf">build_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u_expr</span><span class="p">,</span> <span class="n">f_spce</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build a list of controls by interpolating and expression into a function space.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u_expr(:obj:`dolfin.functions.expression.CompiledExpression`)</span>
+<span class="sd">            f_spce(:obj:`dolfin.functions.functionspace.FunctionSpace`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)):</span>
+
+            <span class="n">u_expr</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interpolate</span><span class="p">(</span><span class="n">u_expr</span><span class="p">,</span> <span class="n">f_spce</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="Bernstein"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Bernstein">[docs]</a><span class="k">class</span> <span class="nc">Bernstein</span><span class="p">(</span><span class="n">Control</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Time dependent control using Bernstein interpolation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        t_vrbl (:obj:`list`)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        u_list (:obj:`list`)</span>
+<span class="sd">        u (:obj:`ufl.algebra.Sum`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">):</span>
+
+        <span class="n">Control</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Bernstein.build_ctrl"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Bernstein.build_ctrl">[docs]</a>    <span class="k">def</span> <span class="nf">build_ctrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Interpolates the control using Bernstein basis functions.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                u(t) = \\sum_{i=0}^{n} u_i b_i(t)</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        were we have introduced</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                b_i(t) = {{i}\choose{n}} t^i (1 - t) ^ {(n - i)},\\quad i=1,\\dots, n</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        known as Bernstein polynomials.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This interpolation only works if the control is defined within the unit interval...</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span> \
+                   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span> <span class="o">**</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="Lagrange"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Lagrange">[docs]</a><span class="k">class</span> <span class="nc">Lagrange</span><span class="p">(</span><span class="n">Control</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Time dependent control using Lagrange interpolation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        t_vrbl (:obj:`list`)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        u_list (:obj:`list`)</span>
+<span class="sd">        u (:obj:`ufl.algebra.Sum`)</span>
+<span class="sd">        chi_list (:obj:`list`)</span>
+<span class="sd">        phi_list (:obj:`list`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">):</span>
+
+        <span class="n">Control</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_chi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Lagrange.build_chi"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Lagrange.build_chi">[docs]</a>    <span class="k">def</span> <span class="nf">build_chi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build the characteristic functions.</span>
+
+<span class="sd">        They take the form:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                \\chi_i(t) = \\{</span>
+<span class="sd">                \\begin{array}{cll}</span>
+<span class="sd">                    1 &amp; if &amp; t_i &lt; t \\leq  t_{i+1}\\\\</span>
+<span class="sd">                    0 &amp; otherwise &amp;</span>
+<span class="sd">                \\end{array}</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        for :math:`i=1,\\dots, n-1` and</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                \\chi_0(t) = \\{</span>
+<span class="sd">                \\begin{array}{cll}</span>
+<span class="sd">                    1 &amp; if &amp; t_0 \\leq t \\leq  t_{1}\\\\</span>
+<span class="sd">                    0 &amp; otherwise &amp;</span>
+<span class="sd">                \\end{array}</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        and store them in :attr:`chi_list`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">make_chi</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+
+                <span class="k">def</span> <span class="nf">chi</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="n">conditional</span><span class="p">(</span><span class="n">ge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="n">conditional</span><span class="p">(</span><span class="n">le</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">chi</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="n">conditional</span><span class="p">(</span><span class="n">ge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="n">conditional</span><span class="p">(</span><span class="n">lt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">chi</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_chi</span><span class="p">(</span><span class="n">j</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Lagrange.build_phi"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Lagrange.build_phi">[docs]</a>    <span class="k">def</span> <span class="nf">build_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build the basis functions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Lagrange.build_ctrl"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.Lagrange.build_ctrl">[docs]</a>    <span class="k">def</span> <span class="nf">build_ctrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Interpolates the control using Lagrange basis functions.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                u(t) = \\sum_{i=1}^{n}u_i\\varphi_i(t)</span>
+<span class="sd">            \\end{equation}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="p">[</span><span class="n">i</span><span class="p">]()</span></div></div>
+
+<div class="viewcode-block" id="P0"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.P0">[docs]</a><span class="k">class</span> <span class="nc">P0</span><span class="p">(</span><span class="n">Lagrange</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Time dependent control using Lagrange interpolation of 0-th order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        t_vrbl (:obj:`list`)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        u_list (:obj:`list`)</span>
+<span class="sd">        u (:obj:`ufl.algebra.Sum`)</span>
+<span class="sd">        chi_list (:obj:`list`)</span>
+<span class="sd">        phi_list (:obj:`list`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">):</span>
+
+        <span class="n">Lagrange</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_phi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="P0.build_phi"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.P0.build_phi">[docs]</a>    <span class="k">def</span> <span class="nf">build_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build the basis functions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">phi</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">conditional</span><span class="p">(</span><span class="n">ge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="o">-</span> <span class="mi">1</span><span class="p">]),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="P1"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.P1">[docs]</a><span class="k">class</span> <span class="nc">P1</span><span class="p">(</span><span class="n">Lagrange</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Time dependent control using Lagrange interpolation of 1-th order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        t_vrbl (:obj:`list`)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        u_list (:obj:`list`)</span>
+<span class="sd">        u (:obj:`ufl.algebra.Sum`)</span>
+<span class="sd">        chi_list (:obj:`list`)</span>
+<span class="sd">        phi_list (:obj:`list`)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">):</span>
+
+        <span class="n">Lagrange</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_phi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="P1.build_phi"><a class="viewcode-back" href="../../../source/fatDAE.dolfin_interface.html#fatDAE.dolfin_interface.class_control.P1.build_phi">[docs]</a>    <span class="k">def</span> <span class="nf">build_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Build the basis functions.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">phi</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">make_phi</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+
+            <span class="k">def</span> <span class="nf">phi</span><span class="p">():</span>
+
+                <span class="n">phi_l</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> \
+                      <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="n">phi_r</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span><span class="p">)</span> \
+                      <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+                <span class="k">return</span>  <span class="n">phi_l</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]()</span> <span class="o">+</span> <span class="n">phi_r</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="p">[</span><span class="n">j</span><span class="p">]()</span>
+
+            <span class="k">return</span> <span class="n">phi</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_phi</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">phi</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_vrbl</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="o">-</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="o">-</span> <span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi_list</span><span class="p">[</span><span class="o">-</span> <span class="mi">1</span><span class="p">]()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">UnitSquareMesh</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s1">&#39;CG&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">t_expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span> <span class="n">t_vrbl</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">t_expr</span><span class="p">)</span>
+
+    <span class="n">t_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">];</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">;</span> <span class="n">t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">Control_P0</span> <span class="o">=</span> <span class="n">P0</span><span class="p">(</span><span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+    <span class="n">Control_P1</span> <span class="o">=</span> <span class="n">P1</span><span class="p">(</span><span class="n">t_list</span><span class="p">,</span> <span class="n">t_vrbl</span><span class="p">)</span>
+
+    <span class="n">P0_pvd</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s1">&#39;P0.pvd&#39;</span><span class="p">)</span>
+    <span class="n">P1_pvd</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s1">&#39;P1.pvd&#39;</span><span class="p">)</span>
+
+    <span class="n">P0_plot</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">P1_plot</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="n">Control_P0</span><span class="o">.</span><span class="n">build_expr</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s1">&#39;x[0] * (x[0] - 1.) * x[1] * (x[1] - 1.) * t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">Control_P1</span><span class="o">.</span><span class="n">build_expr</span><span class="p">(</span><span class="n">Expression</span><span class="p">(</span><span class="s1">&#39;x[0] * (x[0] - 1.) * x[1] * (x[1] - 1.) * t&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">X</span><span class="p">)</span>
+
+    <span class="n">Control_P0</span><span class="o">.</span><span class="n">build_ctrl</span><span class="p">()</span>
+    <span class="n">Control_P1</span><span class="o">.</span><span class="n">build_ctrl</span><span class="p">()</span>
+
+    <span class="n">t_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">];</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">;</span> <span class="n">t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_list</span><span class="p">:</span>
+
+        <span class="n">t_expr</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">Control_P0</span><span class="o">.</span><span class="n">u</span><span class="p">);</span> <span class="n">assign</span><span class="p">(</span><span class="n">P0_plot</span><span class="p">,</span> <span class="n">project</span><span class="p">(</span><span class="n">Control_P0</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>
+        <span class="n">P0_pvd</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">P0_plot</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_list</span><span class="p">:</span>
+
+        <span class="n">t_expr</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="n">plot</span><span class="p">(</span><span class="n">Control_P1</span><span class="o">.</span><span class="n">u</span><span class="p">);</span> <span class="n">assign</span><span class="p">(</span><span class="n">P1_plot</span><span class="p">,</span> <span class="n">project</span><span class="p">(</span><span class="n">Control_P1</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>
+        <span class="n">P1_pvd</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">P1_plot</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

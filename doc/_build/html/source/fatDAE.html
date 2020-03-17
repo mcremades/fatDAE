@@ -1,0 +1,2090 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE package &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">fatDAE package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-fatDAE.class_butcher">fatDAE.class_butcher module</a></li>
+<li><a class="reference internal" href="#module-fatDAE.class_machine">fatDAE.class_machine module</a></li>
+<li><a class="reference internal" href="#module-fatDAE.class_problem">fatDAE.class_problem module</a></li>
+<li><a class="reference internal" href="#module-fatDAE.class_solvers">fatDAE.class_solvers module</a></li>
+<li><a class="reference internal" href="#module-fatDAE">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>fatDAE package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/fatDAE.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fatdae-package">
+<h1>fatDAE package<a class="headerlink" href="#fatdae-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fatDAE.base.html">fatDAE.base package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.base.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.base.html#module-fatDAE.base.basic_import">fatDAE.base.basic_import module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.base.html#module-fatDAE.base.class_solvers_nl">fatDAE.base.class_solvers_nl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.base.html#module-fatDAE.base.class_solvers_sp">fatDAE.base.class_solvers_sp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.base.html#module-fatDAE.base">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fatDAE.dolfin_interface.html">fatDAE.dolfin_interface package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.dolfin_interface.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.dolfin_interface.html#module-fatDAE.dolfin_interface.class_control">fatDAE.dolfin_interface.class_control module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.dolfin_interface.html#module-fatDAE.dolfin_interface.class_problem">fatDAE.dolfin_interface.class_problem module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.dolfin_interface.html#module-fatDAE.dolfin_interface">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fatDAE.firedk_interface.html">fatDAE.firedk_interface package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fatDAE.firedk_interface.html#module-fatDAE.firedk_interface">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fatDAE.class_butcher">
+<span id="fatdae-class-butcher-module"></span><h2>fatDAE.class_butcher module<a class="headerlink" href="#module-fatDAE.class_butcher" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fatDAE.class_butcher.Butcher">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_butcher.</code><code class="sig-name descname">Butcher</code><span class="sig-paren">(</span><em class="sig-param">json</em>, <em class="sig-param">embedded=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Butcher table defining a Runge-Kutta method.</p>
+<div class="graphviz"><img src="../_images/inheritance-b077dda26d932b6c99d7e1e32b26d896d07150ae.png" alt="Inheritance diagram of Generalized" usemap="#inheritancede4945043b" class="inheritance graphviz" /></div>
+<map id="inheritancede4945043b" name="inheritancede4945043b">
+<area shape="rect" id="node1" href="#fatDAE.class_butcher.Butcher" target="_top" title="Butcher table defining a Runge&#45;Kutta method." alt="" coords="5,5,101,48"/>
+<area shape="rect" id="node2" href="#fatDAE.class_butcher.Generalized" target="_top" title="Butcher table defining a Rosenbrock&#45;Wanner method." alt="" coords="149,5,287,48"/>
+</map><p>The coefficients defining a Runge-Kutta method are given in form of a table:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|ccc}
+    c_1     &amp; a_{11}  &amp; \cdots &amp; a_{1s}  \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    c_s     &amp; a_{s1}  &amp; \cdots &amp; a_{ss}  \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; b_s
+    \end{array}
+    \quad = \quad
+    \begin{array}{c|c}
+    \mathbf{c} &amp; A             \\
+    \hline
+                &amp; \mathbf{b}^T
+    \end{array}
+\end{equation}\end{split}\]</div>
+<p>were <span class="math notranslate nohighlight">\(A\in\mathbb{R}^{s\times s}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b}\in\mathbb{R}^{s}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{c}\in\mathbb{R}^{s}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <span class="math notranslate nohighlight">\(\mathbf{c}\in\mathbb{R}^{s}\)</span> is not given, it will be computed from</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    c_i = \sum_{j=1}^{s}a_{ij}, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>known as row condition.</p>
+</div>
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Butcher.A">
+<code class="sig-name descname">A</code><a class="headerlink" href="#fatDAE.class_butcher.Butcher.A" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Butcher.s" title="fatDAE.class_butcher.Butcher.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a> x <a class="reference internal" href="#fatDAE.class_butcher.Butcher.s" title="fatDAE.class_butcher.Butcher.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Butcher.b">
+<code class="sig-name descname">b</code><a class="headerlink" href="#fatDAE.class_butcher.Butcher.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Butcher.s" title="fatDAE.class_butcher.Butcher.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Butcher.c">
+<code class="sig-name descname">c</code><a class="headerlink" href="#fatDAE.class_butcher.Butcher.c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Butcher.s" title="fatDAE.class_butcher.Butcher.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Butcher.p">
+<code class="sig-name descname">p</code><a class="headerlink" href="#fatDAE.class_butcher.Butcher.p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Butcher.s">
+<code class="sig-name descname">s</code><a class="headerlink" href="#fatDAE.class_butcher.Butcher.s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stages of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Butcher.P">
+<code class="sig-name descname">P</code><span class="sig-paren">(</span><em class="sig-param">z</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher.P"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher.P" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stability polynomial.</p>
+<p>it is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    P(z) = \det(I - zA + z(\mathbb{1}\otimes \mathbf{b}))
+\end{equation}\]</div>
+<p>were <span class="math notranslate nohighlight">\(I\in \mathbb{R}^{s\times s}\)</span> is an identity matrix and <span class="math notranslate nohighlight">\(\mathbb{1} = (1,\dots, 1)^T\in \mathbb{R}^{s}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#complex" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complex</span></code></a>) – Point to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Evaluation at the given point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Butcher.Q">
+<code class="sig-name descname">Q</code><span class="sig-paren">(</span><em class="sig-param">z</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher.Q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stability polynomial.</p>
+<p>It is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    Q(z) = \det(I - zA)
+\end{equation}\]</div>
+<p>were <span class="math notranslate nohighlight">\(I\in \mathbb{R}^{s\times s}\)</span> is an identity matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#complex" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complex</span></code></a>) – Point to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Evaluation at the given point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Butcher.R">
+<code class="sig-name descname">R</code><span class="sig-paren">(</span><em class="sig-param">z</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher.R"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher.R" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stability polynomial.</p>
+<p>It is defined as the quotient of two polynomials:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    R(z) = \frac{P(z)}{Q(z)}
+\end{equation}\]</div>
+<p>both defined in <a class="reference internal" href="#fatDAE.class_butcher.Butcher.P" title="fatDAE.class_butcher.Butcher.P"><code class="xref py py-meth docutils literal notranslate"><span class="pre">P()</span></code></a> and <a class="reference internal" href="#fatDAE.class_butcher.Butcher.Q" title="fatDAE.class_butcher.Butcher.Q"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Q()</span></code></a> respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#complex" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complex</span></code></a>) – Point to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Evaluation at the given point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Butcher.build_reflected">
+<code class="sig-name descname">build_reflected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher.build_reflected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher.build_reflected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the table defining the reflected Runge-Kutta method.</p>
+<p>The reflected Runge-Kutta method is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    a^r_{ij} = b_j - a_{ij}, \quad b^r_i = b_i, \quad c^r_i = 1 - c_i, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>which it is usefull for adjoint computations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Butcher.build_transposed">
+<code class="sig-name descname">build_transposed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Butcher.build_transposed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Butcher.build_transposed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the table defining the transposed Runge-Kutta method.</p>
+<p>The transposed Runge-Kutta method is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    a^t_{ij} = b_j\frac{a_{ji}}{b_i}, \quad b^t_i = b_i, \quad c^t_i = 1 - c_i, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>which it is usefull for adjoint computations.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_butcher.Generalized">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_butcher.</code><code class="sig-name descname">Generalized</code><span class="sig-paren">(</span><em class="sig-param">json</em>, <em class="sig-param">embedded=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Generalized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Generalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_butcher.Butcher" title="fatDAE.class_butcher.Butcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_butcher.Butcher</span></code></a></p>
+<p>Butcher table defining a Rosenbrock-Wanner method.</p>
+<p>The coefficients defining a Rosenbrock-Wanner method are given in form of a table:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|ccc|ccc|c}
+    c_1     &amp; a_{11}  &amp; \cdots &amp; a_{1s}  &amp; \gamma_{11} &amp; \cdots &amp; \gamma_{1s} &amp; d_1     \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots      &amp; \ddots &amp; \vdots      &amp; \vdots \\
+    c_s     &amp; a_{s1}  &amp; \cdots &amp; a_{ss}  &amp; \gamma_{s1} &amp; \cdots &amp; \gamma_{ss} &amp; d_s     \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; b_s     &amp;              &amp;         &amp;              &amp;
+    \end{array}
+    \quad = \quad
+    \begin{array}{c|c|c|c}
+    \mathbf{c} &amp; A             &amp; G &amp; \mathbf{d} \\
+    \hline
+                &amp; \mathbf{b}^T &amp;   &amp;
+    \end{array}
+\end{equation}\end{split}\]</div>
+<p>were <span class="math notranslate nohighlight">\(A \in\mathbb{R}^{s\times s}\)</span>, <span class="math notranslate nohighlight">\(G\in\mathbb{R}^{s\times s}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b}\in\mathbb{R}^{s}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{c}\in\mathbb{R}^{s}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{d}\in\mathbb{R}^{s}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <span class="math notranslate nohighlight">\(\mathbf{c}\in\mathbb{R}^{s}\)</span> or <span class="math notranslate nohighlight">\(\mathbf{d}\in\mathbb{R}^{s}\)</span> are not given, they will be computed from</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    c_i = \sum_{j=1}^{s}a_{ij}, \quad d_i = \sum_{j=1}^{s}\gamma_{ij}, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>known as row condition.</p>
+</div>
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.A">
+<code class="sig-name descname">A</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.A" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a> x <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.G">
+<code class="sig-name descname">G</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.G" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a> x <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.b">
+<code class="sig-name descname">b</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.c">
+<code class="sig-name descname">c</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.d">
+<code class="sig-name descname">d</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of coefficients, dimension <a class="reference internal" href="#fatDAE.class_butcher.Generalized.s" title="fatDAE.class_butcher.Generalized.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">s</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.p">
+<code class="sig-name descname">p</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_butcher.Generalized.s">
+<code class="sig-name descname">s</code><a class="headerlink" href="#fatDAE.class_butcher.Generalized.s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stage of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_butcher.Generalized.build_transposed">
+<code class="sig-name descname">build_transposed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Generalized.build_transposed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Generalized.build_transposed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the table defining the transposed Rosenbrock-Wanner method.</p>
+<p>The transposed Runge-Kutta method is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    a^t_{ij} = b_j\frac{a_{ji}}{b_i}, \quad b^t_i = b_i, \quad c^t_i = 1 - c_i, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \gamma^t_{ij} = b_j\frac{\gamma_{ji}}{b_i}, \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>which it is usefull for adjoint computations.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_butcher.Parallel">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_butcher.</code><code class="sig-name descname">Parallel</code><span class="sig-paren">(</span><em class="sig-param">json</em>, <em class="sig-param">embedded=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_butcher.html#Parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_butcher.Parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_butcher.Butcher" title="fatDAE.class_butcher.Butcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_butcher.Butcher</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fatDAE.class_machine">
+<span id="fatdae-class-machine-module"></span><h2>fatDAE.class_machine module<a class="headerlink" href="#module-fatDAE.class_machine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fatDAE.class_machine.End">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">End</code><span class="sig-paren">(</span><em class="sig-param">name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#End"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.End" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_machine.State" title="fatDAE.class_machine.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_machine.State</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.Event">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">Event</code><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Event of a transition.</p>
+<dl class="method">
+<dt id="fatDAE.class_machine.Event.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Event.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Event.check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.Event.f">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Event.f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Event.f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.Machine">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">Machine</code><span class="sig-paren">(</span><em class="sig-param">max_number_states=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Machine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>State machine.</p>
+<dl class="method">
+<dt id="fatDAE.class_machine.Machine.add_states">
+<code class="sig-name descname">add_states</code><span class="sig-paren">(</span><em class="sig-param">states</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Machine.add_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Machine.add_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a list of states to the current list and the associated transitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – List of <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_machine.class_state_machine.State</span></code> instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.Machine.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Machine.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Machine.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the actual state event. If the event is accepted then jumps to next state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.Machine.print_states">
+<code class="sig-name descname">print_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Machine.print_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Machine.print_states" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.MaxCycles">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">MaxCycles</code><span class="sig-paren">(</span><em class="sig-param">n=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#MaxCycles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.MaxCycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_machine.Event" title="fatDAE.class_machine.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_machine.Event</span></code></a></p>
+<dl class="method">
+<dt id="fatDAE.class_machine.MaxCycles.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#MaxCycles.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.MaxCycles.check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.State">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">State</code><span class="sig-paren">(</span><em class="sig-param">name=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>State of operation.</p>
+<dl class="method">
+<dt id="fatDAE.class_machine.State.add_transitions">
+<code class="sig-name descname">add_transitions</code><span class="sig-paren">(</span><em class="sig-param">transitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.add_transitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.add_transitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a list of transitions to the current list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the state must change by checking its transitions, and performs the change of state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>): True if some event is trigered, False otherwise.</p></li>
+<li><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>): True if some event is accepted, False otherwise.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.exec_dur">
+<code class="sig-name descname">exec_dur</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">accept=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.exec_dur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.exec_dur" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be executed every time <a class="reference internal" href="#fatDAE.class_machine.State.check" title="fatDAE.class_machine.State.check"><code class="xref py py-meth docutils literal notranslate"><span class="pre">check()</span></code></a> is called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.exec_ini">
+<code class="sig-name descname">exec_ini</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.exec_ini"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.exec_ini" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be executed when the state is changed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.exec_out">
+<code class="sig-name descname">exec_out</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.exec_out"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.exec_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be executed when the state is changed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">save_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.State.store">
+<code class="sig-name descname">store</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#State.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.State.store" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.Transition">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">Transition</code><span class="sig-paren">(</span><em class="sig-param">ini_state</em>, <em class="sig-param">fin_state</em>, <em class="sig-param">reset=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Transition between states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong> (<em>fin_state</em>) – obj:<a href="#id1"><span class="problematic" id="id2">`</span></a>state_machine.class_state_machine.State):</p></li>
+<li><p><strong>(</strong> – obj:<a href="#id3"><span class="problematic" id="id4">`</span></a>state_machine.class_state_machine.State):</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="fatDAE.class_machine.Transition.add_events">
+<code class="sig-name descname">add_events</code><span class="sig-paren">(</span><em class="sig-param">events</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Transition.add_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Transition.add_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a list of events to the current list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>) – List of <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_machine.class_state_machine.Event</span></code> instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_machine.Transition.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Transition.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Transition.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the transitions happens by checking its triggers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>): True if some trigger is trigered, False otherwise.</p></li>
+<li><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>): True if some trigger is accepted, False otherwise.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_machine.Wait">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_machine.</code><code class="sig-name descname">Wait</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">tol_a=0.0001</em>, <em class="sig-param">tol_r=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_machine.Event" title="fatDAE.class_machine.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_machine.Event</span></code></a></p>
+<p>Event of a transition.</p>
+<dl class="method">
+<dt id="fatDAE.class_machine.Wait.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_machine.html#Wait.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_machine.Wait.check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fatDAE.class_problem">
+<span id="fatdae-class-problem-module"></span><h2>fatDAE.class_problem module<a class="headerlink" href="#module-fatDAE.class_problem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fatDAE.class_problem.Control">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_problem.</code><code class="sig-name descname">Control</code><span class="sig-paren">(</span><em class="sig-param">M</em>, <em class="sig-param">f</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em>, <em class="sig-param">J=None</em>, <em class="sig-param">g=None</em>, <em class="sig-param">derivatives={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_problem.Problem" title="fatDAE.class_problem.Problem"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_problem.Problem</span></code></a></p>
+<p>Optimal control problem governed by a quasi-linearly implicit differential-algebraic system.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+    \text{minimize} \quad \Psi(\mathbf{u}) &amp; = J(t_f, \mathbf{x}(t_f), \mathbf{u}) + \int_{t_0}^{t_f}g(t, \mathbf{x}(t), \mathbf{u})\; dt \\
+    \text{s.t.} \quad \quad \quad \quad &amp; \\
+    M(t, \mathbf{x})\frac{d\mathbf{x}}{dt}(t) &amp; = \mathbf{f}(t, \mathbf{x}(t), \mathbf{u}),\quad t_0\le t\leq t_f \\
+                  \mathbf{x}(t_0) &amp; = \mathbf{x}_0
+\end{split}\end{split}\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Computation of gradients for cost functionals with an explicit control dependence with the adjoint method are not currently working, only an approximation is computed.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>f</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>x_0</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>t_0</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>t_f</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>control</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_control.Control</span></code>) – </p></li>
+<li><p><strong>J</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>g</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>derivatives</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a>, optional) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.J">
+<code class="sig-name descname">J</code><a class="headerlink" href="#fatDAE.class_problem.Control.J" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.g">
+<code class="sig-name descname">g</code><a class="headerlink" href="#fatDAE.class_problem.Control.g" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.dJdx">
+<code class="sig-name descname">dJdx</code><a class="headerlink" href="#fatDAE.class_problem.Control.dJdx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.dJdu">
+<code class="sig-name descname">dJdu</code><a class="headerlink" href="#fatDAE.class_problem.Control.dJdu" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.dgdx">
+<code class="sig-name descname">dgdx</code><a class="headerlink" href="#fatDAE.class_problem.Control.dgdx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.dgdu">
+<code class="sig-name descname">dgdu</code><a class="headerlink" href="#fatDAE.class_problem.Control.dgdu" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.dfdu">
+<code class="sig-name descname">dfdu</code><a class="headerlink" href="#fatDAE.class_problem.Control.dfdu" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.d2fdxdx">
+<code class="sig-name descname">d2fdxdx</code><a class="headerlink" href="#fatDAE.class_problem.Control.d2fdxdx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.d2fdxdt">
+<code class="sig-name descname">d2fdxdt</code><a class="headerlink" href="#fatDAE.class_problem.Control.d2fdxdt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.d2fdxdu">
+<code class="sig-name descname">d2fdxdu</code><a class="headerlink" href="#fatDAE.class_problem.Control.d2fdxdu" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Control.d2fdtdu">
+<code class="sig-name descname">d2fdtdu</code><a class="headerlink" href="#fatDAE.class_problem.Control.d2fdtdu" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_problem.Fitting">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_problem.</code><code class="sig-name descname">Fitting</code><span class="sig-paren">(</span><em class="sig-param">M</em>, <em class="sig-param">f</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em>, <em class="sig-param">t_obs</em>, <em class="sig-param">x_obs</em>, <em class="sig-param">h</em>, <em class="sig-param">dhdx</em>, <em class="sig-param">dhdu</em>, <em class="sig-param">derivatives={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_problem.Control" title="fatDAE.class_problem.Control"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_problem.Control</span></code></a></p>
+<dl class="method">
+<dt id="fatDAE.class_problem.Fitting.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Fitting.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Fitting.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot stored times versus stored states.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_problem.Problem">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_problem.</code><code class="sig-name descname">Problem</code><span class="sig-paren">(</span><em class="sig-param">M</em>, <em class="sig-param">f</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em>, <em class="sig-param">derivatives={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+    M(t, \mathbf{x})\frac{d\mathbf{x}}{dt}(t) &amp; = \mathbf{f}(t, \mathbf{x}(t)),\quad t_0\le t\leq t_f \\
+                  \mathbf{x}(t_0) &amp; = \mathbf{x}_0
+\end{split}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>f</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>) – </p></li>
+<li><p><strong>x_0</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>t_0</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>t_f</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>derivatives</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a>, optional) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.M">
+<code class="sig-name descname">M</code><a class="headerlink" href="#fatDAE.class_problem.Problem.M" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.f">
+<code class="sig-name descname">f</code><a class="headerlink" href="#fatDAE.class_problem.Problem.f" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.x_0">
+<code class="sig-name descname">x_0</code><a class="headerlink" href="#fatDAE.class_problem.Problem.x_0" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.t_0">
+<code class="sig-name descname">t_0</code><a class="headerlink" href="#fatDAE.class_problem.Problem.t_0" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.t_f">
+<code class="sig-name descname">t_f</code><a class="headerlink" href="#fatDAE.class_problem.Problem.t_f" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.dim">
+<code class="sig-name descname">dim</code><a class="headerlink" href="#fatDAE.class_problem.Problem.dim" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.dMdx">
+<code class="sig-name descname">dMdx</code><a class="headerlink" href="#fatDAE.class_problem.Problem.dMdx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.dMdt">
+<code class="sig-name descname">dMdt</code><a class="headerlink" href="#fatDAE.class_problem.Problem.dMdt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.dfdx">
+<code class="sig-name descname">dfdx</code><a class="headerlink" href="#fatDAE.class_problem.Problem.dfdx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.dfdt">
+<code class="sig-name descname">dfdt</code><a class="headerlink" href="#fatDAE.class_problem.Problem.dfdt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.t_list">
+<code class="sig-name descname">t_list</code><a class="headerlink" href="#fatDAE.class_problem.Problem.t_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_problem.Problem.x_list">
+<code class="sig-name descname">x_list</code><a class="headerlink" href="#fatDAE.class_problem.Problem.x_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    M(t,\mathbf{x})\in \mathbb{R}^{d\times d}
+\end{equation}\]</div>
+<p>is constant, then <a class="reference internal" href="#fatDAE.class_problem.Problem.M" title="fatDAE.class_problem.Problem.M"><code class="xref py py-attr docutils literal notranslate"><span class="pre">M</span></code></a> must be a <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html#scipy.sparse.csc_matrix" title="(in SciPy v1.4.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.sparse.csc_matrix</span></code></a> instead of a <code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code> in order to save matrix evaluations.</p>
+</div>
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.check_order">
+<code class="sig-name descname">check_order</code><span class="sig-paren">(</span><em class="sig-param">solver</em>, <em class="sig-param">nsteps=8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.check_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.check_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the convergence order of a given solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">class_solver.Solver</span></code>) – Solver instance.</p></li>
+<li><p><strong>nsteps</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.clean">
+<code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erases stored times and states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">a_tol=0.01</em>, <em class="sig-param">r_tol=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the error between two states.</p>
+<p>In particular, the error is computed as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    error = \frac{||x-y||_2}{a_{tol} + r_{tol} * \max(||x||_2,||y||_2)}
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+<li><p><strong>a_tol</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Absolute tolerance.</p></li>
+<li><p><strong>r_tol</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>, optional) – Relative tolerance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error between the two states.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.get_delta_x">
+<code class="sig-name descname">get_delta_x</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.get_delta_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.get_delta_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.get_delta_y">
+<code class="sig-name descname">get_delta_y</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.get_delta_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.get_delta_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot stored times versus stored states.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">solver</em>, <em class="sig-param">state_machine=None</em>, <em class="sig-param">h=None</em>, <em class="sig-param">adp=False</em>, <em class="sig-param">adj=False</em>, <em class="sig-param">tlm=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves with a given solver the problem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">class_solvers.Solver</span></code>) – Solver instance.</p></li>
+<li><p><strong>adp</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+<li><p><strong>adj</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.store">
+<code class="sig-name descname">store</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">delta_x=None</em>, <em class="sig-param">delta_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores a given time and state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Time.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_problem.Problem.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">M</em>, <em class="sig-param">f</em>, <em class="sig-param">x_0</em>, <em class="sig-param">t_0</em>, <em class="sig-param">t_f</em>, <em class="sig-param">derivatives={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_problem.html#Problem.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_problem.Problem.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fatDAE.class_solvers">
+<span id="fatdae-class-solvers-module"></span><h2>fatDAE.class_solvers module<a class="headerlink" href="#module-fatDAE.class_solvers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fatDAE.class_solvers.DIRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">DIRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.IRK" title="fatDAE.class_solvers.IRK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.IRK</span></code></a></p>
+<p>Diagonally implicit Runge-Kutta solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; a_{11}  &amp; 0       &amp; \cdots &amp; 0       \\
+    \vdots &amp; a_{21}  &amp; a_{22}  &amp; \ddots &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; a_{ss}  \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.stage_adj">
+<code class="sig-name descname">stage_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.stage_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.stage_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute matrices and vectors required for one adjoint time step.</p>
+<p>In particular, it computes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t_n + c_ih, \mathbf{x}_n + \sum_{j=1}^{i}a_{ij}\mathbf{k}_j, \mathbf{u}), \quad i=1,\dots, s
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial \mathbf{g}}{\partial \mathbf{u}}(t_n + c_ih, \mathbf{x}_n + \sum_{j=1}^{i}a_{ij}\mathbf{k}_j, \mathbf{u}), \quad i=1,\dots, s
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t_n + c_ih, \mathbf{x}_n + \sum_{j=1}^{i}a_{ij}\mathbf{k}_j, \mathbf{u}), \quad i=1,\dots, s
+\end{equation}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial \mathbf{g}}{\partial \mathbf{u}}(t_n + c_ih, \mathbf{x}_n + \sum_{j=1}^{i}a_{ij}\mathbf{k}_j, \mathbf{u}), \quad i=1,\dots, s
+\end{equation}\]</div>
+<p>and store all of them in <code class="xref py py-attr docutils literal notranslate"><span class="pre">dfdx_step</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">dfdu_step</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">dgdx_step</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">dgdu_step</span></code> respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.stage_frw">
+<code class="sig-name descname">stage_frw</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.stage_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.stage_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build one stage function and its derivative with respect to that stage.</p>
+<p>Stage function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \mathbf{F}_i(\mathbf{k}_i) = M\mathbf{k}_i - h\mathbf{f}(t_n+c_ih,\mathbf{xx}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j)
+\end{equation}\]</div>
+<p>Stage jacobian:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    J_i(\mathbf{k}_i) = M - ha_{ii}\frac{\partial \mathbf{f}}{\partial\mathbf{x} }(t_n+c_ih,\mathbf{x}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j)
+\end{equation}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">nlsolver.simplified</span></code> = True then only the stage function is returned.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – Index of the intermediate stage.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple containing:</p>
+<ul class="simple">
+<li><p><strong>F</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>): Stage function.</p></li>
+<li><p><strong>J</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>): Stage jacobian.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tuple)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.tstep_adj">
+<code class="sig-name descname">tstep_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.tstep_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.tstep_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one adjoint time step.</p>
+<p>The adjoint stages are computed by solving the linear systems</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+\begin{split}
+(M - h_na_{ll}\frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t_{nl}, \mathbf{x}_{nl}, \mathbf{u}))^T\boldsymbol{\xi}_{nl} &amp; = \boldsymbol{\lambda}_{n+1}                                  \\
+                                               &amp; + h_n\sum_{i=l+1}^{s}{a}^t_{li}\frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t_{ni}, \mathbf{x}_{ni}, \mathbf{u})^T\boldsymbol{\xi}_{ni} \\
+                                               &amp; + h_n\sum_{i=l+0}^{s}{a}^t_{li}\frac{\partial           g}{\partial \mathbf{x}}(t_{ni}, \mathbf{x}_{ni}, \mathbf{u})^T, \quad l=1,\dots, s
+\end{split}
+\end{equation}\end{split}\]</div>
+<p>with the matrices pre-computed by <a class="reference internal" href="#fatDAE.class_solvers.DIRK.stage_adj" title="fatDAE.class_solvers.DIRK.stage_adj"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stage_adj()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+<p>the forward stages are computed by solving the non-linear systems</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \mathbf{F}_i(\mathbf{k}_i) = M\mathbf{k}_i - h\mathbf{f}(t_n+c_ih,\mathbf{x}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j),\quad i=1,\dots, s
+\end{equation}\]</div>
+<p>with jacobians</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    J_i(\mathbf{k}_i) = M - ha_{ii}\frac{\partial \mathbf{f}}{\partial\mathbf{x} }(t_n+c_ih,\mathbf{x}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j),\quad i=1,\dots, s
+\end{equation}\]</div>
+<p>both returned by <a class="reference internal" href="#fatDAE.class_solvers.DIRK.stage_frw" title="fatDAE.class_solvers.DIRK.stage_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stage_frw()</span></code></a> and which are solved sequentially using Newton interations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">nlsolver.simplified</span></code> = True then the matrices</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    J_i = M - ha_{ii}\frac{\partial \mathbf{f}}{\partial\mathbf{x} }(t_n,\mathbf{x}_n),\quad i=1,\dots, s
+\end{equation}\]</div>
+<p>are used to perform simplified Newton iterations.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.tstep_tlm">
+<code class="sig-name descname">tstep_tlm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.tstep_tlm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.tstep_tlm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one tangent time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.updat_grd">
+<code class="sig-name descname">updat_grd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.updat_grd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.updat_grd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the gradient of the cost function after one adjoint time step.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+\begin{split}
+\nabla{\Psi} &amp; = \nabla{\Psi}                                 \\
+               &amp; + h_n\sum_{i=1}^{s}b_i\frac{\partial \mathbf{f}}{\partial \mathbf{u}}^T(t_{n} + c_ih, \mathbf{x}_{n} + \sum_{j=1}^{s}a_{ij}\mathbf{k}_j, \mathbf{u})\boldsymbol{\xi}_{ni} \\
+               &amp; + h_n\sum_{i=1}^{s}b_i\frac{\partial           g}{\partial \mathbf{u}}^T(t_{n} + c_ih, \mathbf{x}_{n} + \sum_{j=1}^{s}a_{ij}\mathbf{k}_j, \mathbf{u})
+\end{split}
+\end{equation}\end{split}\]</div>
+<p>with the matrices pre-computed by <a class="reference internal" href="#fatDAE.class_solvers.DIRK.stage_adj" title="fatDAE.class_solvers.DIRK.stage_adj"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stage_adj()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.DIRK.updat_lmb">
+<code class="sig-name descname">updat_lmb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#DIRK.updat_lmb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.DIRK.updat_lmb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state after one adjoint time step.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+\begin{split}
+\boldsymbol{\lambda}_{n} &amp; = \boldsymbol{\lambda}_{n+1}                                  \\
+                           &amp; + h_n\sum_{i=1}^{s}b_i\frac{\partial \mathbf{f}}{\partial \mathbf{x}}^T(t_{n} + c_ih, \mathbf{x}_{n} + \sum_{j=1}^{s}a_{ij}\mathbf{k}_j, \mathbf{u})\boldsymbol{\xi}_{ni} \\
+                           &amp; + h_n\sum_{i=1}^{s}b_i\frac{\partial           g}{\partial \mathbf{x}}^T(t_{n} + c_ih, \mathbf{x}_{n} + \sum_{j=1}^{s}a_{ij}\mathbf{k}_j, \mathbf{u})
+\end{split}
+\end{equation}\end{split}\]</div>
+<p>with the matrices pre-computed by <a class="reference internal" href="#fatDAE.class_solvers.DIRK.stage_adj" title="fatDAE.class_solvers.DIRK.stage_adj"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stage_adj()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.EDIRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">EDIRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#EDIRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.EDIRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.DIRK" title="fatDAE.class_solvers.DIRK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.DIRK</span></code></a></p>
+<p>Diagonally implicit Runge-Kutta with an explicit first stage solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; 0       &amp; 0       &amp; \cdots &amp; 0       \\
+    \vdots &amp; a_{21}  &amp; a_{22}  &amp; \ddots &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; a_{ss}  \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.EDIRK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#EDIRK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.EDIRK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+<p>The first stage is computed explicitly as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    M\mathbf{k}_1 = h\mathbf{f}(t_n,\mathbf{y}_n)
+\end{equation}\]</div>
+<p>in contrast with <a class="reference internal" href="#fatDAE.class_solvers.SDIRK.tstep_frw" title="fatDAE.class_solvers.SDIRK.tstep_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SDIRK.tstep_frw()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.ERK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">ERK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.RK" title="fatDAE.class_solvers.RK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.RK</span></code></a></p>
+<p>Explicit Runge-Kutta solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; 0       &amp; 0       &amp; \cdots &amp; 0       \\
+    \vdots &amp; a_{21}  &amp; 0       &amp; \ddots &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; 0       \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.ERK.tstep_adj">
+<code class="sig-name descname">tstep_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK.tstep_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK.tstep_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.ERK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.ERK.tstep_tlm">
+<code class="sig-name descname">tstep_tlm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK.tstep_tlm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK.tstep_tlm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one tangent time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.ERK.updat_grd">
+<code class="sig-name descname">updat_grd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK.updat_grd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK.updat_grd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the gradient of the cost function after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.ERK.updat_lmb">
+<code class="sig-name descname">updat_lmb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ERK.updat_lmb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ERK.updat_lmb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state after one adjoint time step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.ESDIRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">ESDIRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ESDIRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ESDIRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.DIRK" title="fatDAE.class_solvers.DIRK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.DIRK</span></code></a></p>
+<p>Singly diagonally implicit Runge-Kutta with an explicit first stage solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; 0       &amp; 0       &amp; \cdots &amp; 0       \\
+    \vdots &amp; a_{21}  &amp; a_{22}  &amp; \ddots &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; a_{ss}  \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.ESDIRK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#ESDIRK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.ESDIRK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+<p>The first stage is computed explicitly as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    M\mathbf{k}_1 = h\mathbf{f}(t_n,\mathbf{y}_n)
+\end{equation}\]</div>
+<p>in contrast with <a class="reference internal" href="#fatDAE.class_solvers.SDIRK.tstep_frw" title="fatDAE.class_solvers.SDIRK.tstep_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SDIRK.tstep_frw()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.FIRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">FIRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#FIRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.FIRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.IRK" title="fatDAE.class_solvers.IRK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.IRK</span></code></a></p>
+<p>Full implicit Runge-Kutta solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; a_{11}  &amp; \cdots &amp; \cdots &amp; a_{1s}  \\
+    \vdots &amp; \vdots &amp; \ddots &amp;         &amp; \vdots \\
+    \vdots &amp; \vdots &amp;         &amp; \ddots &amp; \vdots \\
+    c_s     &amp; a_{s1}  &amp; \cdots &amp; \cdots &amp; a_{ss}  \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.FIRK.tstep_adj">
+<code class="sig-name descname">tstep_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#FIRK.tstep_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.FIRK.tstep_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.FIRK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#FIRK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.FIRK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.FIRK.updat_grd">
+<code class="sig-name descname">updat_grd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#FIRK.updat_grd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.FIRK.updat_grd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the gradient of the cost function after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.FIRK.updat_lmb">
+<code class="sig-name descname">updat_lmb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#FIRK.updat_lmb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.FIRK.updat_lmb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state after one adjoint time step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.IRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">IRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#IRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.IRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.RK" title="fatDAE.class_solvers.RK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.RK</span></code></a></p>
+<p>Abstract class for a implicit Runge-Kutta solver.</p>
+<dl class="method">
+<dt id="fatDAE.class_solvers.IRK.setup_adj">
+<code class="sig-name descname">setup_adj</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#IRK.setup_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.IRK.setup_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one adjoint resolution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.IRK.setup_frw">
+<code class="sig-name descname">setup_frw</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#IRK.setup_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.IRK.setup_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one forward resolution.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.LM">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">LM</code><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#LM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.LM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.Solver" title="fatDAE.class_solvers.Solver"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.Solver</span></code></a></p>
+<p>Abstract class for a linear multistep solver.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.RK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">RK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em>, <em class="sig-param">a_tol=1e-08</em>, <em class="sig-param">r_tol=0.001</em>, <em class="sig-param">s_fac=0.8</em>, <em class="sig-param">f_max=5.0</em>, <em class="sig-param">f_min=0.1</em>, <em class="sig-param">h_max=1000.0</em>, <em class="sig-param">h_min=1e-12</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.Solver" title="fatDAE.class_solvers.Solver"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.Solver</span></code></a></p>
+<p>Abstract class for a Runge-Kutta solver.</p>
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.advancing_table">
+<code class="sig-name descname">advancing_table</code><a class="headerlink" href="#fatDAE.class_solvers.RK.advancing_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Butcher table defining the advancing method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_butcher.Butcher</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.estimator_table">
+<code class="sig-name descname">estimator_table</code><a class="headerlink" href="#fatDAE.class_solvers.RK.estimator_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Butcher table defining the estimator method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_butcher.Butcher</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.f_max">
+<code class="sig-name descname">f_max</code><a class="headerlink" href="#fatDAE.class_solvers.RK.f_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum step size increasing factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.f_min">
+<code class="sig-name descname">f_min</code><a class="headerlink" href="#fatDAE.class_solvers.RK.f_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum step size decreasing factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.a_tol">
+<code class="sig-name descname">a_tol</code><a class="headerlink" href="#fatDAE.class_solvers.RK.a_tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absolute tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.r_tol">
+<code class="sig-name descname">r_tol</code><a class="headerlink" href="#fatDAE.class_solvers.RK.r_tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.s_fac">
+<code class="sig-name descname">s_fac</code><a class="headerlink" href="#fatDAE.class_solvers.RK.s_fac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safety factor used to reduce step rejections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.q">
+<code class="sig-name descname">q</code><a class="headerlink" href="#fatDAE.class_solvers.RK.q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum order of the methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.r">
+<code class="sig-name descname">r</code><a class="headerlink" href="#fatDAE.class_solvers.RK.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum order of the methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fatDAE.class_solvers.RK.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#fatDAE.class_solvers.RK.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the embedded Runge-Kutta method, including type and order of both methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.adapt">
+<code class="sig-name descname">adapt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.adapt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.adapt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust the step size after one forward time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">problem</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the local error estimate is under the specified tolerance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.event_bkw">
+<code class="sig-name descname">event_bkw</code><span class="sig-paren">(</span><em class="sig-param">problem</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.event_bkw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.event_bkw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.event_frw">
+<code class="sig-name descname">event_frw</code><span class="sig-paren">(</span><em class="sig-param">problem</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.event_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.event_frw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.fd_dMdx">
+<code class="sig-name descname">fd_dMdx</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.fd_dMdx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.fd_dMdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes matrix directional derivative with respect to the state by finite differences.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial M}{\partial \mathbf{x}}(t, \mathbf{x})\mathbf{y} = \lim_{\epsilon \rightarrow 0}\frac{M(t, \mathbf{x} + \epsilon\mathbf{y}) - M(t, \mathbf{x})}{\epsilon}
+\end{equation}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.fd_dfdx">
+<code class="sig-name descname">fd_dfdx</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.fd_dfdx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.fd_dfdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source derivative with respect to the state by finite differences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.setup_adj">
+<code class="sig-name descname">setup_adj</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.setup_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.setup_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one adjoint resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>problem</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_problem.Control</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.setup_frw">
+<code class="sig-name descname">setup_frw</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.setup_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.setup_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one forward resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>problem</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_problem.Problem</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.solve_adj">
+<code class="sig-name descname">solve_adj</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">state_machine=None</em>, <em class="sig-param">h=None</em>, <em class="sig-param">adp=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.solve_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.solve_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves an optimization problem and computes the gradient of a cost function by the adjoint method.</p>
+<p>The adjoint state is initialized as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \boldsymbol{\lambda}_N = \frac{\partial J}{\partial \mathbf{x}}(\mathbf{x}_N, \mathbf{u})
+\end{equation}\]</div>
+<p>The gradient of the cost function is initialized as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \nabla{\Psi} = \frac{\partial J}{\partial \mathbf{u}}(\mathbf{x}_N, \mathbf{u})
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problem</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_problem.Control</span></code>) – </p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Step size.</p></li>
+<li><p><strong>adp</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if adaptive step size will be used, False otherwise.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.solve_adp">
+<code class="sig-name descname">solve_adp</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">state_machine=None</em>, <em class="sig-param">h=None</em>, <em class="sig-param">adj=False</em>, <em class="sig-param">tlm=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.solve_adp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.solve_adp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves a problem with adaptive step size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problem</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_problem.Control</span></code>) – </p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Step size.</p></li>
+<li><p><strong>adj</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if adjoint method will be used, False otherwise.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.solve_fxd">
+<code class="sig-name descname">solve_fxd</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">state_machine=None</em>, <em class="sig-param">h=None</em>, <em class="sig-param">adj=False</em>, <em class="sig-param">tlm=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.solve_fxd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.solve_fxd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solves a problem with fixed step size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problem</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">runge_kutta.class_problem.Control</span></code>) – </p></li>
+<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Step size.</p></li>
+<li><p><strong>adj</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if adjoint method will be used, False otherwise.</p></li>
+<li><p><strong>tlm</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if tangent method will be used, False otherwise.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.state_bkw">
+<code class="sig-name descname">state_bkw</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.state_bkw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.state_bkw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(i\)</span>-th bckward intermediate time and state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.state_frw">
+<code class="sig-name descname">state_frw</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.state_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.state_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(i\)</span>-th forward intermediate time and state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.store_frw">
+<code class="sig-name descname">store_frw</code><span class="sig-paren">(</span><em class="sig-param">problem</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.store_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.store_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store the state after one forward time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.tstep_adj">
+<code class="sig-name descname">tstep_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.tstep_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.tstep_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.tstep_tlm">
+<code class="sig-name descname">tstep_tlm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.tstep_tlm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.tstep_tlm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one tangent time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_adj">
+<code class="sig-name descname">updat_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state and gradient of the cost function after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_bkw">
+<code class="sig-name descname">updat_bkw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_bkw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_bkw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the state after one backward time step.</p>
+<p>The state is updated as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+       \mathbf{x}_{n} = \mathbf{x}_{n + 1} - \sum_{i=1}^{s}b_i\mathbf{k}_i
+\end{equation}\]</div>
+<p>once the stage vectors are computed by <a class="reference internal" href="#fatDAE.class_solvers.RK.tstep_frw" title="fatDAE.class_solvers.RK.tstep_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tstep_frw()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_frw">
+<code class="sig-name descname">updat_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the state and cost function after one forward time step.</p>
+<p>The state is updated as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+       \mathbf{x}_{n+1} = \mathbf{x}_{n} + \sum_{i=1}^{s}b_i\mathbf{k}_i
+\end{equation}\]</div>
+<p>once the stage vectors are computed by <a class="reference internal" href="#fatDAE.class_solvers.RK.tstep_frw" title="fatDAE.class_solvers.RK.tstep_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tstep_frw()</span></code></a>.</p>
+<p>The cost function is updated as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+       \Psi = \Psi + h_n \sum_{i=1}^{s}b_i g(t, \mathbf{x}_n + \sum_{j=1}^{s}a_{ij}\mathbf{k}_j)
+\end{equation}\]</div>
+<p>once the stage vectors are computed by <a class="reference internal" href="#fatDAE.class_solvers.RK.tstep_frw" title="fatDAE.class_solvers.RK.tstep_frw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tstep_frw()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_grd">
+<code class="sig-name descname">updat_grd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_grd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_grd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the gradient of the cost function after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_lmb">
+<code class="sig-name descname">updat_lmb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_lmb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_lmb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RK.updat_tlm">
+<code class="sig-name descname">updat_tlm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RK.updat_tlm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RK.updat_tlm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the tangent state after one tangent time step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.RW">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">RW</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em>, <em class="sig-param">a_tol=1e-08</em>, <em class="sig-param">r_tol=0.001</em>, <em class="sig-param">s_fac=0.8</em>, <em class="sig-param">f_max=5.0</em>, <em class="sig-param">f_min=0.1</em>, <em class="sig-param">h_max=1000.0</em>, <em class="sig-param">h_min=1e-12</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.RK" title="fatDAE.class_solvers.RK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.RK</span></code></a></p>
+<p>Rosenbrock-Wanner solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc|cccc|c}
+    c_1     &amp; a_{11}  &amp; 0       &amp; \cdots &amp; 0       &amp; \gamma_{11} &amp; 0            &amp; \cdots &amp; 0            &amp; d_1     \\
+    \vdots &amp; a_{21}  &amp; a_{22}  &amp; \ddots &amp; \vdots &amp; \gamma_{21} &amp; \gamma_{22} &amp; \ddots &amp; \vdots      &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       &amp; \vdots      &amp; \vdots      &amp; \ddots &amp; \ddots      &amp; \vdots \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; a_{ss}  &amp; \gamma_{s1} &amp; \gamma_{s2} &amp; \cdots &amp; \gamma_{ss} &amp; d_s \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s     &amp;              &amp;              &amp;         &amp;              &amp;
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_d2fdtdu">
+<code class="sig-name descname">fd_d2fdtdu</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_d2fdtdu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_d2fdtdu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source second order derivative with respect to the time and control by finite differences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_d2fdxdt">
+<code class="sig-name descname">fd_d2fdxdt</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_d2fdxdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_d2fdxdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source second order derivative with respect to time and state by finite differences.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial^2\mathbf{f}}{\partial \mathbf{x}\partial t}(t, \mathbf{x}) = \lim_{h\rightarrow 0}\frac{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t + h, \mathbf{x}) - \frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t, \mathbf{x})}{h}
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Time.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Source second order derivatives with respect to time and state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_d2fdxdu">
+<code class="sig-name descname">fd_d2fdxdu</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_d2fdxdu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_d2fdxdu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source second order derivative with respect to the state and control by finite differences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_d2fdxdx">
+<code class="sig-name descname">fd_d2fdxdx</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_d2fdxdx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_d2fdxdx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source second order directional derivative with respect to state by finite differences.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial^2\mathbf{f}}{\partial \mathbf{x}^2}(t, \mathbf{x})\mathbf{y} = \lim_{\epsilon\rightarrow 0}\frac{\frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t, \mathbf{x} + \epsilon\mathbf{y}) - \frac{\partial \mathbf{f}}{\partial \mathbf{x}}(t, \mathbf{x})}{\epsilon}
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Time.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Source second order derivatives with respect to state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_dMdt">
+<code class="sig-name descname">fd_dMdt</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_dMdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_dMdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes matrix derivative with respect to time by finite differences.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial M}{\partial t}(t, \mathbf{x}) = \lim_{h\rightarrow 0}\frac{M(t + h, \mathbf{x}) - M(t, \mathbf{x})}{h}
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Time.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix derivatives with respect to time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dMdt (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.fd_dfdt">
+<code class="sig-name descname">fd_dfdt</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.fd_dfdt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.fd_dfdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes source derivative with respect to time by finite differences.</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial\mathbf{f}}{\partial t}(t, \mathbf{x}) = \lim_{h\rightarrow 0}\frac{\mathbf{f}(t + h, \mathbf{x}) - \mathbf{f}(t, \mathbf{x})}{h}
+\end{equation}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#float" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>) – Time.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – State.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Source derivatives with respect to time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dfdt (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.setup_adj">
+<code class="sig-name descname">setup_adj</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.setup_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.setup_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one adjoint resolution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.setup_frw">
+<code class="sig-name descname">setup_frw</code><span class="sig-paren">(</span><em class="sig-param">problem</em>, <em class="sig-param">h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.setup_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.setup_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the solver for one forward resolution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.stage_adj">
+<code class="sig-name descname">stage_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.stage_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.stage_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute matrices and vectors required for one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.stage_frw">
+<code class="sig-name descname">stage_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.stage_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.stage_frw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.tsetp_tlm">
+<code class="sig-name descname">tsetp_tlm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.tsetp_tlm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.tsetp_tlm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.tstep_adj">
+<code class="sig-name descname">tstep_adj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.tstep_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.tstep_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+<p>The stages are computed by solving the non-linear systems</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{split}
+    (M-h\gamma J)\mathbf{k}_i = &amp; h\mathbf{f}(t_n + c_ih, \mathbf{x}_n+\sum_{j=1}^{i-1}a_{ij}\mathbf{k}_j) + hJ\sum_{j=1}^{i-1}\gamma_{ij}\mathbf{k}_j \\
+                              + &amp; h^2d_i\frac{\partial \mathbf{f}}{\partial t}(t_n, \mathbf{x}_n),\quad i=1,\dots, s
+    \end{split}
+\end{equation}\end{split}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.updat_grd">
+<code class="sig-name descname">updat_grd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.updat_grd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.updat_grd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the gradient of the cost function after one adjoint time step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fatDAE.class_solvers.RW.updat_lmb">
+<code class="sig-name descname">updat_lmb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#RW.updat_lmb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.RW.updat_lmb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the adjoint state after one adjoint time step.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.SDIRK">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">SDIRK</code><span class="sig-paren">(</span><em class="sig-param">advancing_table</em>, <em class="sig-param">estimator_table</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#SDIRK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.SDIRK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fatDAE.class_solvers.DIRK" title="fatDAE.class_solvers.DIRK"><code class="xref py py-class docutils literal notranslate"><span class="pre">fatDAE.class_solvers.DIRK</span></code></a></p>
+<p>Singly diagonally implicit Runge-Kutta solver.</p>
+<p>The matrix of coefficients defining the method takes the form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+    \begin{array}{c|cccc}
+    c_1     &amp; \gamma &amp; 0       &amp; \cdots &amp; 0       \\
+    \vdots &amp; a_{21}  &amp; \gamma &amp; \ddots &amp; \vdots \\
+    \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; 0       \\
+    c_s     &amp; a_{s1}  &amp; a_{s2}  &amp; \cdots &amp; \gamma \\
+    \hline
+            &amp; b_1     &amp; \cdots &amp; \cdots &amp; b_s
+    \end{array}
+\end{equation}\end{split}\]</div>
+<dl class="method">
+<dt id="fatDAE.class_solvers.SDIRK.tstep_frw">
+<code class="sig-name descname">tstep_frw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#SDIRK.tstep_frw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.SDIRK.tstep_frw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs one forward time step.</p>
+<p>The stages are computed by solving the non-linear systems</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \mathbf{F}_i(\mathbf{k}_i) = M\mathbf{k}_i - h\mathbf{f}(t_n+c_ih,\mathbf{x}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j),\quad i=1,\dots, s
+\end{equation}\]</div>
+<p>with jacobians</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    J_i(\mathbf{k}_i) = M - h\gamma\frac{\partial \mathbf{f}}{\partial\mathbf{x} }(t_n+c_ih,\mathbf{x}_n+\sum_{j=1}^{i}a_{ij}\mathbf{k}_j),\quad i=1,\dots, s
+\end{equation}\]</div>
+<p>both returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">stage_frw()</span></code> and which are solved sequentially using Newton interations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="xref py py-attr docutils literal notranslate"><span class="pre">nlsolver.simplified</span></code> = True then the matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    J = M - h\gamma\frac{\partial \mathbf{f}}{\partial\mathbf{x} }(t_n,\mathbf{y}_n)
+\end{equation}\]</div>
+<p>is used to perform simplified Newton iterations.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fatDAE.class_solvers.Solver">
+<em class="property">class </em><code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">Solver</code><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#Solver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.Solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Abstract class for a solver.</p>
+<div class="graphviz"><img src="../_images/inheritance-66584f00c88cb994f59883214ae3639c187a3396.png" alt="Inheritance diagram of LM, ERK, FIRK, ESDIRK, SDIRK, RW" usemap="#inheritancee94797469c" class="inheritance graphviz" /></div>
+<map id="inheritancee94797469c" name="inheritancee94797469c">
+<area shape="rect" id="node1" href="#fatDAE.class_solvers.DIRK" target="_top" title="Diagonally implicit Runge&#45;Kutta solver." alt="" coords="365,38,435,79"/>
+<area shape="rect" id="node5" href="#fatDAE.class_solvers.ESDIRK" target="_top" title="Singly diagonally implicit Runge&#45;Kutta with an explicit first stage solver." alt="" coords="482,5,571,47"/>
+<area shape="rect" id="node10" href="#fatDAE.class_solvers.SDIRK" target="_top" title="Singly diagonally implicit Runge&#45;Kutta solver." alt="" coords="487,70,565,111"/>
+<area shape="rect" id="node2" href="#fatDAE.class_solvers.IRK" target="_top" title="Abstract class for a implicit Runge&#45;Kutta solver." alt="" coords="249,70,318,111"/>
+<area shape="rect" id="node6" href="#fatDAE.class_solvers.FIRK" target="_top" title="Full implicit Runge&#45;Kutta solver." alt="" coords="365,102,435,144"/>
+<area shape="rect" id="node3" href="#fatDAE.class_solvers.ERK" target="_top" title="Explicit Runge&#45;Kutta solver." alt="" coords="249,135,318,176"/>
+<area shape="rect" id="node4" href="#fatDAE.class_solvers.RK" target="_top" title="Abstract class for a Runge&#45;Kutta solver." alt="" coords="132,135,202,176"/>
+<area shape="rect" id="node9" href="#fatDAE.class_solvers.RW" target="_top" title="Rosenbrock&#45;Wanner solver." alt="" coords="249,199,318,241"/>
+<area shape="rect" id="node7" href="#fatDAE.class_solvers.LM" target="_top" title="Abstract class for a linear multistep solver." alt="" coords="132,199,202,241"/>
+<area shape="rect" id="node8" href="#fatDAE.class_solvers.Solver" target="_top" title="Abstract class for a solver." alt="" coords="5,167,85,208"/>
+</map></dd></dl>
+
+<dl class="function">
+<dt id="fatDAE.class_solvers.build">
+<code class="sig-prename descclassname">fatDAE.class_solvers.</code><code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">butcher_json</em>, <em class="sig-param">embedded_1</em>, <em class="sig-param">embedded_2</em>, <em class="sig-param">a_tol=1e-08</em>, <em class="sig-param">r_tol=0.001</em>, <em class="sig-param">s_fac=0.8</em>, <em class="sig-param">f_max=5.0</em>, <em class="sig-param">f_min=0.1</em>, <em class="sig-param">h_max=1000.0</em>, <em class="sig-param">h_min=1e-12</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fatDAE/class_solvers.html#build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fatDAE.class_solvers.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances a solver from a Butcher table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>butcher_json</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a>) – </p></li>
+<li><p><strong>embedded_1</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if the first method is going to be embedded, False otherwise.</p></li>
+<li><p><strong>embedded_2</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>) – True if the second method is going to be embedded, False otherwise.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>solver (<a class="reference internal" href="#fatDAE.class_solvers.Solver" title="fatDAE.class_solvers.Solver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Solver</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fatDAE">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fatDAE" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

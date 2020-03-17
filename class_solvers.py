@@ -54,7 +54,7 @@ def build(butcher_json, embedded_1, embedded_2, a_tol=1e-8, r_tol=1e-3, s_fac=0.
 class Solver:
     ''' Abstract class for a solver.
 
-    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK ROW
+    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK RW
        :parts: 1
     '''
 
@@ -748,9 +748,6 @@ class RK(Solver):
 
 class ERK(RK):
     ''' Explicit Runge-Kutta solver.
-
-    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK ROW
-       :parts: 1
 
     The matrix of coefficients defining the method takes the form:
 

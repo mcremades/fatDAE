@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fatDAE.class_problem &mdash; FATDAE beta documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> FATDAE
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FATDAE</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fatDAE.class_problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fatDAE.class_problem</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Date: 23/06/2018</span>
+<span class="c1"># Auth: Manuel Cremades, manuel.cremades@usc.es</span>
+
+<span class="c1"># Basic modules</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">fatDAE.base.basic_import</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># User defined</span>
+<span class="kn">import</span> <span class="nn">fatDAE.class_butcher</span>
+<span class="kn">import</span> <span class="nn">fatDAE.class_solvers</span>
+
+<div class="viewcode-block" id="Problem"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem">[docs]</a><span class="k">class</span> <span class="nc">Problem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{split}</span>
+<span class="sd">            M(t, \\mathbf{x})\\frac{d\\mathbf{x}}{dt}(t) &amp; = \mathbf{f}(t, \\mathbf{x}(t)),\quad t_0\le t\leq t_f \\\\</span>
+<span class="sd">                          \\mathbf{x}(t_0) &amp; = \\mathbf{x}_0</span>
+<span class="sd">        \\end{split}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        M (:obj:`function`)</span>
+<span class="sd">        f (:obj:`function`)</span>
+<span class="sd">        x_0 (:obj:`numpy.ndarray`)</span>
+<span class="sd">        t_0 (:obj:`int`)</span>
+<span class="sd">        t_f (:obj:`int`)</span>
+<span class="sd">        derivatives (:obj:`dict`, optional)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        M (:obj:`function`)</span>
+<span class="sd">        f (:obj:`function`)</span>
+<span class="sd">        x_0 (:obj:`numpy.ndarray`)</span>
+<span class="sd">        t_0 (:obj:`int`)</span>
+<span class="sd">        t_f (:obj:`int`)</span>
+<span class="sd">        dim (:obj:`int`)</span>
+<span class="sd">        dMdx (:obj:`function`, optional)</span>
+<span class="sd">        dMdt (:obj:`function`, optional)</span>
+<span class="sd">        dfdx (:obj:`function`, optional)</span>
+<span class="sd">        dfdt (:obj:`function`, optional)</span>
+<span class="sd">        t_list (:obj:`list`)</span>
+<span class="sd">        x_list (:obj:`list`)</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        If the matrix</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                M(t,\\mathbf{x})\\in \mathbb{R}^{d\\times d}</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        is constant, then :attr:`M` must be a :obj:`scipy.sparse.csc_matrix` instead of a :obj:`function` in order to save matrix evaluations.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Problem.update"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">derivatives</span><span class="o">=</span><span class="p">{}):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_0</span> <span class="o">=</span> <span class="n">x_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_0</span> <span class="o">=</span> <span class="n">t_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_f</span> <span class="o">=</span> <span class="n">t_f</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dMdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dMdt&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dfdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dfdt&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">derivatives</span><span class="o">=</span><span class="p">{}):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_0</span> <span class="o">=</span> <span class="n">x_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_0</span> <span class="o">=</span> <span class="n">t_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_f</span> <span class="o">=</span> <span class="n">t_f</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dMdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dMdt&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dfdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dfdt&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_x_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_y_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_est_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_exc_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Problem.solve"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">state_machine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">adj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tlm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Solves with a given solver the problem.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            solver (:obj:`class_solvers.Solver`): Solver instance.</span>
+<span class="sd">            adp (:obj:`bool`):</span>
+<span class="sd">            adj (:obj:`bool`):</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">h</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_f</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">adj</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve_adj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">adp</span><span class="p">,</span> <span class="n">tlm</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">adp</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve_adp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">adj</span><span class="p">,</span> <span class="n">tlm</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve_fxd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">adj</span><span class="p">,</span> <span class="n">tlm</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+            
+<div class="viewcode-block" id="Problem.error"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a_tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">r_tol</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Computes the error between two states.</span>
+
+<span class="sd">        In particular, the error is computed as:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\begin{equation}</span>
+<span class="sd">                error = \\frac{||x-y||_2}{a_{tol} + r_{tol} * \\max(||x||_2,||y||_2)}</span>
+<span class="sd">            \\end{equation}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (:obj:`numpy.ndarray`): State.</span>
+<span class="sd">            y (:obj:`numpy.ndarray`): State.</span>
+<span class="sd">            a_tol (:obj:`float`, optional): Absolute tolerance.</span>
+<span class="sd">            r_tol (:obj:`float`, optional): Relative tolerance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (:obj:`float`): Error between the two states.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">a_tol</span> <span class="o">+</span> <span class="n">r_tol</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Problem.store"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">delta_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta_y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Stores a given time and state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            t (:obj:`float`): Time.</span>
+<span class="sd">            x (:obj:`numpy.ndarray`): State.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">delta_x</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">delta_y</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta_y_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;x_exact&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">err_exc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_exact</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Problem.clean"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Erases stored times and states.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_x_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_y_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_est_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_exc_list</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Problem.check_order"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.check_order">[docs]</a>    <span class="k">def</span> <span class="nf">check_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Check the convergence order of a given solver.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            solver (:obj:`class_solver.Solver`): Solver instance.</span>
+<span class="sd">            nsteps (:obj:`int`)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;exact&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;To compute error an exact solution must be given...&#39;</span><span class="p">)</span>
+
+        <span class="n">h_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">e_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span><span class="p">):</span>
+            <span class="n">h_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">))</span>
+
+        <span class="n">o_1</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">o_2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">o_3</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="n">e</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">err_exc_list</span><span class="p">:</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">e</span> <span class="o">+</span> <span class="n">err</span> <span class="o">**</span> <span class="mi">2</span>
+
+            <span class="n">e_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">err_exc_list</span><span class="p">)))</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Step: &#39;</span><span class="p">,</span> <span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;Error: &#39;</span><span class="p">,</span> <span class="n">e_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Convergence Rate: &quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">e_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">e_list</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">h_list</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="n">o_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">**</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">o_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+            <span class="n">o_3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">**</span> <span class="mf">3.0</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_list</span><span class="p">,</span> <span class="n">o_1</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;$O(h^1)$&quot;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_list</span><span class="p">,</span> <span class="n">o_2</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;$O(h^2)$&quot;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_list</span><span class="p">,</span> <span class="n">o_3</span><span class="p">,</span> <span class="s1">&#39;g--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;$O(h^3)$&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">advancing_table</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x_color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">advancing_table</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">x_color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">advancing_table</span><span class="o">.</span><span class="n">p</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">x_color</span> <span class="o">=</span> <span class="s1">&#39;g&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Expecting lower order methods...&#39;</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_list</span><span class="p">,</span> <span class="n">e_list</span><span class="p">,</span> <span class="n">x_color</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Steps&#39;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">advancing_table</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Problem.get_delta_x"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.get_delta_x">[docs]</a>    <span class="k">def</span> <span class="nf">get_delta_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+
+        <span class="n">delta_x_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">delta_x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_x_list</span><span class="p">:</span>
+            <span class="n">delta_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">delta_x_list</span></div>
+
+<div class="viewcode-block" id="Problem.get_delta_y"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.get_delta_y">[docs]</a>    <span class="k">def</span> <span class="nf">get_delta_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+
+        <span class="n">delta_y_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">delta_y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_y_list</span><span class="p">:</span>
+            <span class="n">delta_y_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">delta_y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">delta_y_list</span></div>
+
+<div class="viewcode-block" id="Problem.plot"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Problem.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Plot stored times versus stored states.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="c1">#nrows = len(self.x_list[0])</span>
+        <span class="c1">#ncols = len(self.x_list[0])</span>
+
+        <span class="c1">#print(self.t_list)</span>
+
+        <span class="c1">#image = []</span>
+
+        <span class="c1">#for i in range(len(self.x_list[0])):</span>
+
+        <span class="c1">#    for j in range(len(self.x_list[0])):</span>
+
+        <span class="c1">#        image.append(numpy.trapz(self.get_delta_x(i, j), x=self.t_list) / (self.t_list[-1]))</span>
+
+        <span class="c1">#image = numpy.array(image); image = image.reshape((nrows, ncols))</span>
+
+        <span class="c1">#row_labels = []</span>
+        <span class="c1">#col_labels = []</span>
+
+        <span class="c1">#for i in range(len(self.x_list[0])):</span>
+        <span class="c1">#    row_labels.append(&#39;$x_{&#39;+str(i)+&#39;}$&#39;)</span>
+        <span class="c1">#    col_labels.append(&#39;$x_{&#39;+str(i)+&#39;}$&#39;)</span>
+
+        <span class="c1">#matplotlib.pyplot.matshow(image)</span>
+        <span class="c1">#matplotlib.pyplot.xticks(range(len(self.x_list[0])), col_labels)</span>
+        <span class="c1">#matplotlib.pyplot.yticks(range(len(self.x_list[0])), row_labels)</span>
+
+        <span class="c1">#matplotlib.pyplot.colorbar()</span>
+
+        <span class="c1">#matplotlib.pyplot.show()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta_x_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">figure</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+
+                    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_delta_x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+                    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$\delta_{&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;}$&#39;</span><span class="p">)</span>
+                    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;$t$&#39;</span><span class="p">)</span>
+                    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+
+                <span class="n">x_calc_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">x_exac_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;exact&#39;</span><span class="p">):</span>
+
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">:</span>
+                        <span class="n">x_exac_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exact</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="n">i</span><span class="p">])</span>
+
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">:</span>
+                        <span class="n">x_calc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">:</span>
+                        <span class="n">x_calc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;exact&#39;</span><span class="p">):</span>
+                    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="n">x_calc_list</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Exac.&#39;</span><span class="p">)</span>
+                    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="n">x_exac_list</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Calc.&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="n">x_calc_list</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$t$&#39;</span><span class="p">)</span>
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$x_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;$&#39;</span><span class="p">)</span>
+
+                <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">)</span>
+
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Times&#39;</span><span class="p">)</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">)</span>
+
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="Control"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Control">[docs]</a><span class="k">class</span> <span class="nc">Control</span><span class="p">(</span><span class="n">Problem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Optimal control problem governed by a quasi-linearly implicit differential-algebraic system.</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\begin{split}</span>
+<span class="sd">            \\text{minimize} \\quad \\Psi(\\mathbf{u}) &amp; = J(t_f, \\mathbf{x}(t_f), \\mathbf{u}) + \\int_{t_0}^{t_f}g(t, \\mathbf{x}(t), \\mathbf{u})\\; dt \\\\</span>
+<span class="sd">            \\text{s.t.} \\quad \\quad \\quad \\quad &amp; \\\\</span>
+<span class="sd">            M(t, \\mathbf{x})\\frac{d\\mathbf{x}}{dt}(t) &amp; = \mathbf{f}(t, \\mathbf{x}(t), \\mathbf{u}),\quad t_0\le t\leq t_f \\\\</span>
+<span class="sd">                          \\mathbf{x}(t_0) &amp; = \\mathbf{x}_0</span>
+<span class="sd">        \\end{split}</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        Computation of gradients for cost functionals with an explicit control dependence with the adjoint method are not currently working, only an approximation is computed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        M (:obj:`function`)</span>
+<span class="sd">        f (:obj:`function`)</span>
+<span class="sd">        x_0 (:obj:`numpy.ndarray`)</span>
+<span class="sd">        t_0 (:obj:`int`)</span>
+<span class="sd">        t_f (:obj:`int`)</span>
+<span class="sd">        control (:obj:`runge_kutta.class_control.Control`)</span>
+<span class="sd">        J (:obj:`function`)</span>
+<span class="sd">        g (:obj:`function`)</span>
+<span class="sd">        derivatives (:obj:`dict`, optional)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        J (:obj:`function`)</span>
+<span class="sd">        g (:obj:`function`)</span>
+<span class="sd">        dJdx (:obj:`function`, optional)</span>
+<span class="sd">        dJdu (:obj:`function`, optional)</span>
+<span class="sd">        dgdx (:obj:`function`, optional)</span>
+<span class="sd">        dgdu (:obj:`function`, optional)</span>
+<span class="sd">        dfdu (:obj:`function`, optional)</span>
+<span class="sd">        d2fdxdx (:obj:`function`, optional)</span>
+<span class="sd">        d2fdxdt (:obj:`function`, optional)</span>
+<span class="sd">        d2fdxdu (:obj:`function`, optional)</span>
+<span class="sd">        d2fdtdu (:obj:`function`, optional)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">derivatives</span><span class="o">=</span><span class="p">{}):</span>
+
+        <span class="n">Problem</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="n">J</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dJdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dJdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dJdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dJdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dJdu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">g</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dgdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dgdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;dgdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dgdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dgdu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dfdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dfdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dfdu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dMdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dMdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dMdu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;d2fdxdx&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdx</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;d2fdxdx&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;d2fdxdt&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdt</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;d2fdxdt&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;d2fdxdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;d2fdxdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdxdu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s1">&#39;d2fdtdu&#39;</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu</span> <span class="o">=</span> <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;d2fdtdu&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d2fdtdu</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Fitting"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Fitting">[docs]</a><span class="k">class</span> <span class="nc">Fitting</span><span class="p">(</span><span class="n">Control</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">x_obs</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">dhdx</span><span class="p">,</span> <span class="n">dhdu</span><span class="p">,</span> <span class="n">derivatives</span><span class="o">=</span><span class="p">{}):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_obs</span> <span class="o">=</span> <span class="n">t_obs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_obs</span> <span class="o">=</span> <span class="n">x_obs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dhdx</span> <span class="o">=</span> <span class="n">dhdx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dhdu</span> <span class="o">=</span> <span class="n">dhdu</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_int</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_obs</span><span class="p">,</span> \
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">x_obs</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_int</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="k">def</span> <span class="nf">dgdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_int</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dhdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">dgdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_int</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dhdu</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dgdx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dgdx</span>
+        <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dgdu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dgdu</span>
+        <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dJdx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dgdx</span>
+        <span class="n">derivatives</span><span class="p">[</span><span class="s1">&#39;dJdu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dgdu</span>
+
+        <span class="n">Control</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">derivatives</span><span class="o">=</span><span class="n">derivatives</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Fitting.plot"><a class="viewcode-back" href="../../source/fatDAE.html#fatDAE.class_problem.Fitting.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_clc</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_clc</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_clc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_clc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_clc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_clc</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_obs</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Times&#39;</span><span class="p">)</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Output&#39;</span><span class="p">)</span>
+
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Butcher&#39;s tables&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-adv&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Advancing method, choose 1 or 2.&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">required</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-est&#39;</span><span class="p">,</span> <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;Estimator method, choose 1 or 2.&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s1">&#39;store&#39;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">butcher_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">adv</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+        <span class="n">embedded_1</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">embedded_2</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">adv</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span>
+            <span class="n">embedded_1</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">embedded_2</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Choose between 1 or 2 for advancing method...&#39;</span><span class="p">)</span>
+
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">fatDAE</span><span class="o">.</span><span class="n">class_solvers</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">butcher_json</span><span class="p">,</span> <span class="n">embedded_1</span><span class="p">,</span> <span class="n">embedded_2</span><span class="p">)</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Dahlquist problem</span>
+
+<span class="sd">            y_1&#39;(t) = - lmb * y_1(t)</span>
+<span class="sd">            y_2&#39;(t) = - dlt * y_2(t)</span>
+
+<span class="sd">        with initial condition:</span>
+
+<span class="sd">            y_1(0) = 1.</span>
+<span class="sd">            y_2(0) = 1.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">lmb</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">dlt</span> <span class="o">=</span> <span class="mf">5.</span>
+
+    <span class="k">def</span> <span class="nf">M</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> \
+                         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span> <span class="n">lmb</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> \
+                         <span class="o">-</span> <span class="n">dlt</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">dfdx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span> <span class="n">lmb</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> \
+                         <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">dlt</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dfdt</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> \
+                         <span class="mf">0.</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">b</span>
+
+    <span class="n">x_0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> \
+                       <span class="mf">1.</span><span class="p">])</span>
+
+    <span class="n">t_0</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">t_f</span> <span class="o">=</span> <span class="mf">1.</span>
+
+    <span class="n">derivatives</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dfdx&#39;</span><span class="p">:</span> <span class="n">dfdx</span><span class="p">,</span> \
+                   <span class="s1">&#39;dfdt&#39;</span><span class="p">:</span> <span class="n">dfdt</span><span class="p">}</span>
+
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">Problem</span><span class="p">(</span><span class="n">M</span><span class="p">(</span><span class="n">t_0</span><span class="p">,</span> <span class="n">x_0</span><span class="p">),</span> <span class="n">f</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">t_f</span><span class="p">,</span> <span class="n">derivatives</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">lmb</span> <span class="o">*</span> <span class="n">t</span><span class="p">),</span> \
+                         <span class="n">x_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dlt</span> <span class="o">*</span> <span class="n">t</span><span class="p">)])</span>
+
+        <span class="k">return</span> <span class="n">b</span>
+
+    <span class="n">problem</span><span class="o">.</span><span class="n">exact</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">5.e-2</span><span class="p">,</span> <span class="n">tlm</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span> <span class="n">problem</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Manuel Cremades
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
