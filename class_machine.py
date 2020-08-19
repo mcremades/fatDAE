@@ -28,7 +28,9 @@ class Machine(object):
 
     def __init__(self, max_number_states=1):
 
-        self.states = []; self.actual_state = None
+        self.states = []
+
+        self.actual_state = None; self.prev_state = None
 
         self.events = []
 
@@ -59,8 +61,9 @@ class Machine(object):
                 #print(self.actual_state.next_state)
                 #self.print_states()
 
+                self.prev_state = self.actual_state
                 self.actual_state = self.actual_state.next_state
-
+                
                 self.actual_state.exec_ini(params)
 
                 self.number_states_total += 1
@@ -123,7 +126,7 @@ class State(object):
 
     def store(self, params):
         pass
-        
+
     def check(self, params):
         ''' Checks if the state must change by checking its transitions, and performs the change of state.
 

@@ -58,7 +58,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def M(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -67,7 +67,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def f(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -79,11 +79,11 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
             return numpy.array(f)
 
-        self.dfdx_form = derivative(self.f_form, self.x)
+        self.dfdx_form = derivative(self.f_form, self.u_1)
 
         def dfdx(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -94,21 +94,21 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def dfdt(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
 
             return self.assemble_dfdt(self.dfdt_form)
 
-        self.dMdx_form = derivative(self.M_form, self.x, self.y)
+        self.dMdx_form = derivative(self.M_form, self.u_1, self.u_0)
 
         def dMdx(t, x, y):
 
             self.t.value = t
 
-            self.x.vector()[:] = x
-            self.y.vector()[:] = y
+            self.u_1.vector()[:] = x
+            self.u_0.vector()[:] = y
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -119,7 +119,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def dMdt(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -168,7 +168,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def M(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -177,7 +177,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def f(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -189,11 +189,11 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
             return numpy.array(f)
 
-        self.dfdx_form = derivative(self.f_form, self.x)
+        self.dfdx_form = derivative(self.f_form, self.u_1)
 
         def dfdx(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -204,21 +204,21 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def dfdt(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
 
             return self.assemble_dfdt(self.dfdt_form)
 
-        self.dMdx_form = derivative(self.M_form, self.x, self.y)
+        self.dMdx_form = derivative(self.M_form, self.u_1, self.u_0)
 
         def dMdx(t, x, y):
 
             self.t.value = t
 
-            self.x.vector()[:] = x
-            self.y.vector()[:] = y
+            self.u_1.vector()[:] = x
+            self.u_0.vector()[:] = y
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -229,7 +229,7 @@ class UFL_Problem(fatDAE.class_problem.Problem):
 
         def dMdt(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -445,15 +445,15 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
             else:
 
-                self.dMdu_form.append(derivative(self.M_form, u, self.y))
+                self.dMdu_form.append(derivative(self.M_form, u, self.u_0))
                 self.dfdu_form.append(derivative(self.f_form, u))
 
                 self.u_type.append('function')
 
         def dMdu(t, x, y):
 
-            self.t.value = t; self.x.vector()[:] = x; \
-                              self.y.vector()[:] = y
+            self.t.value = t; self.u_1.vector()[:] = x; \
+                              self.u_0.vector()[:] = y
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -488,7 +488,7 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
         def dfdu(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
 
             for expression in self.time_dependent_expresions:
@@ -542,18 +542,18 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
             def J(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
                 for expression in self.time_dependent_expresions:
                     expression.t = t
 
                 return assemble(self.J_form)
 
-            self.dJdx_form = derivative(self.J_form, self.x)
+            self.dJdx_form = derivative(self.J_form, self.u_1)
 
             def dJdx(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
                 for expression in self.time_dependent_expresions:
                     expression.t = t
@@ -573,7 +573,7 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
             def dJdu(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
 
                 for expression in self.time_dependent_expresions:
@@ -615,18 +615,18 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
             def g(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
                 for expression in self.time_dependent_expresions:
                     expression.t = t
 
                 return assemble(self.g_form)
 
-            self.dgdx_form = derivative(self.g_form, self.x)
+            self.dgdx_form = derivative(self.g_form, self.u_1)
 
             def dgdx(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
                 for expression in self.time_dependent_expresions:
                     expression.t = t
@@ -646,7 +646,7 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
             def dgdu(t, x):
 
-                self.t.value = t; self.x.vector()[:] = x
+                self.t.value = t; self.u_1.vector()[:] = x
 
 
                 for expression in self.time_dependent_expresions:
@@ -681,11 +681,11 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
                 return b
 
 
-        self.d2fdxdx_form = derivative(self.dfdx_form, self.x, self.y)
+        self.d2fdxdx_form = derivative(self.dfdx_form, self.u_1, self.u_0)
 
         def d2fdxdx(t, x, y):
 
-            self.t.value = t; self.x.vector()[:] = x; self.y.vector()[:] = y
+            self.t.value = t; self.u_1.vector()[:] = x; self.u_0.vector()[:] = y
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -696,7 +696,7 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
         def d2fdxdt(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -712,12 +712,12 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
             if type(u) == type(Constant(0.)):
                 self.d2fdxdu_form.append(diff(self.dfdx_form, u))
             else:
-                self.d2fdxdu_form.append(derivative(self.dfdx_form, u, self.y))
+                self.d2fdxdu_form.append(derivative(self.dfdx_form, u, self.u_0))
 
         def d2fdxdu(t, x, y):
 
-            self.t.value = t; self.x.vector()[:] = x; \
-                              self.y.vector()[:] = y
+            self.t.value = t; self.u_1.vector()[:] = x; \
+                              self.u_0.vector()[:] = y
 
             for expression in self.time_dependent_expresions:
                 expression.t = t
@@ -761,7 +761,7 @@ class UFL_Control(fatDAE.class_problem.Control, UFL_Problem):
 
         def d2fdtdu(t, x):
 
-            self.t.value = t; self.x.vector()[:] = x
+            self.t.value = t; self.u_1.vector()[:] = x
 
 
             for expression in self.time_dependent_expresions:
