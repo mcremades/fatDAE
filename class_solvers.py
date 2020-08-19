@@ -157,6 +157,8 @@ class RK(Solver):
 
         start = time.time()
 
+        h0 = self.h
+
         while self.t < self.t_f:
 
             print('Time ->', self.t)
@@ -207,7 +209,7 @@ class RK(Solver):
                         self.tstep_tlm()
                         self.updat_tlm()
 
-                    self.x = problem.solve_initial(self.x); self.h = 1
+                    self.x = problem.solve_initial(self.x); self.h = h0
 
             else:
 
@@ -335,13 +337,13 @@ class RK(Solver):
                     self.x = x[0]
 
                     self.store_frw(problem)
+                    self.write_frw(problem)
 
                     if self.tlm == True:
                         self.tstep_tlm()
                         self.updat_tlm()
 
                     self.x = problem.solve_initial(self.x); self.h = 1.0
-
                     self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
             else:
@@ -655,7 +657,17 @@ class RK(Solver):
         if self.tlm == True:
             problem.store(self.t, self.x, self.delta_x, problem.store_level)
         else:
-            problem.store(self.t, self.x, problem.store_level)
+            if self.state_machine == None:
+                problem.store(self.t, self.x, problem.store_level)
+            else:
+                problem.store(self.t, self.x, problem.store_level, self.state_machine.actual_state.name, self.state_machine.actual_state.params['number_states_count'])
+
+    def write_frw(self, problem):
+        '''Write the state
+        '''
+
+        problem.write(problem.write_level, self.state_machine.prev_state.name, self.state_machine.prev_state.params['number_states_count'])
+
 
     def state_frw(self, i):
         '''Compute :math:`i`-th forward intermediate time and state.
@@ -801,9 +813,9 @@ class IRK(RK):
 
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        RK.__init__(self, advancing_table, estimator_table)
+        RK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
         self.nlsolver = class_solvers_nl.solver_nt()
 
@@ -889,9 +901,9 @@ class DIRK(IRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        IRK.__init__(self, advancing_table, estimator_table)
+        IRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
     def updat_lmb(self):
         '''Update the adjoint state after one adjoint time step.
@@ -1210,9 +1222,9 @@ class SDIRK(DIRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        DIRK.__init__(self, advancing_table, estimator_table)
+        DIRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
     def tstep_frw(self):
         '''Performs one forward time step.
