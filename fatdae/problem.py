@@ -1,12 +1,7 @@
 # Date: 23/06/2018
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
-# Basic modules
-import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
-
-# User defined
-import fatDAE.class_butcher
-import fatDAE.class_solvers
+import matplotlib.pyplot
 
 class Problem(object):
     ''' Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.
@@ -132,11 +127,22 @@ class Problem(object):
         if adj:
             return solver.solve_adj(self, state_machine, h, adp, tlm)
         else:
-
             if adp:
                 return solver.solve_adp(self, state_machine, h, adj, tlm)
             else:
                 return solver.solve_fxd(self, state_machine, h, adj, tlm)
+    
+    def solve_initial(self, x):
+        '''Computes a consistent initial condition.
+
+        Args:
+            x (:obj:`numpy.ndarray`): State.
+        
+        Returns:
+            (:obj:`numpy.ndarray`): Consistent state.
+        '''
+
+        return x
 
     def error(self, x, y, a_tol=1e-2, r_tol=1e-2):
         ''' Computes the error between two states.
@@ -550,7 +556,7 @@ if __name__ == '__main__':
         else:
             raise NameError('Choose between 1 or 2 for advancing method...')
 
-    solver = fatDAE.class_solvers.build(butcher_json, embedded_1, embedded_2)
+    solver = fatDAE.src.class_solvers.build(butcher_json, embedded_1, embedded_2)
 
     '''
         Dahlquist problem

@@ -1,6 +1,7 @@
 
 # Basic modules
-from fatDAE.base.basic_import import *
+#from fatdae.base.basic_import import *
+import scipy.sparse.linalg
 
 class solver_ls:
 

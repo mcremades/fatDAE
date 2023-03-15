@@ -1,9 +1,11 @@
 
 # Basic modules
-from fatDAE.base.basic_import import *
+#from fatdae.base.basic_import import *
 
 # User defined
-import fatDAE.base.class_solvers_sp
+import fatdae.base.sp_solvers
+
+import numpy
 
 class solver_nl:
 
@@ -28,7 +30,7 @@ class solver_nt(solver_nl):
 
         solver_nl.__init__(self, m_ite=m_ite, a_tol=a_tol, r_tol=r_tol)
 
-        self.solver = fatDAE.base.class_solvers_sp.solver_sp()
+        self.solver = fatdae.base.sp_solvers.solver_sp()
 
         self.simplified = False
 

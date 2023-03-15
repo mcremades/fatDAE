@@ -1,15 +1,15 @@
 # Date: 23/06/2018
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
-# Basic modules
-import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
+import fatdae.base.nl_solvers
+import fatdae.base.sp_solvers
 
-# User defined
-from fatDAE.base import class_solvers_nl
-from fatDAE.base import class_solvers_sp
+import fatdae.butcher
+import fatdae.problem
 
-import fatDAE.class_butcher
-import fatDAE.class_problem
+import scipy
+import numpy
+import time
 
 def build(butcher_json, embedded_1, embedded_2, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
     '''Instances a solver from a Butcher table.
@@ -25,15 +25,15 @@ def build(butcher_json, embedded_1, embedded_2, a_tol=1e-8, r_tol=1e-3, s_fac=0.
 
     if butcher_json['type'] == 'RW':
 
-        advancing_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_1)
-        estimator_table = fatDAE.class_butcher.Generalized(butcher_json, embedded_2)
+        advancing_table = fatdae.butcher.Generalized(butcher_json, embedded_1)
+        estimator_table = fatdae.butcher.Generalized(butcher_json, embedded_2)
 
         solver = RW(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
     else:
 
-        advancing_table = fatDAE.class_butcher.Butcher(butcher_json, embedded_1)
-        estimator_table = fatDAE.class_butcher.Butcher(butcher_json, embedded_2)
+        advancing_table = fatdae.butcher.Butcher(butcher_json, embedded_1)
+        estimator_table = fatdae.butcher.Butcher(butcher_json, embedded_2)
 
         if butcher_json['type'] == 'DIRK':
             solver = DIRK(advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
@@ -54,7 +54,7 @@ def build(butcher_json, embedded_1, embedded_2, a_tol=1e-8, r_tol=1e-3, s_fac=0.
 class Solver:
     ''' Abstract class for a solver.
 
-    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK RW
+    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK ROW
        :parts: 1
     '''
 
@@ -157,8 +157,6 @@ class RK(Solver):
 
         start = time.time()
 
-        h0 = self.h
-
         while self.t < self.t_f:
 
             print('Time ->', self.t)
@@ -209,7 +207,7 @@ class RK(Solver):
                         self.tstep_tlm()
                         self.updat_tlm()
 
-                    self.x = problem.solve_initial(self.x); self.h = h0
+                    self.x = problem.solve_initial(self.x); self.h = 1
 
             else:
 
@@ -337,13 +335,13 @@ class RK(Solver):
                     self.x = x[0]
 
                     self.store_frw(problem)
-                    self.write_frw(problem)
 
                     if self.tlm == True:
                         self.tstep_tlm()
                         self.updat_tlm()
 
                     self.x = problem.solve_initial(self.x); self.h = 1.0
+
                     self.a_steps = self.a_steps + 1; self.a_list.append([self.t, self.h])
 
             else:
@@ -655,19 +653,9 @@ class RK(Solver):
             self.L_list.append(self.L)
 
         if self.tlm == True:
-            problem.store(self.t, self.x, self.delta_x, problem.store_level)
+            problem.store(self.t, self.x, self.delta_x)
         else:
-            if self.state_machine == None:
-                problem.store(self.t, self.x, problem.store_level)
-            else:
-                problem.store(self.t, self.x, problem.store_level, self.state_machine.actual_state.name, self.state_machine.actual_state.params['number_states_count'])
-
-    def write_frw(self, problem):
-        '''Write the state
-        '''
-
-        problem.write(problem.write_level, self.state_machine.prev_state.name, self.state_machine.prev_state.params['number_states_count'])
-
+            problem.store(self.t, self.x)
 
     def state_frw(self, i):
         '''Compute :math:`i`-th forward intermediate time and state.
@@ -761,6 +749,9 @@ class RK(Solver):
 class ERK(RK):
     ''' Explicit Runge-Kutta solver.
 
+    .. inheritance-diagram:: LM ERK FIRK ESDIRK SDIRK ROW
+       :parts: 1
+
     The matrix of coefficients defining the method takes the form:
 
     .. math::
@@ -776,9 +767,9 @@ class ERK(RK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, *args, **kwargs):
 
-        class_solvers.RK.__init__(self, advancing_table, estimator_table)
+        super().__init__(*args,**kwargs)
 
     def updat_lmb(self):
         '''Update the adjoint state after one adjoint time step.
@@ -810,11 +801,11 @@ class IRK(RK):
 
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
+    def __init__(self, *args, **kwargs):
 
-        RK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
+        super().__init__(*args,**kwargs)
 
-        self.nlsolver = class_solvers_nl.solver_nt()
+        self.nlsolver = fatdae.base.nl_solvers.solver_nt()
 
     def setup_frw(self, problem, h=None):
         '''Configures the solver for one forward resolution.
@@ -898,9 +889,8 @@ class DIRK(IRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
-
-        IRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
 
     def updat_lmb(self):
         '''Update the adjoint state after one adjoint time step.
@@ -1219,9 +1209,9 @@ class SDIRK(DIRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
+    def __init__(self, *args, **kwargs):
 
-        DIRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
+        super().__init__(*args,**kwargs)
 
     def tstep_frw(self):
         '''Performs one forward time step.
@@ -1305,9 +1295,9 @@ class EDIRK(DIRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, *args, **kwargs):
 
-        DIRK.__init__(self, advancing_table, estimator_table)
+        super().__init__(*args,**kwargs)
 
         self.lqsolver = class_solvers_sp.solver_lq()
 
@@ -1441,9 +1431,9 @@ class RW(RK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
+    def __init__(self, *args, **kwargs):
 
-        RK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
+        super().__init__(*args,**kwargs)
 
         self.spsolver = class_solvers_sp.solver_sp()
         self.lqsolver = class_solvers_sp.solver_lq()

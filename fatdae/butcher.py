@@ -1,8 +1,7 @@
 # Date: 23/06/2018
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
-# Basic modules
-import sys; sys.path.insert(0,'..'); from fatDAE.base.basic_import import *
+import numpy
 
 class Butcher(object):
     ''' Butcher table defining a Runge-Kutta method.
