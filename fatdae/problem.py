@@ -2,6 +2,7 @@
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
 import matplotlib.pyplot
+import numpy
 
 class Problem(object):
     ''' Initial value problem goberned by a quasi-linearly implicit differential-algebraic system.
@@ -343,7 +344,7 @@ class Problem(object):
 
             matplotlib.pyplot.subplots_adjust(wspace=0.4, hspace=0.6)
 
-        if len(self.x_list[0]) < 6:
+        if len(self.x_list[0]) < 10:
 
             for i in range(len(self.x_list[0])):
 

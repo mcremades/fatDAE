@@ -1,10 +1,7 @@
+# Date: 24/07/2017
+# Auth: Manuel Cremades, manuel.cremades@usc.es
 
-# Basic modules
-#from fatdae.base.basic_import import *
-
-# User defined
 import fatdae.base.sp_solvers
-
 import numpy
 
 class solver_nl:

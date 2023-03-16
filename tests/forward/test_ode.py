@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 import fatdae.solvers
 import fatdae.problem
@@ -9,9 +9,8 @@ import json
 import scipy.sparse
 import numpy
 
-with open('fatDAE/json_butcher/DIRK/SDIRK1.json') as data_file:
+with open(sys.path[0]+'/fatdae/json_butcher/DIRK/SDIRK1.json') as data_file:
         butcher_json = json.load(data_file)
-    
 
 solver = fatdae.solvers.build(butcher_json,False,True)
 

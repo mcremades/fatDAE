@@ -728,10 +728,9 @@ class RK(Solver):
         for i in range(len(x)):
 
             y = x[i]
-
-            x[i] += self.nlsolver.r_tol * y
-            A[:, i] = (self.f(t, x) - f) / (self.nlsolver.r_tol * y)
-            x[i] -= self.nlsolver.r_tol * y
+            x[i] += self.r_tol * y + self.a_tol
+            A[:, i] = (self.f(t, x) - f) / (self.r_tol * y + self.a_tol)
+            x[i] -= self.r_tol * y + self.a_tol
 
         return scipy.sparse.csc_matrix(A)
 
@@ -1435,8 +1434,8 @@ class RW(RK):
 
         super().__init__(*args,**kwargs)
 
-        self.spsolver = class_solvers_sp.solver_sp()
-        self.lqsolver = class_solvers_sp.solver_lq()
+        self.spsolver = fatdae.base.sp_solvers.solver_sp()
+        self.lqsolver = fatdae.base.sp_solvers.solver_lq()
 
     def setup_frw(self, problem, h=None):
         '''Configures the solver for one forward resolution.

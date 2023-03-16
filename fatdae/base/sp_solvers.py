@@ -1,6 +1,6 @@
+# Date: 24/07/2017
+# Auth: Manuel Cremades, manuel.cremades@usc.es
 
-# Basic modules
-#from fatdae.base.basic_import import *
 import scipy.sparse.linalg
 
 class solver_ls:
