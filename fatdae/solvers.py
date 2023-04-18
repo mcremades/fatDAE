@@ -1,6 +1,7 @@
 # Date: 23/06/2018
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
+
 import fatdae.base.nl_solvers
 import fatdae.base.sp_solvers
 
@@ -126,12 +127,21 @@ class RK(Solver):
         self.adj = adj
         self.tlm = tlm
 
-        self.state_machine = state_machine
+        if self.adj == True:
+            pass
+        else:
+            self.setup_frw(problem, h)
+
+        problem.x_0 = problem.solve_initial(problem.x_0)
 
         if self.adj == True:
             pass
         else:
             self.setup_frw(problem, h)
+
+        self.store_frw(problem)
+
+        self.state_machine = state_machine
 
         if self.state_machine == None:
             pass
@@ -143,15 +153,6 @@ class RK(Solver):
                       't_0': problem.t_0}
 
             self.state_machine.actual_state.exec_ini(params)
-
-        problem.x_0 = problem.solve_initial(problem.x_0)
-
-        if self.adj == True:
-            pass
-        else:
-            self.setup_frw(problem, h)
-
-        self.store_frw(problem)
 
         print("Solving...")
 
@@ -184,7 +185,7 @@ class RK(Solver):
 
                 x, h, trigged, accept = self.state_machine.check(params)
 
-                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+                if type(self.state_machine.actual_state) == type(fatdae.finite_state_machine.End()):
 
                     print("Elapsed time: ", time.time() - start)
 
@@ -245,6 +246,15 @@ class RK(Solver):
         self.adj = adj
         self.tlm = tlm
 
+        problem.x_0 = problem.solve_initial(problem.x_0)
+
+        if self.adj == True:
+            pass
+        else:
+            self.setup_frw(problem, h)
+
+        self.store_frw(problem)
+
         self.state_machine = state_machine
 
         if self.state_machine == None:
@@ -257,15 +267,6 @@ class RK(Solver):
                       't_0': problem.t_0}
 
             self.state_machine.actual_state.exec_ini(params)
-
-        problem.x_0 = problem.solve_initial(problem.x_0)
-
-        if self.adj == True:
-            pass
-        else:
-            self.setup_frw(problem, h)
-
-        self.store_frw(problem)
 
         self.a_steps = 0
         self.r_steps = 0
@@ -315,7 +316,7 @@ class RK(Solver):
 
                 x, h, trigged, accept = self.state_machine.check(params)
 
-                if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
+                if type(self.state_machine.actual_state) == type(fatdae.finite_state_machine.End()):
 
                     print("Elapsed time: ", time.time() - start)
 

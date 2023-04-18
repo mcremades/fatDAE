@@ -1,6 +1,8 @@
 # Date: 01/04/2019
 # Auth: Manuel Cremades, manuel.cremades@usc.es
 
+import numpy
+
 class Machine(object):
     ''' State machine.
     '''

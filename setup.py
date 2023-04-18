@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='fatDAE',
@@ -8,7 +8,7 @@ setup(
     author='Manuel Cremades',
     author_email='manuel.cremades@usc.es',
     license='GNU Lesser General Public License v3.0',
-    packages=['fatDAE'],
+    packages=['fatdae','fatdae/base','fatdae/dolfin_interface'],
     install_requires=['numpy',  
                       'scipy',
                       'sympy',
