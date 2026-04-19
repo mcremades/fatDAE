@@ -26,15 +26,15 @@ class Machine(object):
                 for event in transition.events:
                     print('event ->', event)
 
-    def __init__(self, max_number_states=1):
+    def __init__(self, max_number_states=1, print_level=0):
 
         self.states = []
 
         self.actual_state = None; self.prev_state = None
-
+        self.print_level = print_level
         self.events = []
 
-        self.max_number_states = max_number_states;
+        self.max_number_states = max_number_states
 
         self.number_states_total = 0
         self.number_states_count = 0
@@ -51,7 +51,7 @@ class Machine(object):
         params['number_states_total'] = self.number_states_total
         params['number_states_count'] = self.number_states_count
 
-        x, h, event, accept = self.actual_state.check(params)
+        x, h, event, accept, k = self.actual_state.check(params)
 
         if event:
 
@@ -62,6 +62,8 @@ class Machine(object):
                 #self.print_states()
 
                 self.prev_state = self.actual_state
+                self.prev_state.exec_out(params, reset=self.prev_state.transitions[k].reset)
+                print(self.prev_state.params)
                 self.actual_state = self.actual_state.next_state
                 
                 self.actual_state.exec_ini(params)
@@ -91,9 +93,10 @@ class State(object):
     ''' State of operation.
     '''
 
-    def __init__(self, name=''):
+    def __init__(self, name='', print_level=0):
 
         self.name = name
+        self.print_level = print_level
 
         self.transitions = []
 
@@ -119,9 +122,12 @@ class State(object):
         '''
         pass
 
-    def exec_out(self, params):
+    def exec_out(self, params, reset=False):
         ''' To be executed when the state is changed.
         '''
+        if reset:
+            print('Resetting count')
+            self.params['number_states_count']=0
         pass
 
     def store(self, params):
@@ -156,9 +162,6 @@ class State(object):
 
             x, h, trigered, accepted = transition.check(params)
 
-            #trigered_list.append(trigered)
-            #accepted_list.append(accepted)
-
             if True in trigered:
                 trigered_list.append(True)
             else:
@@ -177,11 +180,6 @@ class State(object):
             x_list.append(x)
             h_list.append(h)
 
-            #print('th',h)
-
-        #print(trigered_list)
-        #print(accepted_list)
-
         if True in trigered_list:
             trigered = True
         else:
@@ -196,61 +194,12 @@ class State(object):
 
             k = numpy.argmin(numpy.array(jump_step))
             self.exec_out(params, self.transitions[jump_list[k]].reset)
-
+            
             self.next_state = self.transitions[jump_list[k]].fin_state
 
-            return x, jump_step[k], trigered, accepted
-        return x, min(h_list)[0], trigered, accepted
+            return x, jump_step[k], trigered, accepted, k
+        return x, min(h_list)[0], trigered, accepted, 0
 
-        #i_trigered = numpy.where(numpy.array(trigered_list))[0]
-        #i_accepted = numpy.where(numpy.array(accepted_list))[0]
-
-        #trigered = False
-        #accepted = True
-
-        #if [True] in trigered_list:
-        #    trigered = True
-        #if [False] in accepted_list:
-        #    accepted = False
-
-        #if len(jump_list) > 0:
-
-        #    print('jump list', jump_list)
-
-        #    ind = numpy.argmin(jump_list)
-
-        #    self.exec_out(params, self.transitions[jump_list[ind]].reset); self.next_state = self.transitions[jump_list[ind]].fin_state
-
-        #    trigered = True
-        #    accepted = True
-
-        #if i_trigered.size > 0:
-
-        #    trigered = True
-
-        #    print('trig',i_trigered)
-        #    print('acep',i_accepted)
-
-        #    if i_trigered[0] in i_accepted:
-
-        #        self.exec_out(params, self.transitions[i_trigered[0]].reset)
-
-        #        self.next_state = self.transitions[i_trigered[0]].fin_state
-
-        #        accepted = True
-
-        #    else:
-        #        accepted = False
-
-        #else:
-
-        #    if i_accepted.size > 0:
-
-        #        accepted = True
-
-        #print('check state', trigered, accepted)
-
-        #return x, min(h_list), trigered, accepted
 
     def add_transitions(self, transitions):
         ''' Appends a list of transitions to the current list.
@@ -269,12 +218,12 @@ class Transition(object):
         fin_state (:obj:`state_machine.class_state_machine.State):
     '''
 
-    def __init__(self, ini_state, fin_state, reset=0):
+    def __init__(self, ini_state, fin_state, reset=0, print_level=0):
 
         self.events = []
 
         self.reset = reset
-
+        self.print_level = print_level
         self.ini_state = ini_state
         self.fin_state = fin_state
 
@@ -299,15 +248,11 @@ class Transition(object):
 
             x, h, trigered, accepted = event.check(params)
 
-            #print('event h',h)
-
             x_list.append(x)
             h_list.append(h)
 
             trigered_list.append(trigered)
             accepted_list.append(accepted)
-
-        #print(h_list)
 
         return x_list, h_list, trigered_list, accepted_list
 
@@ -324,8 +269,8 @@ class Event(object):
     ''' Event of a transition.
     '''
 
-    def __init__(self):
-        pass
+    def __init__(self, print_level=0):
+        self.print_level = print_level
 
     def check(self, params):
         pass
@@ -348,7 +293,8 @@ class MaxCycles(Event):
 
         if params['state_params']['number_states_count'] > self.n:
 
-            print('Event located')
+            if self.print_level > -1:
+                print('Event located')
 
             return x_k, h_k, True, True
 
@@ -360,9 +306,9 @@ class Wait(Event):
     ''' Event of a transition.
     '''
 
-    def __init__(self, t, tol_a=1e-4, tol_r=1e-2):
+    def __init__(self, t, tol_a=1e-4, tol_r=1e-2, print_level=0):
 
-        Event.__init__(self)
+        Event.__init__(self, print_level=print_level)
 
         self.t = t
 
@@ -382,19 +328,19 @@ class Wait(Event):
 
         if abs((params['state_t'] + self.t) - t_k) / self.tol_a < 1:
 
-            print('Event located')
+            if self.print_level > -1:
+                print('Event located')
 
             return x_k, h_k, True, True
 
         else:
 
             if (params['state_t'] + self.t) - t_k < 0.0:
-
-                print('Locating event... ')
+                
+                if self.print_level > -1:
+                    print('Locating event... ')     
 
                 h_k = (params['state_t'] + self.t) - t_0
-
-                #print('h_k',h_k)
 
                 return x_k, h_k, True, False
 

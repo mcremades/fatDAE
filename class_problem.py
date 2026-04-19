@@ -117,7 +117,7 @@ class Problem(object):
         self.err_est_list = []
         self.err_exc_list = []
 
-    def solve(self, solver, state_machine=None, h=None, adp=False, adj=False, tlm=False):
+    def solve(self, solver, state_machine=None, h=None, adp=False, adj=False, tlm=False, print_level=0):
         ''' Solves with a given solver the problem.
 
         Args:
@@ -130,13 +130,13 @@ class Problem(object):
             h = (self.t_f - self.t_0) / 1000.
 
         if adj:
-            return solver.solve_adj(self, state_machine, h, adp, tlm)
+            return solver.solve_adj(self, state_machine, h, adp, print_level)
         else:
 
             if adp:
-                return solver.solve_adp(self, state_machine, h, adj, tlm)
+                return solver.solve_adp(self, state_machine, h, adj, tlm, print_level)
             else:
-                return solver.solve_fxd(self, state_machine, h, adj, tlm)
+                return solver.solve_fxd(self, state_machine, h, adj, tlm, print_level)
 
     def error(self, x, y, a_tol=1e-2, r_tol=1e-2):
         ''' Computes the error between two states.

@@ -113,7 +113,7 @@ class RK(Solver):
                                             + str(self.advancing_table.p) + '(' \
                                             + str(self.estimator_table.p) + ')'
 
-    def solve_fxd(self, problem, state_machine = None, h=None, adj=False, tlm=False):
+    def solve_fxd(self, problem, state_machine = None, h=None, adj=False, tlm=False, print_level=0):
         '''Solves a problem with fixed step size.
 
         Args:
@@ -127,11 +127,6 @@ class RK(Solver):
         self.tlm = tlm
 
         self.state_machine = state_machine
-
-        if self.adj == True:
-            pass
-        else:
-            self.setup_frw(problem, h)
 
         if self.state_machine == None:
             pass
@@ -147,13 +142,14 @@ class RK(Solver):
         problem.x_0 = problem.solve_initial(problem.x_0)
 
         if self.adj == True:
-            pass
+            self.setup_adj(problem, h)
         else:
             self.setup_frw(problem, h)
 
         self.store_frw(problem)
 
-        print("Solving...")
+        if print_level > 0:
+            print("Solving...")
 
         start = time.time()
 
@@ -161,7 +157,8 @@ class RK(Solver):
 
         while self.t < self.t_f:
 
-            print('Time ->', self.t)
+            if print_level > 1:
+                print('Time ->', self.t)
 
             if self.t + self.h > self.t_f:
                 self.h = self.t_f - self.t
@@ -187,8 +184,8 @@ class RK(Solver):
                 x, h, trigged, accept = self.state_machine.check(params)
 
                 if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
-
-                    print("Elapsed time: ", time.time() - start)
+                    if print_level > 0:
+                        print("Elapsed time: ", time.time() - start)
 
                     return 2
 
@@ -201,11 +198,10 @@ class RK(Solver):
                     self.x = x[0]
                     self.t = self.t + self.h
 
-                    if self.tlm == False:
-                        self.store_frw(problem)
-                    else:
-                        self.store_frw(problem)
-
+                    self.store_frw(problem)
+                    self.write_frw(problem)
+                    
+                    if self.tlm == True:
                         self.tstep_tlm()
                         self.updat_tlm()
 
@@ -231,11 +227,12 @@ class RK(Solver):
         else:
             self.cst = self.cst + self.J(self.t, self.x)
 
-        print("Elapsed time: ", time.time() - start)
+        if print_level > 0:
+            print("Elapsed time: ", time.time() - start)
 
         return 1
 
-    def solve_adp(self, problem, state_machine = None, h=None, adj=False, tlm=False):
+    def solve_adp(self, problem, state_machine = None, h=None, adj=False, tlm=False, print_level=0):
         '''Solves a problem with adaptive step size.
 
         Args:
@@ -260,15 +257,19 @@ class RK(Solver):
 
             self.state_machine.actual_state.exec_ini(params)
 
-        problem.x_0 = problem.solve_initial(problem.x_0)
+        try:
+            problem.x_0 = problem.solve_initial(problem.x_0)
+        except:
+            print('Problen with initial solution...')
+            return 0
 
         if self.adj == True:
-            pass
+            self.setup_adj(problem, h)
         else:
             self.setup_frw(problem, h)
 
         self.store_frw(problem)
-
+    
         self.a_steps = 0
         self.r_steps = 0
         self.d_steps = 0
@@ -277,20 +278,22 @@ class RK(Solver):
         self.r_list = []
         self.d_list = []
 
-        print("Solving...")
+        if print_level > 0:
+            print("Solving...")
 
         start = time.time()
 
         while self.t < self.t_f:
-
-            print('Time ->', self.t)
+            if print_level > 1:
+                print('Time ->', self.t)
 
             if self.t + self.h > self.t_f:
                 self.h = self.t_f - self.t
 
             if self.h < self.h_min:
 
-                print ('Minimum stepsize reached...')
+                if print_level > 0:
+                    print ('Minimum stepsize reached...')
 
                 return 0
 
@@ -319,11 +322,12 @@ class RK(Solver):
 
                 if type(self.state_machine.actual_state) == type(fatDAE.class_machine.End()):
 
-                    print("Elapsed time: ", time.time() - start)
+                    if print_level > 0:
+                        print("Elapsed time: ", time.time() - start)
 
-                    print('Accept. steps: ', self.a_steps)
-                    print('Reject. steps: ', self.r_steps)
-                    print('Diverg. steps: ', self.d_steps)
+                        print('Accept. steps: ', self.a_steps)
+                        print('Reject. steps: ', self.r_steps)
+                        print('Diverg. steps: ', self.d_steps)
 
                     return 2
 
@@ -394,17 +398,18 @@ class RK(Solver):
         else:
             self.cst = self.cst + self.J(self.t, self.x)
 
-        print("Elapsed time: ", time.time() - start)
+        if print_level > 0:
+            print("Elapsed time: ", time.time() - start)
 
-        print('Accept. steps: ', self.a_steps)
-        print('Reject. steps: ', self.r_steps)
-        print('Diverg. steps: ', self.d_steps)
+            print('Accept. steps: ', self.a_steps)
+            print('Reject. steps: ', self.r_steps)
+            print('Diverg. steps: ', self.d_steps)
 
-        print('Maximum simulation time exceeded')
+            print('Maximum simulation time exceeded')
 
         return 1
 
-    def solve_adj(self, problem, state_machine = None, h=None, adp=False):
+    def solve_adj(self, problem, state_machine = None, h=None, adp=False, print_level=0):
         '''Solves an optimization problem and computes the gradient of a cost function by the adjoint method.
 
         The adjoint state is initialized as
@@ -426,8 +431,72 @@ class RK(Solver):
             h (:obj:`float`): Step size.
             adp (:obj:`bool`): True if adaptive step size will be used, False otherwise.
         '''
+        # ----------------------------
+        # 1. Forward simulation
+        # ----------------------------
 
-        raise NameError('Feature not implemented yet...')
+        if adp:
+            self.solve_adp(problem, state_machine, h, adj=True, tlm=False, print_level=print_level)
+        else:
+            self.solve_fxd(problem, state_machine, h, adj=True, tlm=False, print_level=print_level)
+
+        # ----------------------------
+        # 2. Setup adjoint variables
+        # ----------------------------
+        
+        # terminal state
+        xN = self.x
+        tN = self.t
+
+        # terminal adjoint
+        if self.J is None:
+            self.lmb = numpy.zeros_like(xN)
+            self.grd = numpy.zeros_like(problem.u)
+        else:
+            self.lmb = self.dJdx(tN, xN)
+            self.grd = self.dJdu(tN, xN)
+
+        # ----------------------------
+        # 3. Backward loop
+        # ----------------------------
+
+        if print_level > 0:
+            print("Solving adjoint...")
+
+        start = time.time()
+
+        #print(self.h_list)
+        #print(sum(self.h_list))
+        #print(tN)
+        N = len(self.h_list)
+
+        for n in range(N-1, -1, -1):
+
+            # restore step size
+            self.h = self.h_list[n]
+
+            # restore stage vectors
+            self.K = self.K_list[n]
+            self.L = self.L_list[n]
+
+            # compute derivatives for this step
+            self.stage_adj()
+
+            # solve adjoint stages
+            self.tstep_adj()
+
+            # update lambda and gradient
+            self.updat_adj()
+
+            # go to previous state
+            self.updat_bkw()
+
+            #print(n,self.grd)
+
+        if print_level > 0:
+            print("Elapsed time: ", time.time() - start)
+
+        return self.cst, self.grd
 
     def setup_frw(self, problem, h=None):
         '''Configures the solver for one forward resolution.
@@ -1305,9 +1374,9 @@ class EDIRK(DIRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        DIRK.__init__(self, advancing_table, estimator_table)
+        DIRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
         self.lqsolver = class_solvers_sp.solver_lq()
 
@@ -1372,9 +1441,9 @@ class ESDIRK(DIRK):
         \\end{equation}
     '''
 
-    def __init__(self, advancing_table, estimator_table):
+    def __init__(self, advancing_table, estimator_table, a_tol=1e-8, r_tol=1e-3, s_fac=0.8, f_max=5.0, f_min=0.1, h_max=1.e+3, h_min=1.e-12):
 
-        DIRK.__init__(self, advancing_table, estimator_table)
+        DIRK.__init__(self, advancing_table, estimator_table, a_tol, r_tol, s_fac, f_max, f_min, h_max, h_min)
 
         self.lqsolver = class_solvers_sp.solver_lq()
 
@@ -1416,7 +1485,7 @@ class ESDIRK(DIRK):
             else:
                 F, J = self.stage_frw(i)
 
-            self.K[i, :], ite = self.nlsolver.solve(F, dFdx, self.K[i - 1, :])
+            self.K[i, :], ite = self.nlsolver.solve(F, J, self.K[i - 1, :])
 
             if self.nlsolver.converged:
                 pass
@@ -1499,16 +1568,16 @@ class RW(RK):
         '''Update the adjoint state after one adjoint time step.
         '''
 
-        for i in range(self.advancing_table.s):
+        #for i in range(self.advancing_table.s):
 
-            if self.g == None:
+        #    if self.g == None:
 
-                self.lmb = self.lmb + self.h * self.advancing_table.b[i] * self.dfdx_step[i].transpose().dot(self.X[i, :])
+        #        self.lmb = self.lmb + self.h * self.advancing_table.b[i] * self.dfdx_step[i].transpose().dot(self.X[i, :])
 
-            else:
+        #    else:
 
-                self.lmb = self.lmb + self.h * self.advancing_table.b[i] * self.dfdx_step[i].transpose().dot(self.X[i, :]) \
-                                    + self.h * self.advancing_table.b[i] * self.dgdx_step[i]
+        #        self.lmb = self.lmb + self.h * self.advancing_table.b[i] * self.dfdx_step[i].transpose().dot(self.X[i, :]) \
+        #                            + self.h * self.advancing_table.b[i] * self.dgdx_step[i]
 
         for i in range(self.advancing_table.s):
 
