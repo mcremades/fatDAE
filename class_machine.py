@@ -62,8 +62,7 @@ class Machine(object):
                 #self.print_states()
 
                 self.prev_state = self.actual_state
-                self.prev_state.exec_out(params, reset=self.prev_state.transitions[k].reset)
-                print(self.prev_state.params)
+                # exec_out already called by State.check() with the correct transition index
                 self.actual_state = self.actual_state.next_state
                 
                 self.actual_state.exec_ini(params)
@@ -301,6 +300,52 @@ class MaxCycles(Event):
         else:
 
             return x_k, h_k, False, True
+
+class EveryNCyclesWait(Event):
+    '''Fires after a fixed wait time, but only on every N-th visit to the state.'''
+
+    def __init__(self, n=25, t=1800, tol_a=1e-4, tol_r=1e-2, print_level=0):
+
+        Event.__init__(self, print_level=print_level)
+
+        self.n     = n
+        self.t     = t
+        self.tol_a = tol_a
+        self.tol_r = tol_r
+
+    def check(self, params):
+
+        count = params['state_params']['number_states_count']
+
+        if count <= 0 or count % self.n != 0:
+            return params['x_k'], params['h_k'], False, True
+
+        x_k = params['x_k']
+        t_0 = params['t_0']
+        h_k = params['h_k']
+        t_k = t_0 + h_k
+
+        if abs((params['state_t'] + self.t) - t_k) / self.tol_a < 1:
+
+            if self.print_level > -1:
+                print('Event located')
+
+            return x_k, h_k, True, True
+
+        else:
+
+            if (params['state_t'] + self.t) - t_k < 0.0:
+
+                if self.print_level > -1:
+                    print('Locating event...')
+
+                h_k = (params['state_t'] + self.t) - t_0
+                return x_k, h_k, True, False
+
+            else:
+
+                return x_k, h_k, False, True
+
 
 class Wait(Event):
     ''' Event of a transition.
